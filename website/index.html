@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Do classical models detect fallacies or memorise templates? · ES 335</title>
+<meta name="description" content="Multi-label logical fallacy detection with TF-IDF, Lasso / ridge logistic regression, PCA and SVMs, and a shortcut-learning audit.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="layout">
+<nav aria-label="Sections">
+  <div class="brand">Logical Fallacy Detection<br><span class="small">ES 335 · IIT Gandhinagar</span></div>
+  <a href="#question">1 · Question</a>
+  <a href="#data">2 · Data</a>
+  <a href="#preprocessing">3 · Preprocessing</a>
+  <a href="#methods">4 · Baseline &amp; methods</a>
+  <a href="#evaluation">5 · Evaluation design</a>
+  <a href="#results">6 · Results</a>
+  <a href="#shortcuts">7 · Shortcut audit</a>
+  <a href="#inspector" class="int">Perturbation inspector</a>
+  <a href="#thresholds" class="int">Cost-threshold tool</a>
+  <a href="#errors">8 · Errors</a>
+  <a href="#limitations">9 · Limitations</a>
+  <a href="#conclusion">10 · Conclusion</a>
+  <a href="#reproduce">11 · Reproduce</a>
+  <a href="#disclosure">12 · Team &amp; AI use</a>
+</nav>
+
+<main>
+<header class="hero">
+  <h1>Do classical models detect logical fallacies, or memorise argument templates?</h1>
+  <p class="sub">A multi-label study of 16 informal fallacies with TF-IDF features, Lasso and ridge logistic regression, PCA projections and SVMs, and an audit of how much the models rely on subject-matter shortcuts.</p>
+  <p class="byline">Ujjawal Awasthi (25110329) &amp; Varad Gupta (25110339) · ES 335 Machine Learning, Semester I 2026 · <a href="https://github.com/whats-grass/Logical_Fallacy_Detection">source code</a></p>
+  <div class="stats" id="hero-stats"></div>
+</header>
+
+<!-- ===================================================== 1 -->
+<section id="question">
+<h2>1 · The question</h2>
+<p><b>Research question.</b> When linear and margin-based classifiers label informal logical fallacies, how much of their accuracy comes from <i>surface lexical shortcuts</i> (topic words and templates that happen to co-occur with a label) rather than from words that express the reasoning pattern, and do L1 sparsity or SVM margins reduce that reliance?</p>
+<p>A <b>logical fallacy</b> is an error in reasoning that makes an argument unsound or misleading even when its conclusion happens to be true: “If we allow calculators in class, students will forget arithmetic and the economy will collapse” is a <i>slippery slope</i> whatever one thinks of calculators.</p>
+<dl class="kv">
+  <dt>Unit (one row)</dt><dd>One short natural-language argument (median 26 words).</dd>
+  <dt>Target</dt><dd>A 16-dimensional binary vector: which of 16 fallacies the argument contains (1–5 per argument, mean 1.33). This is <b>multi-label</b> classification.</dd>
+  <dt>When a prediction is made</dt><dd>At the moment a piece of text is available, e.g. a comment is posted. Only the text is used: no author, context, thread or metadata.</dd>
+  <dt>What is not claimed</dt><dd>That the model can tell whether a text is fallacious <i>at all</i>: every training row contains a fallacy, so the model is only asked <i>which</i> fallacies are present. Nor do we claim the model “understands” reasoning; we measure what its predictions depend on.</dd>
+</dl>
+<div class="callout warn"><b>One proposal item could not be done as written.</b> The proposal planned to detect Ad Hominem, False Dilemma and Slippery Slope “alongside valid arguments”. The dataset contains <b>no valid (fallacy-free) arguments</b>, so fallacy-vs-valid detection cannot be evaluated. The closest honest version is in §6: a dedicated binary detector for each of the three focus fallacies (present vs. a different fallacy), reported with accuracy against the majority-class baseline as the proposal asked. Every other proposal item is implemented (notebook 09).</div>
+</section>
+
+<!-- ===================================================== 2 -->
+<section id="data">
+<h2>2 · Data</h2>
+<dl class="kv">
+  <dt>Source</dt><dd><code>logical_fallacy_dataset.xlsx</code>, built from <code>logical_fallacy_model_candidates.jsonl</code> (19,246 raw multiple-choice, true/false and free-form fallacy items), cleaned and de-duplicated by the dataset builder. <i>[Team: add the original URL, licence and citation here.]</i></dd>
+  <dt>Size after cleaning</dt><dd>17,866 arguments; 468 more were set aside for conflicting or rare labels.</dd>
+  <dt>Labels</dt><dd><b>Silver labels</b>: produced from an LLM-written explanation of each answer, then normalised to 16 names. Not manually verified.</dd>
+  <dt>Access</dt><dd>The spreadsheet is in the repository (<code>data/raw/</code>); it contains no personal data. The website ships only derived numbers and ~150 short test arguments.</dd>
+</dl>
+<h3>Class imbalance</h3>
+<p>Slippery Slope appears in 27% of arguments; the four rarest labels appear in fewer than 1% (57–129 arguments in total, 5–15 in the test split). This is why <b>macro-F1</b> (every label counts equally) is the primary metric.</p>
+<div id="chart-labels"></div>
+<h3>Quality issues that matter for the question</h3>
+<ul>
+  <li><b>Templates.</b> Many arguments are synthetic paraphrases of the same template. 1,744 arguments mention calculators; 1,242 of those begin with the identical ten words “If we allow students to use calculators in math class,” and 90% are Slippery Slope (notebook 02).</li>
+  <li><b>Near-duplicates across splits.</b> The official split hashes the normalised text, so exact duplicates never cross splits, but paraphrases do: 268 cross-split pairs with TF-IDF cosine ≥ 0.8 within the calculator subset alone.</li>
+  <li><b>Label name in the text.</b> 45 arguments literally contain the words “slippery slope” (98% of them carry that label).</li>
+  <li><b>No missing values, no duplicate ids or texts, and the one-hot columns agree with the label strings</b> (notebook 01).</li>
+</ul>
+</section>
+
+<!-- ===================================================== 3 -->
+<section id="preprocessing">
+<h2>3 · Preprocessing</h2>
+<ul>
+  <li><b>Tokenisation.</b> Lower-case word tokens with contractions kept (<code>don't</code>, <code>they'll</code>). Notebook 03 also compared a BPE subword tokenizer (trained on train only); it was within 0.01 macro-F1 of word tokens, so word tokens were kept because they are interpretable.</li>
+  <li><b>TF-IDF</b> with unigrams + bigrams, sublinear term frequency <code>1 + ln(tf)</code>, terms in ≥ 2 training arguments, L2 row normalisation. Vocabulary and IDF weights are fitted on the <b>training split only</b> and then applied unchanged to validation and test (38,246 features).</li>
+  <li><b>Stop words are kept.</b> Words like <i>if, then, either, because, all</i> are exactly the structural cues a fallacy detector should use; notebook 02 showed that removing them deletes these cues.</li>
+  <li><b>Proper-noun removal</b> (proposal). Two versions, both fixed rules that learn nothing from our data: NLTK part-of-speech tagging (tokens tagged NNP/NNPS replaced by a placeholder), and a capitalisation heuristic. Validation macro-F1 <span data-k="nnp"></span>. Neither helps, so proper nouns are not where the shortcuts live; the final models use unmasked text and this is reported as an ablation.</li>
+  <li><b>Structural / rhetorical features</b> (proposal: “tabular syntactic, rhetorical and n-gram representations”). 13 counts per argument from regular expressions written from the Label Guide definitions: if–then consequence, causal chain words, either–or, universal quantifiers, authority, popularity, second person, insults, causal connectives, negation, “?”, “!”, and log length (<code>src/structural.py</code>). They are standardised with a scaler fitted on train and appended to TF-IDF with a weight w chosen by cross-validation.</li>
+  <li><b>Learned projections and scalers</b> (truncated SVD, standardisation, Platt calibration) are always fitted inside a pipeline on training data only.</li>
+</ul>
+</section>
+
+<!-- ===================================================== 4 -->
+<section id="methods">
+<h2>4 · Baseline and methods</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Model</th><th>Core idea / objective</th><th>Why it fits this question</th></tr></thead>
+<tbody>
+<tr class="base"><td>Most-frequent label</td><td>Predict Slippery Slope for every argument</td><td>The strongest no-information rule. (An all-zeros “majority” predictor scores macro-F1 = 0 because every label is a minority class.)</td></tr>
+<tr class="base"><td>Stratified random</td><td>Predict each label with its training prevalence</td><td>Shows what chance looks like under imbalance.</td></tr>
+<tr class="base"><td><b>Unigram BoW + logistic regression</b></td><td>Word counts; L2-penalised log-loss, one model per label</td><td>The team's first baseline (notebook 03): a meaningful, simple bar to beat.</td></tr>
+<tr><td>TF-IDF + Lasso LR</td><td>min ‖w‖₁ + C·Σ log-loss</td><td>The L1 penalty sets most coefficients to exactly zero, so we can read off which tokens the model needs.</td></tr>
+<tr><td>TF-IDF + ridge LR</td><td>min ½‖w‖₂² + C·Σ log-loss</td><td>Spreads weight across correlated n-grams (“in math”, “math class”) instead of picking one arbitrarily.</td></tr>
+<tr><td>TF-IDF + linear SVM</td><td>min ½‖w‖₂² + C·Σ hinge loss</td><td>Maximum-margin boundary; robust in sparse high-dimensional text.</td></tr>
+<tr><td>Truncated SVD (PCA) + LR</td><td>Project onto the top-k directions of variance, then LR</td><td>Tests whether dense, de-correlated features generalise better than coordinate-wise selection.</td></tr>
+<tr><td>TF-IDF + structural + linear SVM</td><td>Same hinge objective on [TF-IDF | w · structural]</td><td>Tests whether explicit argument-form features add to n-grams (the proposal's structural-vs-lexical question).</td></tr>
+<tr><td>SVD-300 + RBF SVM</td><td>Hinge loss in the space of K(x,x′) = exp(−γ‖x−x′‖²)</td><td>Can model interactions between cue words. Run on a 300-d projection because a kernel on 38k sparse features was too slow on a laptop.</td></tr>
+</tbody></table></div>
+<p class="small">All models are one-vs-rest over the 16 labels. Class weighting (<code>balanced</code> = loss re-weighted by inverse label frequency) was a tuned option for every family.</p>
+<h3>Why regularisation is necessary here</h3>
+<p>The proposal predicted that co-occurring rhetorical terms make the Gram matrix XᵀX ill-conditioned. Measured on the 2,000 most frequent TF-IDF features (notebook 09): the condition number κ(X) is <span data-k="kappa"></span>, so κ(XᵀX) = κ(X)² is <span data-k="kappa2"></span>. That is far beyond 1/ε ≈ 4.5×10¹⁵ for 64-bit floats, so XᵀX is numerically singular. There are <span data-k="corrpairs"></span> feature pairs with |correlation| &gt; 0.95, e.g. “unable” / “unable to”. Without a penalty the logistic-regression solution is not unique. Ridge adds λI and so makes the problem well-posed, sharing weight across a correlated pair; Lasso keeps one member of the pair, essentially arbitrarily, which is why its selected words must not be over-interpreted.</p>
+</section>
+
+<!-- ===================================================== 5 -->
+<section id="evaluation">
+<h2>5 · Evaluation design</h2>
+<ol>
+  <li><b>Split, fixed before modelling:</b> the dataset's official 80/10/10 split: train 14,341 · validation 1,768 · test 1,757. It hashes the normalised text, so exact duplicates never cross splits. It is also effectively <b>stratified</b> (proposal): no label's prevalence in any split differs from the whole dataset by more than <span data-k="prevgap"></span> percentage points (notebook 09). We therefore keep it rather than draw a new split that would allow duplicates to cross.</li>
+  <li><b>Hyperparameters chosen by validation folds</b> (proposal). 5-fold multilabel-stratified cross-validation on the training split, with the vectoriser refitted inside each fold, chooses C, class weight and the structural weight w by mean macro-F1 (notebook 09). The separate validation split was used for the first grid (notebooks 04–05), for the per-label thresholds (notebook 07), and as a second check. CV confirmed every validation-split choice. Notebooks 04–09 never load the test split.</li>
+  <li><b>Final test evaluation</b> (notebook 10) of the configurations saved in <code>results/selection.json</code>, refitted on train only. It was run a second time after the proposal items were added; no earlier choice changed (see §12).</li>
+  <li><b>Group-based evaluation</b> (team research question Q6). Near-duplicate clusters are built from train + validation (cosine ≥ τ, connected components). 5-fold CV that keeps each cluster inside one fold is compared with ordinary stratified CV. The difference is the part of the score that comes from seeing near-copies (§7D).</li>
+  <li><b>Template-overlap check.</b> Each test argument is placed in a bucket by its maximum cosine similarity to <i>any</i> training argument (TF-IDF fitted on train, labels unused): <b>template-seen</b> ≥ 0.8, <b>intermediate</b> 0.5–0.8, <b>novel</b> &lt; 0.5. This answers “does the official split overstate performance?” without re-splitting.</li>
+</ol>
+<h3>Metrics</h3>
+<ul>
+  <li><b>Macro-F1</b> (primary): mean of the 16 per-label F1 scores; rare fallacies count as much as common ones.</li>
+  <li><b>Micro-F1</b>, precision, recall: pooled over all argument–label decisions; dominated by frequent labels.</li>
+  <li><b>Hamming loss</b>: fraction of the 16 decisions per argument that are wrong. <b>Subset accuracy</b>: the whole label set exactly right (strict).</li>
+  <li><b>Uncertainty:</b> 95% bootstrap intervals over test arguments (1,000 resamples), and <i>paired</i> bootstrap intervals for the difference from the baseline. These describe sampling noise in this test set; they say nothing about other datasets.</li>
+  <li><b>Calibration</b> (Brier score, reliability curves) and <b>precision–recall curves</b> for threshold choice.</li>
+</ul>
+</section>
+
+<!-- ===================================================== 6 -->
+<section id="results">
+<h2>6 · Results</h2>
+<h3>Test-set macro-F1 with 95% bootstrap intervals</h3>
+<div id="chart-test"></div>
+<div id="table-test"></div>
+<div class="callout" id="results-reading"></div>
+
+<h3>Validation: Lasso sparsity versus accuracy</h3>
+<figure class="figure"><img src="figures/l1_sparsity_path.png" alt="Validation macro-F1 against percentage of non-zero Lasso coefficients for different C values" loading="lazy">
+<figcaption>Each point is one Lasso model. With C = 10 only 2.6% of coefficients are non-zero and macro-F1 is already 0.80; relaxing the penalty to C = 1000 (4.0% non-zero) adds 0.014. Accuracy saturates with a small vocabulary, but that vocabulary is not mainly cue words (section 7).</figcaption></figure>
+
+<h3>Validation: dense projections</h3>
+<figure class="figure"><img src="figures/svd_k_vs_f1.png" alt="Validation macro-F1 against number of SVD components" loading="lazy">
+<figcaption>Even 1,000 SVD components keep only 48.5% of the TF-IDF variance, and SVD-k + LR stays below the sparse models at every k. On the <i>same</i> 300-d projection, an RBF kernel (0.789) beats a linear SVM (0.676), so interactions help once information has been compressed away, but they do not recover what the projection lost.</figcaption></figure>
+
+<h3>Per-label test F1</h3>
+<div id="table-perclass"></div>
+
+<h3>The three focus fallacies as binary detectors (proposal)</h3>
+<p>One linear SVM per fallacy, on test. Plain accuracy is shown next to the majority-class baseline (“always absent”), as the proposal asked, with imbalance-aware metrics beside it.</p>
+<div id="table-focus"></div>
+<p id="focus-text"></p>
+
+<h3>BoW vs. TF-IDF, with the model held fixed (team question Q2)</h3>
+<p class="small">Validation macro-F1. Notebook 04 compared a BoW baseline with <i>tuned</i> TF-IDF models; here only the representation changes (notebook 08).</p>
+<div id="table-q2"></div>
+<p id="q2-text"></p>
+
+<h3>Class imbalance and rare fallacies (team question Q4)</h3>
+<figure class="figure"><img src="figures/q4_imbalance.png" alt="Validation F1 against training support per label, with and without class weighting" loading="lazy">
+<figcaption id="q4-text"></figcaption></figure>
+</section>
+
+<!-- ===================================================== 7 -->
+<section id="shortcuts">
+<h2>7 · Shortcut audit: what do the models actually use?</h2>
+<p>Every vocabulary item is put into one of three groups by a small lexicon written <i>before</i> looking at any model weights (<code>src/text.py</code>):</p>
+<p><span class="dot g-topic"></span><b>topic</b>: everything else, mostly what the argument is <i>about</i> (calculators, vaccines, homework) · <span class="dot g-cue"></span><b>cue</b>: ≈150 words whose meaning signals a reasoning pattern (eventually, everyone, expert, either, because, idiot) · <span class="dot g-function"></span><b>function</b>: remaining stop-words.</p>
+<div class="callout warn">“Topic” is the residual group, so it also catches rhetorical words the lexicon missed (<i>heartbreaking, can't prove, secretly</i>). We did not patch the lexicon after seeing the weights, because that would tune the measurement to the answer. Read topic shares as an <b>upper bound</b> on subject-matter reliance; the random-word control below separates the two effects.</div>
+
+<h3>A. Template familiarity explains a large part of the score</h3>
+<div id="chart-overlap"></div>
+<p id="overlap-text"></p>
+
+<h3>B. Label-preserving edits flip predictions</h3>
+<p>For every correctly detected (argument, fallacy) pair in the test set, we make an edit that should not change the fallacy and count how often the prediction flips to “absent”.</p>
+<div id="table-stress"></div>
+<p id="stress-text"></p>
+
+<h3>C. Deleting or isolating token groups</h3>
+<p class="small"><b>Delete a group at prediction time</b> (test macro-F1, models trained on full text)</p><div id="chart-mask"></div>
+<p class="small"><b>Train and evaluate on one group only</b> (validation macro-F1, linear SVM re-fitted on the restricted text each time)</p><div id="chart-restricted"></div>
+<p id="mask-text"></p>
+
+<h3>D. Keeping near-duplicates apart: group-based evaluation (team question Q6)</h3>
+<figure class="figure"><img src="figures/q6_group_cv.png" alt="Ordinary vs group-based 5-fold CV macro- and micro-F1" loading="lazy" style="max-width:620px"></figure>
+<p id="q6-text"></p>
+<div id="table-q6"></div>
+
+<h3>E. Structural features: real signal, no extra gain</h3>
+<figure class="figure"><img src="figures/structural_coefficients.png" alt="Heatmap of structural feature weights per fallacy" loading="lazy">
+<figcaption id="struct-text"></figcaption></figure>
+
+<h3>F. Where the weight sits</h3>
+<figure class="figure"><img src="figures/coef_mass_by_group_l1.png" alt="Stacked bar per label of positive Lasso coefficient mass by token group" loading="lazy">
+<figcaption>Share of positive Lasso weight per label. Topic tokens are 89% of the vocabulary but carry about 80% of the positive weight; cue words are 5.6% of the vocabulary and carry about 10%. Cue words are over-weighted relative to their frequency, yet most of the weight still sits on topic tokens.</figcaption></figure>
+
+<!-- ======= interaction 1 ======= -->
+<div class="tool" id="inspector">
+  <h3 style="margin-top:0">Interactive: shortcut perturbation inspector</h3>
+  <p class="small">Pick a held-out test argument (grouped by whether the final model got it right). Click words to delete them and watch the Lasso model's 16 probabilities update live; the black tick marks the original probability and the dashed line is 0.5. Coloured underlines show the token group. Try deleting only the <span style="color:var(--c-topic)">topic</span> words and see whether the fallacy is still found.</p>
+  <div class="controls">
+    <select id="ins-example" aria-label="Choose a test argument" style="max-width:560px"></select>
+    <label class="small">explain label <select id="ins-label" aria-label="Label to explain"></select></label>
+  </div>
+  <div class="controls">
+    <button id="ins-drop-topic">Remove topic words</button>
+    <button id="ins-drop-cue">Remove cue words</button>
+    <button id="ins-drop-function">Remove function words</button>
+    <button id="ins-reset">Reset</button>
+  </div>
+  <p class="small" id="ins-meta"></p>
+  <div class="chips" id="ins-chips"></div>
+  <div class="legend"><span><i style="background:var(--c-topic)"></i>topic</span><span><i style="background:var(--c-cue)"></i>cue</span><span><i style="background:var(--c-func)"></i>function</span><span><b>bold</b> = positive weight for the selected label</span></div>
+  <div class="cols">
+    <div><p class="small"><b>Predicted probabilities</b> (click a row to explain that label)</p><div id="ins-probs"></div></div>
+    <div><p class="small"><b>Active non-zero Lasso coefficients</b> (largest contributions w·x)</p><div id="ins-coefs"></div></div>
+  </div>
+  <details><summary class="small">Type your own argument</summary>
+    <textarea id="ins-text" rows="3" style="width:100%;margin-top:8px" placeholder="e.g. Everyone I know uses this app, so it must be the best one."></textarea>
+    <button id="ins-own">Analyse my text</button>
+  </details>
+  <p class="small" id="selfcheck"></p>
+</div>
+</section>
+
+<!-- ======= interaction 2 ======= -->
+<section id="thresholds">
+<h2>Choosing a decision threshold by cost</h2>
+<p>A default cut-off of 0.5 implicitly assumes a missed fallacy costs as much as a false alarm. If a miss costs <i>r</i> times a false alarm, the cost-optimal rule for a <b>calibrated</b> probability is to flag the fallacy when p &gt; 1 / (1 + r). The best model (linear SVM) gives margins, not probabilities, so it was wrapped in Platt scaling fitted with 5-fold cross-validation <i>inside the training split</i>. Its validation Brier score is 0.021, versus 0.027 for the over-confident Lasso model.</p>
+<figure class="figure"><img src="figures/reliability_val.png" alt="Reliability diagram on validation" loading="lazy" style="max-width:360px"></figure>
+<div class="tool">
+  <div class="controls">
+    <label class="small">fallacy <select id="th-label" aria-label="Fallacy"></select></label>
+    <label class="small">cost of a miss relative to a false alarm (log scale)
+      <input type="range" id="th-ratio" min="-2" max="2" step="0.05" value="0" aria-label="log10 cost ratio"></label>
+    <button id="th-half">r = 1 (p* = 0.5)</button>
+    <button id="th-f1">validation F1-optimal threshold</button>
+  </div>
+  <p id="th-readout"></p>
+  <div id="th-cm"></div>
+  <div class="cols">
+    <div><p class="small"><b>Precision–recall curve</b> (test) and current operating point</p><div id="th-pr"></div></div>
+    <div><p class="small"><b>Expected cost per argument</b> (C<sub>FP</sub> = 1) as the cost ratio changes</p><div id="th-cost"></div></div>
+  </div>
+  <p class="small">Computed live from the calibrated SVM's test-set probabilities. The test split was not used to choose anything shown in this tool; it only displays the consequences of a threshold choice.</p>
+</div>
+<div class="callout" id="threshold-text"></div>
+</section>
+
+<!-- ===================================================== 8 -->
+<section id="errors">
+<h2>8 · Errors</h2>
+<div id="error-stats" class="stats"></div>
+<h3>Critical boundary arguments (support vectors)</h3>
+<p>For a linear SVM f(x) = wᵀx + b, a training argument with y·f(x) ≤ 1 is an <b>active support vector</b>: only these arguments determine w. <span id="sv-text"></span> The validation arguments closest to each boundary (|f(x)| ≈ 0):</p>
+<div id="table-boundary"></div>
+<h3>Most frequent confusions</h3>
+<p class="small">For each test argument, every missed true label paired with every spurious predicted label (final thresholded model).</p>
+<div id="table-confusions"></div>
+<h3>Representative errors</h3>
+<div id="error-cards"></div>
+<p>Three patterns recur. (1) <b>Compound arguments</b> such as “everyone is doing it, and if we don't we'll be homeless” carry two fallacies, and the model often finds only the one with the stronger template. (2) <b>Neighbouring fallacies</b> (Composition vs. Hasty Generalization vs. Bandwagon) share wording like “all” and “everyone”. (3) Several “errors” look like <b>label noise</b> in the silver labels: an argument built on “everyone in our school has one … join the trend” is labelled only Appeal to Emotion, and the model's Bandwagon prediction is arguably correct. Errors are concentrated in the novel bucket.</p>
+</section>
+
+<!-- ===================================================== 9 -->
+<section id="limitations">
+<h2>9 · Limitations</h2>
+<ul>
+  <li><b>Silver labels.</b> Labels come from LLM explanations, not annotators. Scores measure agreement with those labels, and some errors are label noise.</li>
+  <li><b>No “no fallacy” class.</b> A deployed model would flag fallacies in every sentence. The proposal's fallacy-vs-valid detection could not be evaluated; the focus-fallacy detectors in §6 only separate one fallacy from the others.</li>
+  <li><b>Synthetic, templated text.</b> Even our “novel” bucket shares the dataset's style; performance on real social-media arguments is unknown and likely lower.</li>
+  <li><b>The lexicon is coarse.</b> The topic/cue/function split is a ≈150-word hand-made list; “topic” includes missed rhetorical words, so topic-reliance numbers are upper bounds.</li>
+  <li><b>Rare labels.</b> 5–15 test examples for four labels; their F1 values and tuned thresholds are very noisy.</li>
+  <li><b>Compute compromises.</b> The RBF SVM ran on a 300-d SVD projection; the largest C values sat at the edge of the grid (C = 1000) for Lasso and ridge, where the curve had flattened (gain &lt; 0.005).</li>
+  <li><b>Prediction is not explanation.</b> A large coefficient shows that a token is useful <i>for this dataset</i>, not that it causes an argument to be fallacious.</li>
+</ul>
+</section>
+
+<!-- ===================================================== 10 -->
+<section id="conclusion">
+<h2>10 · Conclusion</h2>
+<div id="conclusion-text"></div>
+</section>
+
+<!-- ===================================================== 11 -->
+<section id="reproduce">
+<h2>11 · Reproduce</h2>
+<pre>git clone https://github.com/whats-grass/Logical_Fallacy_Detection.git
+cd Logical_Fallacy_Detection
+python -m venv venv                       # Python 3.11 or 3.12
+source venv/bin/activate                  # Windows PowerShell: .\venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng'); nltk.download('punkt_tab')"
+# notebooks 01-03 (audit, EDA, baselines): open in VS Code and Run All, in order
+python -m src.run_all                     # notebooks 04-10 + website data (about 45-60 min)
+python -m http.server -d website          # open http://localhost:8000</pre>
+<ul>
+  <li>Data: <code>data/raw/logical_fallacy_dataset.xlsx</code>, sheet <code>Dataset</code>; split column <code>split</code> (train / val / test).</li>
+  <li>Notebooks 04–09 use train and validation only; notebook 10 is the held-out test evaluation and runs last.</li>
+  <li>Selected hyperparameters: <code>results/selection.json</code>. Validation and CV grids: <code>results/val_*.csv</code>, <code>results/cv_grid_train.csv</code>. Test results: <code>results/test_results.csv</code>. Near-duplicate clusters: <code>data/processed/near_dup_groups_trainval.csv</code>.</li>
+  <li>The full pipeline was run on Python 3.12.3 (as in the team setup guide) and on 3.13. Notebook 03 reproduces its published validation numbers exactly, and every reported metric agrees across the two versions (largest difference 7×10⁻⁸, in Platt-calibrated probabilities).</li>
+  <li>Random seed 42 everywhere; scikit-learn 1.9.1. The website is static HTML/CSS/JS in <code>website/</code>, deployed by <code>.github/workflows/pages.yml</code>; its Lasso model is re-implemented in JavaScript and checked against Python on load (see the self-check line under the inspector).</li>
+</ul>
+</section>
+
+<!-- ===================================================== 12 -->
+<section id="disclosure">
+<h2>12 · Team contributions and AI use</h2>
+<p><i>[Team: replace with your own account.]</i></p>
+<ul>
+  <li><b>Ujjawal Awasthi (25110329)</b>: dataset audit, EDA, template / near-duplicate investigation, BoW and BPE baselines (notebooks 01–03).</li>
+  <li><b>Varad Gupta (25110339)</b>: TF-IDF / regularised models, PCA and SVM experiments, shortcut audit, thresholds, final evaluation and website (notebooks 04–10, <code>src/</code>, <code>website/</code>).</li>
+</ul>
+<p><b>AI assistance.</b> Claude and ChatGPT was used to help in drafting the experiment code in <code>src/</code> and notebooks, draft website text, and build the interactive tools. All reported numbers come from executing the notebooks. We re-ran and checked them, and are responsible for every result.</p>
+<p><b>Test-set use.</b> The final test notebook was executed and evaluated the models of exisiting notebooks. New notebooks were added according to the requirements, ran again with two additional models chosen without looking at test (TF-IDF + structural SVM, focus-fallacy detectors). Cross-validation left every earlier choice unchanged, so the rows shared by both runs are identical.</p>
+</section>
+<p class="small" style="margin-top:24px">Built with plain HTML, CSS and JavaScript; no tracking, no external requests.</p>
+</main>
+</div>
+
+<script src="app.js"></script>
+<script>
+function renderResults(R) {
+  const T = R.test_table, find = n => T.find(r => r.model === n);
+  const base = find("Unigram BoW + LR (baseline)"), svm = find("TF-IDF Linear SVM"), thr = find("Calibrated Linear SVM + val-tuned thresholds"), stc = find("TF-IDF + structural Linear SVM");
+  const ci = s => (s || "").replace(/[\[\]]/g, "").split(",").map(Number);
+
+  // hero stats
+  document.getElementById("hero-stats").replaceChildren(
+    ...[[R.data.n.toLocaleString(), "arguments"], ["16", "fallacy labels (multi-label)"],
+        [fmt(svm.macro_f1), "test macro-F1, best model"], [fmt(base.macro_f1), "test macro-F1, BoW baseline"]]
+      .map(([v, l]) => el("div", { class: "stat" }, el("b", {}, v), el("span", {}, l))));
+
+  // label distribution
+  const lc = Object.entries(R.data.label_counts).sort((a, b) => b[1] - a[1]);
+  hbar(document.getElementById("chart-labels"), lc.map(([l, v]) => ({ label: l, value: v, note: `${(100 * v / R.data.n).toFixed(1)}% of arguments` })),
+    { max: 5000, valueLabel: "arguments" });
+  document.querySelectorAll("#chart-labels .val").forEach(t => t.textContent = Math.round(+t.textContent));
+
+  // test chart + table
+  const order = T.slice().sort((a, b) => a.macro_f1 - b.macro_f1).reverse();
+  hbar(document.getElementById("chart-test"), order.map(r => { const [lo, hi] = ci(r.macro_f1_95ci); return { label: r.model, value: r.macro_f1, lo, hi,
+    color: /baseline|random|frequent/i.test(r.model) ? "var(--ink-3)" : "var(--c-1)",
+    note: r.delta_macro_f1_vs_baseline_95ci ? "Δ vs baseline 95% CI " + r.delta_macro_f1_vs_baseline_95ci : "" }; }),
+    { highlight: r => r.label === "TF-IDF Linear SVM" });
+  table(document.getElementById("table-test"), [
+    { h: "model", k: "model" }, { h: "macro-F1", num: 1, f: r => fmt(r.macro_f1) }, { h: "95% CI", f: r => r.macro_f1_95ci },
+    { h: "Δ vs baseline, 95% CI", f: r => r.delta_macro_f1_vs_baseline_95ci || "–" },
+    { h: "micro-F1", num: 1, f: r => fmt(r.micro_f1) }, { h: "precision", num: 1, f: r => fmt(r.micro_precision) },
+    { h: "recall", num: 1, f: r => fmt(r.micro_recall) }, { h: "Hamming loss", num: 1, f: r => fmt(r.hamming_loss, 4) },
+    { h: "subset acc.", num: 1, f: r => fmt(r.subset_accuracy) }],
+    T.map(r => ({ ...r, _class: r.model === "TF-IDF Linear SVM" ? "hl" : /baseline|random|frequent/i.test(r.model) ? "base" : "" })));
+  document.getElementById("results-reading").innerHTML =
+    `<b>Reading the table.</b> The tuned linear SVM on TF-IDF uni+bigrams is the best model (macro-F1 ${fmt(svm.macro_f1)}), and the paired interval for its gain over the BoW baseline, ${svm.delta_macro_f1_vs_baseline_95ci}, excludes zero. Ridge LR also beats the baseline; the Lasso, PCA and RBF models do not separate from it. ` +
+    (stc ? `Adding the 13 structural features (chosen by CV, where they gained +0.002) gives ${fmt(stc.macro_f1)} on test, the same as TF-IDF alone: argument-form features did not generalise beyond what n-grams already capture. ` : "") +
+    `More complex was not better: the dense projections and the RBF kernel lost to a plain linear margin on sparse features. ` +
+    `Per-label thresholds tuned on validation <i>lowered</i> test macro-F1 (${fmt(thr.macro_f1)} vs ${fmt(svm.macro_f1)} at the default cut-off): thresholds for the four rarest labels were estimated from 5–19 validation positives and did not transfer. A modest, honest negative result.`;
+
+  // per-class
+  table(document.getElementById("table-perclass"), [
+    { h: "label", k: "label" }, { h: "test n", num: 1, k: "test support" },
+    { h: "BoW baseline", num: 1, f: r => fmt(r["BoW + LR baseline"]) }, { h: "Lasso", num: 1, f: r => fmt(r["TF-IDF Lasso"]) },
+    { h: "Linear SVM", num: 1, f: r => fmt(r["Linear SVM"]) }, { h: "SVM + tuned thr.", num: 1, f: r => fmt(r["Cal. SVM + thresholds"]) }], R.per_class);
+
+  // overlap
+  const bk = ["template-seen", "intermediate", "novel"], ms = ["Unigram BoW + LR (baseline)", "TF-IDF LR-L1 (Lasso)", "TF-IDF Linear SVM"];
+  const ov = (b, m) => R.overlap.find(r => r.bucket === b && r.model === m);
+  groupedBars(document.getElementById("chart-overlap"), bk.map(b => `${b} (n=${R.bucket_counts[b]})`), ms,
+    (g, m) => ov(g.split(" ")[0], m).micro_f1, { yLabel: "test micro-F1 by overlap bucket", err: (g, m) => { const r = ov(g.split(" ")[0], m); return [r.ci_lo, r.ci_hi]; } });
+  const s1 = ov("template-seen", "TF-IDF Linear SVM"), s3 = ov("novel", "TF-IDF Linear SVM");
+  const b1 = ov("template-seen", ms[0]), b3 = ov("novel", ms[0]);
+  document.getElementById("overlap-text").innerHTML =
+    `Test micro-F1 for the linear SVM falls from <b>${fmt(s1.micro_f1)}</b> on the ${R.bucket_counts["template-seen"]} test arguments that are near-copies of a training argument to <b>${fmt(s3.micro_f1)}</b> on the ${R.bucket_counts.novel} novel ones (non-overlapping 95% intervals); the baseline drops from ${fmt(b1.micro_f1)} to ${fmt(b3.micro_f1)}. ` +
+    `${pct(R.bucket_counts["template-seen"] / 1757, 0)} of the official test split is template-seen. The headline score is therefore an average of an easy “recognise the template” task and a harder “generalise” task. The linear SVM is the best model in every bucket, but every model loses 0.14–0.18 micro-F1 on novel arguments.`;
+
+  // stress
+  table(document.getElementById("table-stress"), [{ h: "model", k: "model" }, { h: "edit", k: "test" },
+    { h: "pairs edited", num: 1, k: "edited" }, { h: "flip rate", num: 1, f: r => pct(r["flip rate"]) }], R.stress);
+  const st = (m, t) => R.stress.find(r => r.model === m && r.test === t)["flip rate"];
+  document.getElementById("stress-text").innerHTML =
+    `Replacing the three most heavily weighted topic words with neutral words flips <b>${pct(st("TF-IDF Linear SVM", "topic swap (top-weighted)"), 0)}</b> of the SVM's correct detections, against ${pct(st("TF-IDF Linear SVM", "topic swap (random control)"), 0)} for three random topic words. Swapping cue words for rare synonyms (<i>eventually→ultimately, expert→specialist, idiot→imbecile</i>) flips ${pct(st("TF-IDF Linear SVM", "cue synonym swap"), 0)} (SVM) and ${pct(st("TF-IDF LR-L1 (Lasso)", "cue synonym swap"), 0)} (Lasso): the models learned specific strings, not the concept. Because the lexicon is coarse, part of the top-weighted topic effect comes from rhetorical words that the lexicon filed as topic, which is why the random control matters.`;
+
+  // masking + restricted
+  const mk = R.masking, inputs = ["full text", "no cue words", "no topic words", "topic words only"];
+  groupedBars(document.getElementById("chart-mask"), inputs, ["TF-IDF Linear SVM", "TF-IDF LR-L1 (Lasso)"],
+    (g, m) => (mk.find(r => r.input === g && r.model === m) || {}).macro_f1, { yLabel: "macro-F1", width: 640, height: 240 });
+  const rs = R.val_shortcuts.val_restricted;
+  hbar(document.getElementById("chart-restricted"), rs.map(r => ({ label: r["trained & evaluated on"], value: r.macro_f1, note: `vocabulary: ${r.vocab.toLocaleString()} features` })),
+    { highlight: r => /only/.test(r.label) });
+  const rr = n => rs.find(r => r["trained & evaluated on"].startsWith(n)).macro_f1;
+  document.getElementById("mask-text").innerHTML =
+    `A model trained only on <b>topic words</b> reaches validation macro-F1 <b>${fmt(rr("topic words only"))}</b>; one trained only on cue and function words reaches <b>${fmt(rr("no topic words"))}</b>; both together give ${fmt(rr("full text"))}. Subject matter alone predicts the fallacy almost exactly as well as the reasoning vocabulary does. In this dataset, what an argument is <i>about</i> is a near-substitute for how it reasons.`;
+
+  // errors
+  const es = R.error_status;
+  document.getElementById("error-stats").replaceChildren(...Object.entries(es).map(([k, v]) => el("div", { class: "stat" }, el("b", {}, v), el("span", {}, k))));
+  table(document.getElementById("table-confusions"), [{ h: "true label (missed)", k: "true (missed)" }, { h: "predicted instead", k: "predicted instead" }, { h: "count", num: 1, k: "count" }], R.confusion_pairs);
+
+  document.getElementById("threshold-text").innerHTML =
+    `<b>Takeaway.</b> On test, per-label thresholds tuned for F1 on validation scored macro-F1 ${fmt(thr.macro_f1)}, below the plain 0.5 rule on the uncalibrated SVM (${fmt(svm.macro_f1)}). Threshold choice should follow from the costs of the application (moderation tool vs. teaching aid), not from squeezing F1 out of a few validation positives.`;
+
+  // conclusion
+  document.getElementById("conclusion-text").innerHTML = `
+    <p><b>Answer to the research question.</b> Classical linear models reach test macro-F1 ≈ 0.80 on 16 fallacies (BoW baseline ${fmt(base.macro_f1)}), but a large share of that accuracy rests on surface lexical patterns rather than argument structure:</p>
+    <ul>
+      <li>scores fall from ≈0.94 to ≈0.80 micro-F1 when a test argument is not a paraphrase of a training template;</li>
+      <li>topic words alone predict the fallacy about as well as cue and function words alone (≈0.74 vs ≈0.75 macro-F1);</li>
+      <li>swapping the top topic words flips ≈22% of correct detections (random swaps: ≈6%), and synonym swaps of cue words flip 9–11%;</li>
+      <li>when near-duplicate clusters cannot span training and evaluation folds, CV macro-F1 falls from ${fmt(R.q6[0]["macro_f1 mean"])} to ${fmt(R.q6[R.q6.length - 1]["macro_f1 mean"])}, and the rare, templated fallacies lose most (§7D).</li>
+    </ul>
+    <p><b>Structure is learnable but adds nothing that generalises.</b> Thirteen hand-written structural features carry the expected signal on their own (either–or → False Dilemma, chain → Slippery Slope), yet add nothing measurable on top of n-grams (test macro-F1 ${stc ? fmt(stc.macro_f1) : "–"} vs ${fmt(svm.macro_f1)}).</p>
+    <p><b>Neither Lasso sparsity nor SVM margins removed the shortcut.</b> Lasso found a compact model (≈4% of 38k features) but kept mostly topic n-grams. The SVM was the most accurate and slightly less brittle to synonym swaps, yet just as dependent on topic words. Dense PCA projections and RBF kernels did not help.</p>
+    <p><b>What would change the conclusion:</b> evaluation on human-labelled, non-templated arguments that include valid (non-fallacious) text. The group-based CV of §7D suggests that grouped splitting should be the default protocol for this dataset.</p>`;
+
+  renderExtra(R);
+  // representative error cards from inspector examples
+  fetch("data/examples.json").then(r => r.json()).then(ex => {
+    const pick = ex.filter(e => e.status !== "correct").slice(0, 6);
+    document.getElementById("error-cards").replaceChildren(...pick.map(e => el("div", { class: "err-card" },
+      el("div", {}, "“" + e.text + "”"),
+      el("div", { class: "tag" }, `true: ${e.labels.join(", ")} · predicted: ${e.pred} · status: ${e.status} · overlap: ${e.bucket}`))));
+  });
+}
+function renderExtra(R) {
+  const P = R.proposal, set = (k, v) => document.querySelectorAll(`[data-k="${k}"]`).forEach(n => n.innerHTML = v);
+  const sci = x => { const e = Math.floor(Math.log10(x)); return `${(x / 10 ** e).toFixed(1)}×10<sup>${e}</sup>`; };
+  set("kappa", sci(P.kappa_X)); set("kappa2", sci(P.kappa_gram)); set("corrpairs", P.corr_pairs_095);
+  set("prevgap", (100 * P.prevalence_max_gap).toFixed(1));
+  const nn = Object.fromEntries(P.nnp_ablation.map(r => [r.preprocessing, r.macro_f1]));
+  set("nnp", `was ${fmt(nn["no masking"])} without masking, ${fmt(nn["capitalisation heuristic (nb06)"])} with the heuristic and ${fmt(nn["NLTK NNP/NNPS"])} with NLTK (which masks tokens in ${pct(P.nnp_share, 0)} of training arguments, including capitalised common nouns)`);
+
+  // focus binary detectors (test)
+  const F = R.focus_binary || [];
+  table(document.getElementById("table-focus"), [{ h: "fallacy", k: "fallacy" }, { h: "test prevalence", num: 1, f: r => pct(r["test prevalence"]) },
+    { h: "majority-class accuracy", num: 1, f: r => pct(r["majority-class accuracy"]) }, { h: "SVM accuracy", num: 1, f: r => pct(r["SVM accuracy"]) },
+    { h: "balanced accuracy", num: 1, f: r => pct(r["balanced accuracy"]) }, { h: "F1", num: 1, f: r => fmt(r.F1) }, { h: "avg. precision", num: 1, f: r => fmt(r["average precision"]) }], F);
+  const ah = F.find(r => r.fallacy === "Ad Hominem");
+  if (ah) document.getElementById("focus-text").innerHTML = `Accuracy alone is misleading under imbalance: for Ad Hominem, answering “absent” every time is already ${pct(ah["majority-class accuracy"])} accurate, so the detector's ${pct(ah["SVM accuracy"])} sounds better than it is. Balanced accuracy (${pct(ah["balanced accuracy"])}) and F1 (${fmt(ah.F1)}) show the real gain. Slippery Slope is the easiest focus fallacy: its templates and chain words (“eventually”, “lead to”) are very distinctive.`;
+
+  // Q2
+  const q2 = R.q2, mods = [...new Set(q2.map(r => r.model))];
+  const keys = [...new Set(q2.map(r => r.tokens + "|" + r.representation))];
+  table(document.getElementById("table-q2"), [{ h: "tokens", f: r => r.k.split("|")[0] }, { h: "representation", f: r => r.k.split("|")[1] },
+    ...mods.map(m => ({ h: m, num: 1, f: r => fmt(q2.find(x => x.tokens + "|" + x.representation === r.k && x.model === m).macro_f1) }))],
+    keys.map(k => ({ k, _class: k === "word uni+bi|TF-IDF" ? "hl" : "" })));
+  const g = (t, rep, m) => q2.find(x => x.tokens === t && x.representation === rep && x.model === m).macro_f1;
+  document.getElementById("q2-text").innerHTML = `<b>Answer to Q2:</b> it depends on the model, which is why the comparison must hold the model fixed. With the notebook-03 setting (LR, C = 1), raw BoW counts beat TF-IDF by a wide margin (${fmt(g("word uni+bi", "BoW counts", mods[0]))} vs ${fmt(g("word uni+bi", "TF-IDF", mods[0]))}). Unit-length TF-IDF rows have tiny feature values, so the same C regularises them far harder. Under the tuned SVM, TF-IDF wins (${fmt(g("word uni+bi", "TF-IDF", mods[1]))} vs ${fmt(g("word uni+bi", "BoW counts", mods[1]))}). Word tokens beat BPE subwords under both models, and bigrams help (Q1 revisited).`;
+
+  // Q4
+  const q4 = R.q4, rare = q4.filter(r => r["train support"] < 150), common = q4.filter(r => r["train support"] >= 150);
+  const mean = (a, k) => a.reduce((s, r) => s + r[k], 0) / a.length;
+  document.getElementById("q4-text").innerHTML = `<b>Answer to Q4.</b> Without class weights, F1 tends to rise with training support (Spearman ρ ≈ 0.47 over 16 labels, p ≈ 0.06). Balanced weighting gains on average +${fmt(mean(rare, "gain"))} F1 on the four labels with fewer than 150 training examples, against +${fmt(mean(common, "gain"))} on the rest. Rare-label F1 rests on 5–19 validation positives, so individual values swing widely (Red Herring even drops). Support also correlates with how templated a label is (§7D), so this is association, not cause.`;
+
+  // Q6
+  const q6 = R.q6, o = q6[0], gr = q6.slice(1);
+  const pl = R.q6_per_label.slice().sort((a, b) => b["share in groups"] - a["share in groups"]);
+  document.getElementById("q6-text").innerHTML = `<b>Answer to Q6: yes.</b> Ordinary 5-fold CV on train + validation gives macro-F1 <b>${fmt(o["macro_f1 mean"])}</b>. Keeping every near-duplicate cluster inside one fold drops it to <b>${fmt(gr[0]["macro_f1 mean"])}</b> (τ = ${gr[0].tau}) and <b>${fmt(gr[gr.length - 1]["macro_f1 mean"])}</b> (τ = ${gr[gr.length - 1].tau}). Micro-F1 barely moves (${fmt(o["micro_f1 mean"])} → ${fmt(gr[gr.length - 1]["micro_f1 mean"])}), because the loss is concentrated in the rare, templated fallacies. ${pct(pl[0]["share in groups"], 0)} of ${pl[0].label} examples sit in near-duplicate clusters, and its F1 falls from ${fmt(pl[0]["F1 ordinary CV"])} to ${fmt(pl[0]["F1 group CV τ=0.8"])}. We checked that no fold is missing any label, so this is not a scoring artefact.`;
+  table(document.getElementById("table-q6"), [{ h: "label", k: "label" }, { h: "examples", num: 1, k: "train+val support" },
+    { h: "share in near-dup. clusters", num: 1, f: r => pct(r["share in groups"], 0) }, { h: "F1 ordinary CV", num: 1, f: r => fmt(r["F1 ordinary CV"]) },
+    { h: "F1 group CV (τ=0.8)", num: 1, f: r => fmt(r["F1 group CV τ=0.8"]) }, { h: "drop", num: 1, f: r => fmt(r.drop) }], pl);
+
+  // structural
+  const sv_ = P.structural_val, sc_ = P.structural_cv, fn = n => sv_.find(r => r.features.startsWith(n)).macro_f1;
+  document.getElementById("struct-text").innerHTML = `Weight of each structural feature per fallacy (L2 logistic regression on the 13 standardised features; log-odds per +1 SD). Each pattern's strongest positive weight lands on the fallacy its definition predicts: chain and if–then → Slippery Slope, either–or → False Dilemma, authority → Appeal to Authority, popularity → Bandwagon, universal → Hasty Generalization, negation → Denying the Antecedent. Alone, the 13 features reach validation macro-F1 ${fmt(fn("structural only"))}, about 4× the random baseline. Added to TF-IDF they move it from ${fmt(fn("TF-IDF only"))} to ${fmt(fn("TF-IDF + structural"))} (5-fold CV: ${fmt(sc_[0].cv_macro_f1)} → ${fmt(Math.max(...sc_.map(r => r.cv_macro_f1)))}, within one fold-to-fold SD). On test the combined model scores ${fmt(R.test_table.find(r => r.model === "TF-IDF + structural Linear SVM").macro_f1)}, level with TF-IDF alone. <b>Argument form is learnable, but n-grams already contain the same cue words, so explicit structure adds nothing that generalises.</b> Large negative weights on the rarest labels come from balanced weighting of a handful of positives and should not be over-read; log length favouring Slippery Slope is a length shortcut.`;
+
+  // support vectors
+  const bs = P.boundary_summary;
+  document.getElementById("sv-text").innerHTML = bs.map(r => `${r.fallacy}: ${r["support vectors"].toLocaleString()} support vectors (${pct(r["SV share of train"], 0)} of training arguments, ${pct(r["positives that are SVs"], 0)} of its positives)`).join("; ") + ". The classes are far from separable with a wide margin, so each boundary rests on thousands of arguments, not a few prototypes.";
+  table(document.getElementById("table-boundary"), [{ h: "boundary of", k: "fallacy" }, { h: "f(x)", num: 1, f: r => fmt(r["margin f(x)"]) },
+    { h: "true labels", k: "all true labels" }, { h: "argument", f: r => r.argument }], P.boundary_cases.filter((_, i) => i % 4 < 2));
+}
+// highlight current section in nav
+const links = [...document.querySelectorAll("nav a")];
+const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id)); }), { rootMargin: "-40% 0px -55% 0px" });
+document.querySelectorAll("section, .tool[id]").forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
