@@ -105,7 +105,7 @@ Limitations section.
 
 ## AI use
 
-Claude and ChatGPT assisted with code for notebooks and with drafting codes. We re-ran every notebook, checked the outputs and are responsible for all results.
+We used Claude and ChatGPT to help draft the experiment code in `src/` and the notebooks. Every number reported in this repository comes from running our notebooks; we re-ran them, checked the outputs, and take responsibility for all the results.
 
 ## External data (notebooks 11-12)
 
