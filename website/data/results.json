@@ -1,0 +1,2527 @@
+{
+ "test_table": [
+  {
+   "model": "Most-frequent label",
+   "micro_f1": 0.23675860385648034,
+   "macro_f1": 0.02704058876003568,
+   "weighted_f1": 0.08967306358028927,
+   "micro_precision": 0.27603870233352307,
+   "micro_recall": 0.20726495726495728,
+   "hamming_loss": 0.11123363688104725,
+   "subset_accuracy": 0.15025611838360842,
+   "macro_avg_precision": 0.08323847467273762,
+   "macro_f1_95ci": "[0.025, 0.029]",
+   "delta_macro_f1_vs_baseline_95ci": null
+  },
+  {
+   "model": "Stratified random",
+   "micro_f1": 0.15675446049277825,
+   "macro_f1": 0.0817539786491662,
+   "weighted_f1": 0.157299534648766,
+   "micro_precision": 0.15582770270270271,
+   "micro_recall": 0.1576923076923077,
+   "hamming_loss": 0.14122083096186683,
+   "subset_accuracy": 0.03130335799658509,
+   "macro_avg_precision": 0.08323847467273762,
+   "macro_f1_95ci": "[0.074, 0.090]",
+   "delta_macro_f1_vs_baseline_95ci": null
+  },
+  {
+   "model": "Unigram BoW + LR (baseline)",
+   "micro_f1": 0.7940639269406393,
+   "macro_f1": 0.7511386275143801,
+   "weighted_f1": 0.7917442423229158,
+   "micro_precision": 0.8524509803921568,
+   "micro_recall": 0.7431623931623932,
+   "hamming_loss": 0.03208594194649972,
+   "subset_accuracy": 0.6306203756402959,
+   "macro_avg_precision": 0.81525013838833,
+   "macro_f1_95ci": "[0.699, 0.786]",
+   "delta_macro_f1_vs_baseline_95ci": null
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "micro_f1": 0.7983377077865267,
+   "macro_f1": 0.7728641105380656,
+   "weighted_f1": 0.7981881728946743,
+   "micro_precision": 0.817652329749104,
+   "micro_recall": 0.7799145299145299,
+   "hamming_loss": 0.03279738190096756,
+   "subset_accuracy": 0.6471257825839499,
+   "macro_avg_precision": 0.8260809918197256,
+   "macro_f1_95ci": "[0.729, 0.805]",
+   "delta_macro_f1_vs_baseline_95ci": "[-0.007, +0.057]"
+  },
+  {
+   "model": "TF-IDF LR-L2 (ridge)",
+   "micro_f1": 0.8238623993032876,
+   "macro_f1": 0.7894807165684523,
+   "weighted_f1": 0.8230584169541988,
+   "micro_precision": 0.8397691966267199,
+   "micro_recall": 0.8085470085470086,
+   "hamming_loss": 0.028777746158224246,
+   "subset_accuracy": 0.6818440523619806,
+   "macro_avg_precision": 0.8429291593013616,
+   "macro_f1_95ci": "[0.746, 0.820]",
+   "delta_macro_f1_vs_baseline_95ci": "[+0.005, +0.077]"
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "micro_f1": 0.8320545609548167,
+   "macro_f1": 0.8045460250513587,
+   "weighted_f1": 0.8325824057345973,
+   "micro_precision": 0.8299319727891157,
+   "micro_recall": 0.8341880341880342,
+   "hamming_loss": 0.02803073420603301,
+   "subset_accuracy": 0.6943653955606147,
+   "macro_avg_precision": 0.8459776278308753,
+   "macro_f1_95ci": "[0.764, 0.834]",
+   "delta_macro_f1_vs_baseline_95ci": "[+0.021, +0.092]"
+  },
+  {
+   "model": "SVD-1000 + LR (PCA)",
+   "micro_f1": 0.793483047115808,
+   "macro_f1": 0.7608557842541799,
+   "weighted_f1": 0.7922175370666099,
+   "micro_precision": 0.818346957311535,
+   "micro_recall": 0.7700854700854701,
+   "hamming_loss": 0.03336653386454183,
+   "subset_accuracy": 0.6323278315310188,
+   "macro_avg_precision": 0.8087100646582632,
+   "macro_f1_95ci": "[0.712, 0.793]",
+   "delta_macro_f1_vs_baseline_95ci": "[-0.019, +0.048]"
+  },
+  {
+   "model": "SVD-300 + RBF SVM",
+   "micro_f1": 0.8147653991549922,
+   "macro_f1": 0.7644130282990249,
+   "weighted_f1": 0.8137476068873313,
+   "micro_precision": 0.8493277700509968,
+   "micro_recall": 0.7829059829059829,
+   "hamming_loss": 0.02963147410358566,
+   "subset_accuracy": 0.6738759248719408,
+   "macro_avg_precision": 0.8154534467006858,
+   "macro_f1_95ci": "[0.713, 0.798]",
+   "delta_macro_f1_vs_baseline_95ci": "[-0.028, +0.052]"
+  },
+  {
+   "model": "TF-IDF + structural Linear SVM",
+   "micro_f1": 0.8284554582354198,
+   "macro_f1": 0.804075724333789,
+   "weighted_f1": 0.8288062644427813,
+   "micro_precision": 0.8282785134557882,
+   "micro_recall": 0.8286324786324787,
+   "hamming_loss": 0.028564314171883893,
+   "subset_accuracy": 0.688673875924872,
+   "macro_avg_precision": 0.8511927604736561,
+   "macro_f1_95ci": "[0.761, 0.834]",
+   "delta_macro_f1_vs_baseline_95ci": "[+0.021, +0.093]"
+  },
+  {
+   "model": "Calibrated Linear SVM + val-tuned thresholds",
+   "micro_f1": 0.8251178739819974,
+   "macro_f1": 0.7814061094077778,
+   "weighted_f1": 0.8257970885170959,
+   "micro_precision": 0.8276010318142735,
+   "micro_recall": 0.8226495726495726,
+   "hamming_loss": 0.02902675014228799,
+   "subset_accuracy": 0.6812749003984063,
+   "macro_avg_precision": 0.8424396084234149,
+   "macro_f1_95ci": "[0.735, 0.813]",
+   "delta_macro_f1_vs_baseline_95ci": "[-0.006, +0.069]"
+  }
+ ],
+ "per_class": [
+  {
+   "label": "Slippery Slope",
+   "test support": 485,
+   "BoW + LR baseline": 0.8948453608247423,
+   "TF-IDF Lasso": 0.882051282051282,
+   "Linear SVM": 0.9056224899598394,
+   "Cal. SVM + thresholds": 0.9019607843137255
+  },
+  {
+   "label": "Appeal to Authority",
+   "test support": 316,
+   "BoW + LR baseline": 0.7973199329983249,
+   "TF-IDF Lasso": 0.8052373158756138,
+   "Linear SVM": 0.8598425196850393,
+   "Cal. SVM + thresholds": 0.8427876823338736
+  },
+  {
+   "label": "Bandwagon / Popularity",
+   "test support": 281,
+   "BoW + LR baseline": 0.7458256029684601,
+   "TF-IDF Lasso": 0.7686832740213523,
+   "Linear SVM": 0.8019639934533551,
+   "Cal. SVM + thresholds": 0.8
+  },
+  {
+   "label": "Hasty Generalization",
+   "test support": 207,
+   "BoW + LR baseline": 0.6889460154241646,
+   "TF-IDF Lasso": 0.6811594202898551,
+   "Linear SVM": 0.7142857142857143,
+   "Cal. SVM + thresholds": 0.7061611374407583
+  },
+  {
+   "label": "False Cause / Causality",
+   "test support": 215,
+   "BoW + LR baseline": 0.7866323907455013,
+   "TF-IDF Lasso": 0.8078817733990148,
+   "Linear SVM": 0.8190954773869347,
+   "Cal. SVM + thresholds": 0.8202531645569621
+  },
+  {
+   "label": "Appeal to Emotion",
+   "test support": 208,
+   "BoW + LR baseline": 0.8071979434447301,
+   "TF-IDF Lasso": 0.7810945273631841,
+   "Linear SVM": 0.8444444444444444,
+   "Cal. SVM + thresholds": 0.8305489260143198
+  },
+  {
+   "label": "Composition",
+   "test support": 131,
+   "BoW + LR baseline": 0.8067226890756303,
+   "TF-IDF Lasso": 0.776,
+   "Linear SVM": 0.7967479674796748,
+   "Cal. SVM + thresholds": 0.8185654008438819
+  },
+  {
+   "label": "False Dilemma",
+   "test support": 146,
+   "BoW + LR baseline": 0.8059701492537313,
+   "TF-IDF Lasso": 0.7986111111111112,
+   "Linear SVM": 0.8402777777777778,
+   "Cal. SVM + thresholds": 0.8215488215488216
+  },
+  {
+   "label": "Ad Hominem",
+   "test support": 119,
+   "BoW + LR baseline": 0.6889952153110048,
+   "TF-IDF Lasso": 0.7457627118644068,
+   "Linear SVM": 0.782608695652174,
+   "Cal. SVM + thresholds": 0.7888446215139442
+  },
+  {
+   "label": "Equivocation",
+   "test support": 86,
+   "BoW + LR baseline": 0.7866666666666666,
+   "TF-IDF Lasso": 0.8466257668711656,
+   "Linear SVM": 0.8734177215189873,
+   "Cal. SVM + thresholds": 0.863905325443787
+  },
+  {
+   "label": "Circular Reasoning",
+   "test support": 74,
+   "BoW + LR baseline": 0.704,
+   "TF-IDF Lasso": 0.782608695652174,
+   "Linear SVM": 0.8201438848920863,
+   "Cal. SVM + thresholds": 0.8115942028985508
+  },
+  {
+   "label": "Straw Man",
+   "test support": 35,
+   "BoW + LR baseline": 0.7368421052631579,
+   "TF-IDF Lasso": 0.8,
+   "Linear SVM": 0.8,
+   "Cal. SVM + thresholds": 0.7796610169491526
+  },
+  {
+   "label": "Red Herring",
+   "test support": 7,
+   "BoW + LR baseline": 0.4444444444444444,
+   "TF-IDF Lasso": 0.5714285714285714,
+   "Linear SVM": 0.5,
+   "Cal. SVM + thresholds": 0.5
+  },
+  {
+   "label": "Appeal to Ignorance",
+   "test support": 7,
+   "BoW + LR baseline": 0.6666666666666666,
+   "TF-IDF Lasso": 0.7692307692307693,
+   "Linear SVM": 0.8571428571428571,
+   "Cal. SVM + thresholds": 0.6666666666666666
+  },
+  {
+   "label": "Affirming the Consequent",
+   "test support": 15,
+   "BoW + LR baseline": 0.8,
+   "TF-IDF Lasso": 0.6923076923076923,
+   "Linear SVM": 0.8,
+   "Cal. SVM + thresholds": 0.75
+  },
+  {
+   "label": "Denying the Antecedent",
+   "test support": 8,
+   "BoW + LR baseline": 0.8571428571428571,
+   "TF-IDF Lasso": 0.8571428571428571,
+   "Linear SVM": 0.8571428571428571,
+   "Cal. SVM + thresholds": 0.8
+  }
+ ],
+ "overlap": [
+  {
+   "model": "Unigram BoW + LR (baseline)",
+   "bucket": "template-seen",
+   "n": 251,
+   "micro_f1": 0.9125,
+   "ci_lo": 0.8846052631578947,
+   "ci_hi": 0.9421487603305785
+  },
+  {
+   "model": "Unigram BoW + LR (baseline)",
+   "bucket": "intermediate",
+   "n": 451,
+   "micro_f1": 0.8592283628779979,
+   "ci_lo": 0.8334991182432989,
+   "ci_hi": 0.8822391118982028
+  },
+  {
+   "model": "Unigram BoW + LR (baseline)",
+   "bucket": "novel",
+   "n": 1055,
+   "micro_f1": 0.7534852091125468,
+   "ci_lo": 0.7354782530285465,
+   "ci_hi": 0.7709043325158133
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "bucket": "template-seen",
+   "n": 251,
+   "micro_f1": 0.9270216962524654,
+   "ci_lo": 0.8941072255673923,
+   "ci_hi": 0.9565260184868196
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "bucket": "intermediate",
+   "n": 451,
+   "micro_f1": 0.8853439680957128,
+   "ci_lo": 0.8618649067286513,
+   "ci_hi": 0.9074451184720261
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "bucket": "novel",
+   "n": 1055,
+   "micro_f1": 0.7485303723056825,
+   "ci_lo": 0.7301680138487081,
+   "ci_hi": 0.7676721069640403
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "bucket": "template-seen",
+   "n": 251,
+   "micro_f1": 0.9409448818897638,
+   "ci_lo": 0.9087200045598769,
+   "ci_hi": 0.968503937007874
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "bucket": "intermediate",
+   "n": 451,
+   "micro_f1": 0.888235294117647,
+   "ci_lo": 0.8652834328726913,
+   "ci_hi": 0.9085666973767154
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "bucket": "novel",
+   "n": 1055,
+   "micro_f1": 0.7964601769911505,
+   "ci_lo": 0.7785604307370656,
+   "ci_hi": 0.8127784212991486
+  },
+  {
+   "model": "Calibrated Linear SVM + val-tuned thresholds",
+   "bucket": "template-seen",
+   "n": 251,
+   "micro_f1": 0.9270216962524654,
+   "ci_lo": 0.8927770339089733,
+   "ci_hi": 0.9565217391304348
+  },
+  {
+   "model": "Calibrated Linear SVM + val-tuned thresholds",
+   "bucket": "intermediate",
+   "n": 451,
+   "micro_f1": 0.8814229249011858,
+   "ci_lo": 0.8559953055881556,
+   "ci_hi": 0.9047141424272819
+  },
+  {
+   "model": "Calibrated Linear SVM + val-tuned thresholds",
+   "bucket": "novel",
+   "n": 1055,
+   "micro_f1": 0.790594216714331,
+   "ci_lo": 0.7732646927622372,
+   "ci_hi": 0.8071199779992955
+  }
+ ],
+ "stress": [
+  {
+   "model": "TF-IDF Linear SVM",
+   "test": "topic swap (top-weighted)",
+   "true positives": 1952,
+   "edited": 1951,
+   "flip rate": 0.2229625832906202
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "test": "topic swap (random control)",
+   "true positives": 1952,
+   "edited": 1952,
+   "flip rate": 0.055327868852459015
+  },
+  {
+   "model": "TF-IDF Linear SVM",
+   "test": "cue synonym swap",
+   "true positives": 1952,
+   "edited": 1499,
+   "flip rate": 0.08872581721147432
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "test": "topic swap (top-weighted)",
+   "true positives": 1825,
+   "edited": 1773,
+   "flip rate": 0.2222222222222222
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "test": "topic swap (random control)",
+   "true positives": 1825,
+   "edited": 1825,
+   "flip rate": 0.06575342465753424
+  },
+  {
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "test": "cue synonym swap",
+   "true positives": 1825,
+   "edited": 1390,
+   "flip rate": 0.1079136690647482
+  }
+ ],
+ "masking": [
+  {
+   "input": "full text",
+   "model": "TF-IDF Linear SVM",
+   "macro_f1": 0.8045460250513587
+  },
+  {
+   "input": "full text",
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "macro_f1": 0.7728641105380656
+  },
+  {
+   "input": "no topic words",
+   "model": "TF-IDF Linear SVM",
+   "macro_f1": 0.6701826351715123
+  },
+  {
+   "input": "no topic words",
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "macro_f1": 0.6343054186507842
+  },
+  {
+   "input": "no cue words",
+   "model": "TF-IDF Linear SVM",
+   "macro_f1": 0.7154124987136552
+  },
+  {
+   "input": "no cue words",
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "macro_f1": 0.656942883589651
+  },
+  {
+   "input": "topic words only",
+   "model": "TF-IDF Linear SVM",
+   "macro_f1": 0.4715731898522765
+  },
+  {
+   "input": "topic words only",
+   "model": "TF-IDF LR-L1 (Lasso)",
+   "macro_f1": 0.45932063734987216
+  }
+ ],
+ "confusion_pairs": [
+  {
+   "true (missed)": "Composition",
+   "predicted instead": "Bandwagon / Popularity",
+   "count": 15
+  },
+  {
+   "true (missed)": "Appeal to Authority",
+   "predicted instead": "Bandwagon / Popularity",
+   "count": 11
+  },
+  {
+   "true (missed)": "False Cause / Causality",
+   "predicted instead": "Hasty Generalization",
+   "count": 10
+  },
+  {
+   "true (missed)": "Bandwagon / Popularity",
+   "predicted instead": "Hasty Generalization",
+   "count": 8
+  },
+  {
+   "true (missed)": "Hasty Generalization",
+   "predicted instead": "Bandwagon / Popularity",
+   "count": 7
+  },
+  {
+   "true (missed)": "Composition",
+   "predicted instead": "Hasty Generalization",
+   "count": 6
+  },
+  {
+   "true (missed)": "Appeal to Authority",
+   "predicted instead": "Hasty Generalization",
+   "count": 6
+  },
+  {
+   "true (missed)": "Slippery Slope",
+   "predicted instead": "Bandwagon / Popularity",
+   "count": 6
+  },
+  {
+   "true (missed)": "False Cause / Causality",
+   "predicted instead": "Slippery Slope",
+   "count": 6
+  },
+  {
+   "true (missed)": "Straw Man",
+   "predicted instead": "Ad Hominem",
+   "count": 6
+  }
+ ],
+ "error_status": {
+  "correct": 1197,
+  "missed label(s)": 208,
+  "extra label(s)": 190,
+  "swapped": 162
+ },
+ "bucket_counts": {
+  "novel": 1055,
+  "intermediate": 451,
+  "template-seen": 251
+ },
+ "focus_binary": [
+  {
+   "fallacy": "Slippery Slope",
+   "test prevalence": 0.27603870233352307,
+   "majority-class accuracy": 0.7239612976664769,
+   "SVM accuracy": 0.9464997154240182,
+   "balanced accuracy": 0.9413635479478701,
+   "F1": 0.9056224899598394,
+   "average precision": 0.9612229460181689
+  },
+  {
+   "fallacy": "Ad Hominem",
+   "test prevalence": 0.06772908366533864,
+   "majority-class accuracy": 0.9322709163346614,
+   "SVM accuracy": 0.9686966420034149,
+   "balanced accuracy": 0.9052826258708612,
+   "F1": 0.782608695652174,
+   "average precision": 0.8671419525278632
+  },
+  {
+   "fallacy": "False Dilemma",
+   "test prevalence": 0.08309618668184406,
+   "majority-class accuracy": 0.916903813318156,
+   "SVM accuracy": 0.9738190096755834,
+   "balanced accuracy": 0.9078658707686028,
+   "F1": 0.8402777777777778,
+   "average precision": 0.8965312271173037
+  }
+ ],
+ "val_shortcuts": {
+  "val_overlap": [
+   {
+    "model": "LinearSVM",
+    "bucket": "template-seen",
+    "n": 266,
+    "micro_f1": 0.9520295202952029,
+    "micro_f1_95ci": "[0.931, 0.970]",
+    "macro_f1": 0.8707113658557287
+   },
+   {
+    "model": "LinearSVM",
+    "bucket": "intermediate",
+    "n": 443,
+    "micro_f1": 0.9212121212121213,
+    "micro_f1_95ci": "[0.900, 0.941]",
+    "macro_f1": 0.8614686337042773
+   },
+   {
+    "model": "LinearSVM",
+    "bucket": "novel",
+    "n": 1059,
+    "micro_f1": 0.7851662404092071,
+    "micro_f1_95ci": "[0.769, 0.801]",
+    "macro_f1": 0.6656133896449414
+   },
+   {
+    "model": "LR-L1",
+    "bucket": "template-seen",
+    "n": 266,
+    "micro_f1": 0.9534450651769087,
+    "micro_f1_95ci": "[0.930, 0.972]",
+    "macro_f1": 0.8704979612969732
+   },
+   {
+    "model": "LR-L1",
+    "bucket": "intermediate",
+    "n": 443,
+    "micro_f1": 0.9117043121149897,
+    "micro_f1_95ci": "[0.890, 0.931]",
+    "macro_f1": 0.8432223343440478
+   },
+   {
+    "model": "LR-L1",
+    "bucket": "novel",
+    "n": 1059,
+    "micro_f1": 0.7573385518590998,
+    "micro_f1_95ci": "[0.741, 0.774]",
+    "macro_f1": 0.6639909854390215
+   },
+   {
+    "model": "LR-L2",
+    "bucket": "template-seen",
+    "n": 266,
+    "micro_f1": 0.9459962756052142,
+    "micro_f1_95ci": "[0.925, 0.965]",
+    "macro_f1": 0.858841250247223
+   },
+   {
+    "model": "LR-L2",
+    "bucket": "intermediate",
+    "n": 443,
+    "micro_f1": 0.9161554192229039,
+    "micro_f1_95ci": "[0.894, 0.936]",
+    "macro_f1": 0.8614371419045979
+   },
+   {
+    "model": "LR-L2",
+    "bucket": "novel",
+    "n": 1059,
+    "micro_f1": 0.7756452680344142,
+    "micro_f1_95ci": "[0.758, 0.791]",
+    "macro_f1": 0.6399474009176939
+   }
+  ],
+  "val_masking": [
+   {
+    "input": "full text",
+    "model": "LinearSVM",
+    "micro_f1": 0.8334763948497854,
+    "macro_f1": 0.8228550924020248
+   },
+   {
+    "input": "full text",
+    "model": "LR-L1",
+    "micro_f1": 0.8131964168669434,
+    "macro_f1": 0.8155356267687837
+   },
+   {
+    "input": "full text",
+    "model": "LR-L2",
+    "micro_f1": 0.8260965395635883,
+    "macro_f1": 0.8107884067165241
+   },
+   {
+    "input": "no topic words (cue + function only)",
+    "model": "LinearSVM",
+    "micro_f1": 0.7298438159560996,
+    "macro_f1": 0.6517107993665189
+   },
+   {
+    "input": "no topic words (cue + function only)",
+    "model": "LR-L1",
+    "micro_f1": 0.7192982456140351,
+    "macro_f1": 0.6230480866928335
+   },
+   {
+    "input": "no topic words (cue + function only)",
+    "model": "LR-L2",
+    "micro_f1": 0.7250844594594594,
+    "macro_f1": 0.6368303854040791
+   },
+   {
+    "input": "no cue words",
+    "model": "LinearSVM",
+    "micro_f1": 0.7445220322658319,
+    "macro_f1": 0.7351817889152139
+   },
+   {
+    "input": "no cue words",
+    "model": "LR-L1",
+    "micro_f1": 0.680019305019305,
+    "macro_f1": 0.6862845726644708
+   },
+   {
+    "input": "no cue words",
+    "model": "LR-L2",
+    "micro_f1": 0.7266009852216748,
+    "macro_f1": 0.7229595266414759
+   },
+   {
+    "input": "no function words",
+    "model": "LinearSVM",
+    "micro_f1": 0.768796992481203,
+    "macro_f1": 0.680685035673188
+   },
+   {
+    "input": "no function words",
+    "model": "LR-L1",
+    "micro_f1": 0.7263850562513267,
+    "macro_f1": 0.6316600403488759
+   },
+   {
+    "input": "no function words",
+    "model": "LR-L2",
+    "micro_f1": 0.7537349397590362,
+    "macro_f1": 0.6790334568891204
+   },
+   {
+    "input": "topic words only",
+    "model": "LinearSVM",
+    "micro_f1": 0.5293093441671504,
+    "macro_f1": 0.5019531577567121
+   },
+   {
+    "input": "topic words only",
+    "model": "LR-L1",
+    "micro_f1": 0.5601295097132285,
+    "macro_f1": 0.49259160392745804
+   },
+   {
+    "input": "topic words only",
+    "model": "LR-L2",
+    "micro_f1": 0.5657142857142857,
+    "macro_f1": 0.5334283837049176
+   }
+  ],
+  "val_restricted": [
+   {
+    "trained & evaluated on": "full text",
+    "vocab": 38246,
+    "micro_f1": 0.8334763948497854,
+    "macro_f1": 0.8228550924020248
+   },
+   {
+    "trained & evaluated on": "no topic words (cue + function only)",
+    "vocab": 8931,
+    "micro_f1": 0.7711143390744968,
+    "macro_f1": 0.7472800420655548
+   },
+   {
+    "trained & evaluated on": "no cue words",
+    "vocab": 35608,
+    "micro_f1": 0.8076923076923077,
+    "macro_f1": 0.7920760236359625
+   },
+   {
+    "trained & evaluated on": "no function words",
+    "vocab": 30304,
+    "micro_f1": 0.8190230256079191,
+    "macro_f1": 0.7899037698498454
+   },
+   {
+    "trained & evaluated on": "topic words only",
+    "vocab": 25129,
+    "micro_f1": 0.770696591149693,
+    "macro_f1": 0.7436512337205994
+   }
+  ],
+  "val_stress": [
+   {
+    "model": "LinearSVM",
+    "test": "topic swap (top-weighted)",
+    "true positives": 1942,
+    "edited": 1940,
+    "flip rate (edited)": 0.23144329896907218
+   },
+   {
+    "model": "LinearSVM",
+    "test": "topic swap (random control)",
+    "true positives": 1942,
+    "edited": 1941,
+    "flip rate (edited)": 0.06027820710973725
+   },
+   {
+    "model": "LinearSVM",
+    "test": "cue synonym swap",
+    "true positives": 1942,
+    "edited": 1458,
+    "flip rate (edited)": 0.09327846364883402
+   },
+   {
+    "model": "LR-L1",
+    "test": "topic swap (top-weighted)",
+    "true positives": 1861,
+    "edited": 1793,
+    "flip rate (edited)": 0.2426101505856107
+   },
+   {
+    "model": "LR-L1",
+    "test": "topic swap (random control)",
+    "true positives": 1861,
+    "edited": 1861,
+    "flip rate (edited)": 0.0800644814615798
+   },
+   {
+    "model": "LR-L1",
+    "test": "cue synonym swap",
+    "true positives": 1861,
+    "edited": 1386,
+    "flip rate (edited)": 0.12698412698412698
+   }
+  ],
+  "proper_noun_ablation": [
+   {
+    "proper nouns masked": false,
+    "model": "LinearSVM",
+    "micro_f1": 0.8334763948497854,
+    "macro_f1": 0.8228550924020248
+   },
+   {
+    "proper nouns masked": false,
+    "model": "LR-L1",
+    "micro_f1": 0.8131964168669434,
+    "macro_f1": 0.8155356267687837
+   },
+   {
+    "proper nouns masked": true,
+    "model": "LinearSVM",
+    "micro_f1": 0.8326161790017211,
+    "macro_f1": 0.823510892569467
+   },
+   {
+    "proper nouns masked": true,
+    "model": "LR-L1",
+    "micro_f1": 0.8114360541248363,
+    "macro_f1": 0.8147441916049912
+   }
+  ],
+  "coef_mass_mean": [
+   {
+    "model": "LinearSVM",
+    "topic": 0.8264283103244411,
+    "cue": 0.08108008719591095,
+    "function": 0.09249160247964802
+   },
+   {
+    "model": "LR-L1",
+    "topic": 0.7950010187563603,
+    "cue": 0.10429951521148002,
+    "function": 0.10069946603215964
+   },
+   {
+    "model": "LR-L2",
+    "topic": 0.8199928874834568,
+    "cue": 0.08181296754164075,
+    "function": 0.09819414497490242
+   }
+  ],
+  "vocab_group_share": {
+   "topic": 0.8923809025780474,
+   "cue": 0.05626732207289651,
+   "function": 0.05135177534905611
+  }
+ },
+ "selection": {
+  "LinearSVM": {
+   "model": "TF-IDF uni+bi LinearSVM C=1 cw=balanced",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8228550924020248,
+   "cv_macro_f1": 0.8076455831245865,
+   "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "LR-L1": {
+   "model": "TF-IDF uni+bi LR-L1 C=1000 cw=balanced",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8155356267687837,
+   "cv_macro_f1": 0.7886999604460192,
+   "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "LR-L2": {
+   "model": "TF-IDF uni+bi LR-L2 C=1000 cw=balanced",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8107884067165241,
+   "cv_macro_f1": 0.8073225224927139,
+   "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "PCA-LR": {
+   "model": "SVD-1000 + LR cw=None",
+   "k": 1000,
+   "C": 1.0,
+   "class_weight": "None",
+   "macro_f1": 0.7686393230640249
+  },
+  "RBF-SVM": {
+   "model": "SVD-300 + RBF-SVM C=10 cw=balanced",
+   "k": 300,
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7894359130522337
+  },
+  "thresholds": {
+   "model": "Calibrated LinearSVM",
+   "f1_tuned_on_val": {
+    "Slippery Slope": 0.56,
+    "Appeal to Authority": 0.51,
+    "Bandwagon / Popularity": 0.46,
+    "Hasty Generalization": 0.4,
+    "False Cause / Causality": 0.36,
+    "Appeal to Emotion": 0.28,
+    "Composition": 0.39,
+    "False Dilemma": 0.25,
+    "Ad Hominem": 0.46,
+    "Equivocation": 0.28,
+    "Circular Reasoning": 0.45,
+    "Straw Man": 0.56,
+    "Red Herring": 0.5,
+    "Appeal to Ignorance": 0.07,
+    "Affirming the Consequent": 0.7,
+    "Denying the Antecedent": 0.06
+   }
+  },
+  "calibration_val": [
+   {
+    "model": "Calibrated LinearSVM",
+    "brier": 0.020744740392789507
+   },
+   {
+    "model": "LR-L1 (raw probabilities)",
+    "brier": 0.02723425996845089
+   }
+  ],
+  "TFIDF+Structural-SVM": {
+   "model": "TF-IDF + structural (w=1) Linear SVM",
+   "weight": 1.0,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "cv_macro_f1": 0.8100312742629139,
+   "beats_tfidf_only_in_cv": true
+  },
+  "focus_binary": {
+   "fallacies": [
+    "Slippery Slope",
+    "Ad Hominem",
+    "False Dilemma"
+   ],
+   "model": "LinearSVC per fallacy",
+   "C": 1.0,
+   "class_weight": "balanced"
+  }
+ },
+ "val_grid_linear": [
+  {
+   "model": "Most-frequent label",
+   "family": "baseline",
+   "ngram": null,
+   "penalty": null,
+   "C": null,
+   "class_weight": null,
+   "macro_f1": 0.02712577502214349,
+   "micro_f1": 0.23972602739726026,
+   "nonzero_frac": null
+  },
+  {
+   "model": "Stratified random",
+   "family": "baseline",
+   "ngram": null,
+   "penalty": null,
+   "C": null,
+   "class_weight": null,
+   "macro_f1": 0.08498370575598274,
+   "micro_f1": 0.15230801957030418,
+   "nonzero_frac": null
+  },
+  {
+   "model": "Unigram BoW + LR (nb03)",
+   "family": "baseline",
+   "ngram": null,
+   "penalty": null,
+   "C": null,
+   "class_weight": null,
+   "macro_f1": 0.7641158168265758,
+   "micro_f1": 0.7974068071312804,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=0.1 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.3607950833321089,
+   "micro_f1": 0.6202247191011236,
+   "nonzero_frac": 0.002203851153721157
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=0.1 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.5500681684268498,
+   "micro_f1": 0.6590443686006826,
+   "nonzero_frac": 0.007962300942476437
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=1 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.6506805820558939,
+   "micro_f1": 0.7773731488225297,
+   "nonzero_frac": 0.026385277868053298
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=1 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.6924566353075221,
+   "micro_f1": 0.7555973659454375,
+   "nonzero_frac": 0.05892508937276568
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=10 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.7752796686137498,
+   "micro_f1": 0.7943520838077887,
+   "nonzero_frac": 0.15027827429314267
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=10 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7583571572248113,
+   "micro_f1": 0.7806691449814126,
+   "nonzero_frac": 0.16081004224894377
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=100 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 100.0,
+   "class_weight": null,
+   "macro_f1": 0.770825958799297,
+   "micro_f1": 0.7726675427069645,
+   "nonzero_frac": 0.18610862853428664
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=100 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 100.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7471048855611475,
+   "micro_f1": 0.7628043660789253,
+   "nonzero_frac": 0.18817029574260644
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=1000 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 1000.0,
+   "class_weight": null,
+   "macro_f1": 0.7603986600417061,
+   "micro_f1": 0.7603341186549583,
+   "nonzero_frac": 0.20838072798180046
+  },
+  {
+   "model": "TF-IDF uni LR-L1 C=1000 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni",
+   "penalty": "l1",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7430251443380853,
+   "micro_f1": 0.7586641461877757,
+   "nonzero_frac": 0.20118012674683133
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=0.1 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.2566890351615514,
+   "micro_f1": 0.5182160804020101,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=0.1 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.6535520166475706,
+   "micro_f1": 0.7260223048327138,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=1 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.5298597979782178,
+   "micro_f1": 0.7533723593789768,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=1 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7276380745395366,
+   "micro_f1": 0.7751878250818725,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=10 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.6798680319734469,
+   "micro_f1": 0.7977342459287231,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=10 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7697537236044405,
+   "micro_f1": 0.7963414634146342,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=100 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 100.0,
+   "class_weight": null,
+   "macro_f1": 0.7550219532406302,
+   "micro_f1": 0.7882379758377023,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=100 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 100.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7817747031613942,
+   "micro_f1": 0.7836924376848331,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=1000 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 1000.0,
+   "class_weight": null,
+   "macro_f1": 0.7659701974519378,
+   "micro_f1": 0.7848214285714286,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LR-L2 C=1000 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni",
+   "penalty": "l2",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.776541767429263,
+   "micro_f1": 0.7762931034482758,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=0.1 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.5529032707414606,
+   "micro_f1": 0.7602635580334516,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=0.1 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.7422660677508952,
+   "micro_f1": 0.7790900290416264,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=1 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.7843041975111149,
+   "micro_f1": 0.8063536556879234,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=1 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7809845843087739,
+   "micro_f1": 0.7950920245398773,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=10 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.7760266293471831,
+   "micro_f1": 0.7770419426048565,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni LinearSVM C=10 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni",
+   "penalty": "l2-hinge",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7631722749988645,
+   "micro_f1": 0.7673434856175972,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=0.1 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.32037104489434975,
+   "micro_f1": 0.570426651081239,
+   "nonzero_frac": 0.0001846598337081002
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=0.1 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.5429485755721765,
+   "micro_f1": 0.6440564137004701,
+   "nonzero_frac": 0.000898786801234116
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=1 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.6088545101274199,
+   "micro_f1": 0.7771317829457365,
+   "nonzero_frac": 0.002743750980494692
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=1 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7194860765327831,
+   "micro_f1": 0.7656569410890169,
+   "nonzero_frac": 0.007608638811901898
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=10 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.7929231445104983,
+   "micro_f1": 0.8149490373725934,
+   "nonzero_frac": 0.023948582858338126
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=10 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8013260874130221,
+   "micro_f1": 0.8113326337880378,
+   "nonzero_frac": 0.025889962349003818
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=100 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 100.0,
+   "class_weight": null,
+   "macro_f1": 0.7994185855995053,
+   "micro_f1": 0.8096622679490046,
+   "nonzero_frac": 0.031848101762275795
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=100 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 100.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8111434185720108,
+   "micro_f1": 0.8095340347863431,
+   "nonzero_frac": 0.0327272786696648
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=1000 cw=None",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 1000.0,
+   "class_weight": null,
+   "macro_f1": 0.8002092249735266,
+   "micro_f1": 0.8080035971223022,
+   "nonzero_frac": 0.04275447105579668
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L1 C=1000 cw=balanced",
+   "family": "LR-L1",
+   "ngram": "uni+bi",
+   "penalty": "l1",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8155356267687837,
+   "micro_f1": 0.8131964168669434,
+   "nonzero_frac": 0.03969205930031899
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=0.1 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.1787505369271925,
+   "micro_f1": 0.40858018386108275,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=0.1 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.7307240984620736,
+   "micro_f1": 0.7552256300058605,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=1 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.5055701880642093,
+   "micro_f1": 0.747031491997935,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=1 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7716521204378617,
+   "micro_f1": 0.8040363269424824,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=10 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.6848230207282924,
+   "micro_f1": 0.805318138651472,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=10 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8059925975795573,
+   "micro_f1": 0.8265932669913191,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=100 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 100.0,
+   "class_weight": null,
+   "macro_f1": 0.7796406164033811,
+   "micro_f1": 0.8223489167616875,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=100 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 100.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8103068569344841,
+   "micro_f1": 0.8260963491034781,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=1000 cw=None",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 1000.0,
+   "class_weight": null,
+   "macro_f1": 0.7878265467052227,
+   "micro_f1": 0.8236883584778203,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LR-L2 C=1000 cw=balanced",
+   "family": "LR-L2",
+   "ngram": "uni+bi",
+   "penalty": "l2",
+   "C": 1000.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8107884067165241,
+   "micro_f1": 0.8260965395635883,
+   "nonzero_frac": 1.0
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=0.1 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 0.1,
+   "class_weight": null,
+   "macro_f1": 0.5346253937344114,
+   "micro_f1": 0.7586912065439673,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=0.1 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 0.1,
+   "class_weight": "balanced",
+   "macro_f1": 0.7934501080536102,
+   "micro_f1": 0.8128298822574097,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=1 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.7844319591563503,
+   "micro_f1": 0.8230912476722533,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=1 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8228550924020248,
+   "micro_f1": 0.8334763948497854,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=10 cw=None",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.8158363116190378,
+   "micro_f1": 0.8214285714285714,
+   "nonzero_frac": null
+  },
+  {
+   "model": "TF-IDF uni+bi LinearSVM C=10 cw=balanced",
+   "family": "LinearSVM",
+   "ngram": "uni+bi",
+   "penalty": "l2-hinge",
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.8116615561290152,
+   "micro_f1": 0.8193418401611821,
+   "nonzero_frac": null
+  }
+ ],
+ "val_grid_dense": [
+  {
+   "model": "SVD-50 + LR cw=None",
+   "family": "PCA-LR",
+   "k": 50,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.5530312716827541,
+   "micro_f1": 0.724759318686744
+  },
+  {
+   "model": "SVD-50 + LR cw=balanced",
+   "family": "PCA-LR",
+   "k": 50,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.4569040763815818,
+   "micro_f1": 0.5742545454545455
+  },
+  {
+   "model": "SVD-100 + LR cw=None",
+   "family": "PCA-LR",
+   "k": 100,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.6218788178695838,
+   "micro_f1": 0.7585875570502042
+  },
+  {
+   "model": "SVD-100 + LR cw=balanced",
+   "family": "PCA-LR",
+   "k": 100,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.5196627084479698,
+   "micro_f1": 0.636681500317864
+  },
+  {
+   "model": "SVD-300 + LR cw=None",
+   "family": "PCA-LR",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.7193731852494996,
+   "micro_f1": 0.7914913510986442
+  },
+  {
+   "model": "SVD-300 + LR cw=balanced",
+   "family": "PCA-LR",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.6288177814574254,
+   "micro_f1": 0.710517059444249
+  },
+  {
+   "model": "SVD-1000 + LR cw=None",
+   "family": "PCA-LR",
+   "k": 1000,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.7686393230640249,
+   "micro_f1": 0.7869584635998214
+  },
+  {
+   "model": "SVD-1000 + LR cw=balanced",
+   "family": "PCA-LR",
+   "k": 1000,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7274205355296794,
+   "micro_f1": 0.7643413951629022
+  },
+  {
+   "model": "SVD-300 + RBF-SVM C=1 cw=None",
+   "family": "RBF-SVM",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.6315948544224373,
+   "micro_f1": 0.7994255624700813
+  },
+  {
+   "model": "SVD-300 + RBF-SVM C=1 cw=balanced",
+   "family": "RBF-SVM",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7525452533912413,
+   "micro_f1": 0.8044989775051125
+  },
+  {
+   "model": "SVD-300 + RBF-SVM C=10 cw=None",
+   "family": "RBF-SVM",
+   "k": 300,
+   "C": 10.0,
+   "class_weight": null,
+   "macro_f1": 0.7872911965452896,
+   "micro_f1": 0.817458513298477
+  },
+  {
+   "model": "SVD-300 + RBF-SVM C=10 cw=balanced",
+   "family": "RBF-SVM",
+   "k": 300,
+   "C": 10.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.7894359130522337,
+   "micro_f1": 0.8169713382983526
+  },
+  {
+   "model": "SVD-300 + Linear-SVM cw=None",
+   "family": "SVD-LinearSVM",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": null,
+   "macro_f1": 0.676184593386326,
+   "micro_f1": 0.7973856209150327
+  },
+  {
+   "model": "SVD-300 + Linear-SVM cw=balanced",
+   "family": "SVD-LinearSVM",
+   "k": 300,
+   "C": 1.0,
+   "class_weight": "balanced",
+   "macro_f1": 0.6143044695153301,
+   "micro_f1": 0.6979911474293496
+  }
+ ],
+ "q2": [
+  {
+   "tokens": "word uni",
+   "representation": "BoW counts",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 6154,
+   "macro_f1": 0.7593363749923336,
+   "micro_f1": 0.7975005785697755
+  },
+  {
+   "tokens": "word uni",
+   "representation": "BoW counts",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 6154,
+   "macro_f1": 0.7327668553307002,
+   "micro_f1": 0.7569153394803018
+  },
+  {
+   "tokens": "word uni",
+   "representation": "BoW binary",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 6154,
+   "macro_f1": 0.7537932466321138,
+   "micro_f1": 0.8002777134922472
+  },
+  {
+   "tokens": "word uni",
+   "representation": "BoW binary",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 6154,
+   "macro_f1": 0.7625611419780165,
+   "micro_f1": 0.7722980062959076
+  },
+  {
+   "tokens": "word uni",
+   "representation": "TF-IDF",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 6154,
+   "macro_f1": 0.5298597979782178,
+   "micro_f1": 0.7533723593789768
+  },
+  {
+   "tokens": "word uni",
+   "representation": "TF-IDF",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 6154,
+   "macro_f1": 0.7809845843087739,
+   "micro_f1": 0.7950920245398773
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "BoW counts",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 38246,
+   "macro_f1": 0.7930555671894657,
+   "micro_f1": 0.8142824020403432
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "BoW counts",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 38246,
+   "macro_f1": 0.7891088836093327,
+   "micro_f1": 0.8100470957613815
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "BoW binary",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 38246,
+   "macro_f1": 0.770539200563192,
+   "micro_f1": 0.8125727590221188
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "BoW binary",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 38246,
+   "macro_f1": 0.7926142793376585,
+   "micro_f1": 0.8128101037437979
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "TF-IDF",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 38246,
+   "macro_f1": 0.5055701880642093,
+   "micro_f1": 0.747031491997935
+  },
+  {
+   "tokens": "word uni+bi",
+   "representation": "TF-IDF",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 38246,
+   "macro_f1": 0.8228550924020248,
+   "micro_f1": 0.8334763948497854
+  },
+  {
+   "tokens": "BPE uni",
+   "representation": "BoW counts",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 4426,
+   "macro_f1": 0.7712014333937254,
+   "micro_f1": 0.7987191216834401
+  },
+  {
+   "tokens": "BPE uni",
+   "representation": "BoW counts",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 4426,
+   "macro_f1": 0.737707586400701,
+   "micro_f1": 0.7489643744821872
+  },
+  {
+   "tokens": "BPE uni",
+   "representation": "TF-IDF",
+   "model": "LR L2 C=1 (nb03 setting)",
+   "features": 4426,
+   "macro_f1": 0.543268232869832,
+   "micro_f1": 0.7541984732824427
+  },
+  {
+   "tokens": "BPE uni",
+   "representation": "TF-IDF",
+   "model": "Linear SVM C=1 balanced (nb04 choice)",
+   "features": 4426,
+   "macro_f1": 0.7746466085150995,
+   "micro_f1": 0.7911508017048914
+  }
+ ],
+ "q4": [
+  {
+   "label": "Slippery Slope",
+   "train support": 3925,
+   "val support": 490,
+   "F1 no weights": 0.8952772073921971,
+   "F1 balanced": 0.8906560636182903,
+   "gain": -0.004621143773906766
+  },
+  {
+   "label": "Appeal to Authority",
+   "train support": 2462,
+   "val support": 279,
+   "F1 no weights": 0.8409090909090909,
+   "F1 balanced": 0.8551483420593369,
+   "gain": 0.014239251150245935
+  },
+  {
+   "label": "Bandwagon / Popularity",
+   "train support": 2268,
+   "val support": 262,
+   "F1 no weights": 0.7710371819960861,
+   "F1 balanced": 0.8151986183074266,
+   "gain": 0.04416143631134051
+  },
+  {
+   "label": "Hasty Generalization",
+   "train support": 2008,
+   "val support": 213,
+   "F1 no weights": 0.7877237851662404,
+   "F1 balanced": 0.7934272300469484,
+   "gain": 0.005703444880707953
+  },
+  {
+   "label": "False Cause / Causality",
+   "train support": 1675,
+   "val support": 211,
+   "F1 no weights": 0.8342245989304813,
+   "F1 balanced": 0.8353808353808354,
+   "gain": 0.00115623645035412
+  },
+  {
+   "label": "Appeal to Emotion",
+   "train support": 1581,
+   "val support": 207,
+   "F1 no weights": 0.7819148936170213,
+   "F1 balanced": 0.8,
+   "gain": 0.018085106382978777
+  },
+  {
+   "label": "Composition",
+   "train support": 1118,
+   "val support": 151,
+   "F1 no weights": 0.8698884758364313,
+   "F1 balanced": 0.8472222222222222,
+   "gain": -0.022666253614209042
+  },
+  {
+   "label": "False Dilemma",
+   "train support": 1080,
+   "val support": 139,
+   "F1 no weights": 0.7950819672131147,
+   "F1 balanced": 0.7940074906367042,
+   "gain": -0.0010744765764105768
+  },
+  {
+   "label": "Ad Hominem",
+   "train support": 957,
+   "val support": 129,
+   "F1 no weights": 0.7123287671232876,
+   "F1 balanced": 0.7622641509433963,
+   "gain": 0.04993538382010865
+  },
+  {
+   "label": "Equivocation",
+   "train support": 733,
+   "val support": 81,
+   "F1 no weights": 0.8142857142857143,
+   "F1 balanced": 0.8211920529801324,
+   "gain": 0.006906338694418146
+  },
+  {
+   "label": "Circular Reasoning",
+   "train support": 559,
+   "val support": 73,
+   "F1 no weights": 0.8031496062992126,
+   "F1 balanced": 0.8333333333333334,
+   "gain": 0.030183727034120755
+  },
+  {
+   "label": "Straw Man",
+   "train support": 384,
+   "val support": 39,
+   "F1 no weights": 0.835820895522388,
+   "F1 balanced": 0.8285714285714286,
+   "gain": -0.0072494669509594045
+  },
+  {
+   "label": "Red Herring",
+   "train support": 103,
+   "val support": 19,
+   "F1 no weights": 0.8484848484848485,
+   "F1 balanced": 0.8108108108108109,
+   "gain": -0.03767403767403765
+  },
+  {
+   "label": "Appeal to Ignorance",
+   "train support": 85,
+   "val support": 10,
+   "F1 no weights": 0.7058823529411765,
+   "F1 balanced": 0.8421052631578947,
+   "gain": 0.13622291021671817
+  },
+  {
+   "label": "Affirming the Consequent",
+   "train support": 70,
+   "val support": 12,
+   "F1 no weights": 0.5882352941176471,
+   "F1 balanced": 0.7272727272727273,
+   "gain": 0.13903743315508021
+  },
+  {
+   "label": "Denying the Antecedent",
+   "train support": 44,
+   "val support": 5,
+   "F1 no weights": 0.6666666666666666,
+   "F1 balanced": 0.9090909090909091,
+   "gain": 0.24242424242424243
+  }
+ ],
+ "q6": [
+  {
+   "scheme": "ordinary (multilabel-stratified)",
+   "tau": null,
+   "macro_f1 mean": 0.813411272952656,
+   "macro_f1 sd": 0.009754921608066021,
+   "micro_f1 mean": 0.8294934411000792,
+   "micro_f1 sd": 0.0067506785107692415,
+   "seconds": 10
+  },
+  {
+   "scheme": "group-based",
+   "tau": 0.9,
+   "macro_f1 mean": 0.7516042705200936,
+   "macro_f1 sd": 0.020034974065761987,
+   "micro_f1 mean": 0.8243510387580407,
+   "micro_f1 sd": 0.0029923318781160018,
+   "seconds": 10
+  },
+  {
+   "scheme": "group-based",
+   "tau": 0.8,
+   "macro_f1 mean": 0.7338461011826911,
+   "macro_f1 sd": 0.013171275201030083,
+   "micro_f1 mean": 0.8197491343042238,
+   "micro_f1 sd": 0.005613639179410249,
+   "seconds": 10
+  },
+  {
+   "scheme": "group-based",
+   "tau": 0.7,
+   "macro_f1 mean": 0.7091555912703914,
+   "macro_f1 sd": 0.015321809309451524,
+   "micro_f1 mean": 0.8175889525758621,
+   "micro_f1 sd": 0.011354403238227305,
+   "seconds": 10
+  },
+  {
+   "scheme": "group-based",
+   "tau": 0.6,
+   "macro_f1 mean": 0.7083064914133287,
+   "macro_f1 sd": 0.02251215576974102,
+   "micro_f1 mean": 0.8150328225864699,
+   "micro_f1 sd": 0.01963168625091279,
+   "seconds": 10
+  }
+ ],
+ "q6_per_label": [
+  {
+   "label": "Slippery Slope",
+   "train+val support": 4415,
+   "share in groups": 0.13975084937712345,
+   "F1 ordinary CV": 0.8995721684305337,
+   "F1 group CV \u03c4=0.8": 0.9003150315031503,
+   "drop": -0.0007428630726166174
+  },
+  {
+   "label": "Appeal to Authority",
+   "train+val support": 2741,
+   "share in groups": 0.03356439255746078,
+   "F1 ordinary CV": 0.8634977578475337,
+   "F1 group CV \u03c4=0.8": 0.8576081056631084,
+   "drop": 0.005889652184425276
+  },
+  {
+   "label": "Bandwagon / Popularity",
+   "train+val support": 2530,
+   "share in groups": 0.042292490118577074,
+   "F1 ordinary CV": 0.7905943343825218,
+   "F1 group CV \u03c4=0.8": 0.7852373887240356,
+   "drop": 0.005356945658486212
+  },
+  {
+   "label": "Hasty Generalization",
+   "train+val support": 2221,
+   "share in groups": 0.08914903196758217,
+   "F1 ordinary CV": 0.7681970884658454,
+   "F1 group CV \u03c4=0.8": 0.7604871447902571,
+   "drop": 0.007709943675588304
+  },
+  {
+   "label": "False Cause / Causality",
+   "train+val support": 1886,
+   "share in groups": 0.12301166489925769,
+   "F1 ordinary CV": 0.8388338833883389,
+   "F1 group CV \u03c4=0.8": 0.8240200166805671,
+   "drop": 0.014813866707771739
+  },
+  {
+   "label": "Appeal to Emotion",
+   "train+val support": 1788,
+   "share in groups": 0.04753914988814318,
+   "F1 ordinary CV": 0.823042836041359,
+   "F1 group CV \u03c4=0.8": 0.8197691624741048,
+   "drop": 0.003273673567254165
+  },
+  {
+   "label": "Composition",
+   "train+val support": 1269,
+   "share in groups": 0.24980299448384555,
+   "F1 ordinary CV": 0.8170575692963753,
+   "F1 group CV \u03c4=0.8": 0.8229255774165953,
+   "drop": -0.005868008120220036
+  },
+  {
+   "label": "False Dilemma",
+   "train+val support": 1219,
+   "share in groups": 0.09762100082034454,
+   "F1 ordinary CV": 0.7988039299444681,
+   "F1 group CV \u03c4=0.8": 0.7948608137044968,
+   "drop": 0.003943116239971345
+  },
+  {
+   "label": "Ad Hominem",
+   "train+val support": 1086,
+   "share in groups": 0.06998158379373849,
+   "F1 ordinary CV": 0.749003984063745,
+   "F1 group CV \u03c4=0.8": 0.7260458839406208,
+   "drop": 0.02295810012312427
+  },
+  {
+   "label": "Equivocation",
+   "train+val support": 814,
+   "share in groups": 0.020884520884520884,
+   "F1 ordinary CV": 0.8436268068331143,
+   "F1 group CV \u03c4=0.8": 0.8436886854153042,
+   "drop": -6.187858218986708e-05
+  },
+  {
+   "label": "Circular Reasoning",
+   "train+val support": 632,
+   "share in groups": 0.20253164556962025,
+   "F1 ordinary CV": 0.8209825145711906,
+   "F1 group CV \u03c4=0.8": 0.7419072615923009,
+   "drop": 0.07907525297888973
+  },
+  {
+   "label": "Straw Man",
+   "train+val support": 423,
+   "share in groups": 0.0851063829787234,
+   "F1 ordinary CV": 0.7644683714670256,
+   "F1 group CV \u03c4=0.8": 0.753315649867374,
+   "drop": 0.011152721599651638
+  },
+  {
+   "label": "Red Herring",
+   "train+val support": 122,
+   "share in groups": 0.5819672131147541,
+   "F1 ordinary CV": 0.7639484978540773,
+   "F1 group CV \u03c4=0.8": 0.6886792452830188,
+   "drop": 0.07526925257105843
+  },
+  {
+   "label": "Appeal to Ignorance",
+   "train+val support": 95,
+   "share in groups": 0.4105263157894737,
+   "F1 ordinary CV": 0.8202247191011236,
+   "F1 group CV \u03c4=0.8": 0.7485380116959064,
+   "drop": 0.07168670740521721
+  },
+  {
+   "label": "Affirming the Consequent",
+   "train+val support": 82,
+   "share in groups": 0.7439024390243902,
+   "F1 ordinary CV": 0.7643312101910829,
+   "F1 group CV \u03c4=0.8": 0.2962962962962963,
+   "drop": 0.4680349138947866
+  },
+  {
+   "label": "Denying the Antecedent",
+   "train+val support": 49,
+   "share in groups": 0.7755102040816326,
+   "F1 ordinary CV": 0.9010989010989011,
+   "F1 group CV \u03c4=0.8": 0.38095238095238093,
+   "drop": 0.5201465201465202
+  }
+ ],
+ "proposal": {
+  "prevalence_max_gap": 0.018086136845845563,
+  "kappa_X": 3.273613511127761e+17,
+  "kappa_gram": 1.071654542023823e+35,
+  "corr_pairs_095": 81,
+  "top_corr_pairs": [
+   [
+    "unable",
+    "unable to",
+    1.0
+   ],
+   [
+    "due to",
+    "due",
+    1.0
+   ],
+   [
+    "incapable of",
+    "incapable",
+    1.0
+   ],
+   [
+    "fossil fuels",
+    "fuels",
+    1.0
+   ],
+   [
+    "tend",
+    "tend to",
+    1.0
+   ]
+  ],
+  "cv_best": [
+   {
+    "family": "LinearSVM",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "cv_macro_f1": 0.8076455831245865,
+    "cv_sd": 0.008446099568835323
+   },
+   {
+    "family": "LR-L2",
+    "C": 1000.0,
+    "class_weight": "balanced",
+    "cv_macro_f1": 0.8073225224927139,
+    "cv_sd": 0.007412368991622341
+   },
+   {
+    "family": "LR-L1",
+    "C": 1000.0,
+    "class_weight": "balanced",
+    "cv_macro_f1": 0.7886999604460192,
+    "cv_sd": 0.006396229331726329
+   }
+  ],
+  "cv_changed": [],
+  "structural_cv": [
+   {
+    "weight": 0.1,
+    "cv_macro_f1": 0.8076301594229509,
+    "cv_sd": 0.0055608663538005716
+   },
+   {
+    "weight": 0.3,
+    "cv_macro_f1": 0.8078771570111071,
+    "cv_sd": 0.004271257353285999
+   },
+   {
+    "weight": 1.0,
+    "cv_macro_f1": 0.8099995178271188,
+    "cv_sd": 0.006254623942065216
+   },
+   {
+    "weight": 3.0,
+    "cv_macro_f1": 0.8100312742629139,
+    "cv_sd": 0.006264025520506276
+   }
+  ],
+  "structural_val": [
+   {
+    "features": "structural only (13 features)",
+    "macro_f1": 0.3508060617803243,
+    "micro_f1": 0.4076105204252938
+   },
+   {
+    "features": "TF-IDF only",
+    "macro_f1": 0.8228550924020248,
+    "micro_f1": 0.8334763948497854
+   },
+   {
+    "features": "TF-IDF + structural (w=1)",
+    "macro_f1": 0.8272305788205012,
+    "micro_f1": 0.8352027610008628
+   }
+  ],
+  "boundary_summary": [
+   {
+    "fallacy": "Slippery Slope",
+    "train positives": 3925,
+    "support vectors": 5565,
+    "SV share of train": 0.38804825325988423,
+    "positives that are SVs": 0.39031847133757963
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "train positives": 957,
+    "support vectors": 4829,
+    "SV share of train": 0.33672686702461474,
+    "positives that are SVs": 0.7826541274817137
+   },
+   {
+    "fallacy": "False Dilemma",
+    "train positives": 1080,
+    "support vectors": 4975,
+    "SV share of train": 0.34690746809845896,
+    "positives that are SVs": 0.55
+   }
+  ],
+  "boundary_cases": [
+   {
+    "fallacy": "Slippery Slope",
+    "margin f(x)": -0.0,
+    "truly this fallacy": true,
+    "all true labels": "Slippery Slope",
+    "argument": "Dr. Smith, a renowned nutritionist, says that eating one apple a day keeps the doctor away. Therefore, if you eat an apple daily, you will never get sick and can avoid all medical expenses forever."
+   },
+   {
+    "fallacy": "Slippery Slope",
+    "margin f(x)": -0.005,
+    "truly this fallacy": false,
+    "all true labels": "Bandwagon / Popularity; Ad Hominem",
+    "argument": "Since polls show most people believe in climate change and scientists say it's urgent, we must immediately ban all fossil fuels even if it causes economic collapse\u2014after all, anyone who disagrees is probably funded by oil companies and doesn't care about future generations"
+   },
+   {
+    "fallacy": "Slippery Slope",
+    "margin f(x)": 0.006,
+    "truly this fallacy": true,
+    "all true labels": "Slippery Slope; Hasty Generalization",
+    "argument": "Since my friend started jogging daily and lost weight, everyone must jog to lose weight, and if you don't jog, you'll never be healthy."
+   },
+   {
+    "fallacy": "Slippery Slope",
+    "margin f(x)": 0.007,
+    "truly this fallacy": false,
+    "all true labels": "Appeal to Authority; Bandwagon / Popularity",
+    "argument": "Dr. Smith, a famous psychologist, claims that 95% of people who meditate daily become happier. Therefore, if you start meditating, you will definitely become happier because everyone is doing it and experts say it works."
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "margin f(x)": 0.007,
+    "truly this fallacy": false,
+    "all true labels": "Slippery Slope; Equivocation",
+    "argument": "My friend who studies philosophy says that since 'free will' could mean different things in different contexts, and since neuroscience shows our decisions are preceded by brain activity, we therefore cannot trust any of our choices at all and are just biological machines with no real autonomy."
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "margin f(x)": 0.01,
+    "truly this fallacy": false,
+    "all true labels": "Hasty Generalization",
+    "argument": "My friend John failed the exam, proving he's incompetent at everything. After all, everyone knows he always struggles with math, so why trust him on anything?"
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "margin f(x)": 0.01,
+    "truly this fallacy": false,
+    "all true labels": "Bandwagon / Popularity; False Dilemma",
+    "argument": "You should join this fitness program - everyone in our office is doing it and those who don't participate are clearly not serious about their health, so you must sign up now to avoid being ostracized."
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "margin f(x)": 0.011,
+    "truly this fallacy": false,
+    "all true labels": "Slippery Slope; Appeal to Emotion; False Dilemma",
+    "argument": "My psychic advisor, who predicted the 2020 stock crash, says that if you don't buy his 'lucky crystals' today, you will face financial ruin just like all those stubborn skeptics who ignored his warnings. It's common knowledge among his followers."
+   },
+   {
+    "fallacy": "False Dilemma",
+    "margin f(x)": -0.01,
+    "truly this fallacy": false,
+    "all true labels": "Appeal to Emotion",
+    "argument": "If you truly care about your children's education, you'll vote for this school funding proposal. How could you look them in the eye if you don't support better schools?"
+   },
+   {
+    "fallacy": "False Dilemma",
+    "margin f(x)": -0.01,
+    "truly this fallacy": false,
+    "all true labels": "Appeal to Authority",
+    "argument": "My professor said that regular exercise is beneficial, so you must join our expensive gym membership because it's the only way to get healthy."
+   },
+   {
+    "fallacy": "False Dilemma",
+    "margin f(x)": -0.025,
+    "truly this fallacy": false,
+    "all true labels": "Appeal to Authority; Straw Man",
+    "argument": "The government scientist says this chemical is completely safe, so if you oppose its use, you must want to harm our economy and put hardworking people out of jobs."
+   },
+   {
+    "fallacy": "False Dilemma",
+    "margin f(x)": -0.025,
+    "truly this fallacy": false,
+    "all true labels": "Appeal to Authority",
+    "argument": "Dr. Evans, the Nobel laureate in physics, has voiced skepticism about artificial sweeteners causing health issues. Since he is a celebrated expert in quantum mechanics, we must conclude that artificial sweeteners are unequivocally safe for human consumption"
+   }
+  ],
+  "nnp_ablation": [
+   {
+    "preprocessing": "no masking",
+    "macro_f1": 0.8228550924020248,
+    "micro_f1": 0.8334763948497854
+   },
+   {
+    "preprocessing": "capitalisation heuristic (nb06)",
+    "macro_f1": 0.823510892569467,
+    "micro_f1": 0.8326161790017211
+   },
+   {
+    "preprocessing": "NLTK NNP/NNPS",
+    "macro_f1": 0.8096476763717928,
+    "micro_f1": 0.8286510829937809
+   }
+  ],
+  "nnp_share": 0.28896171815075655,
+  "focus_binary_val": [
+   {
+    "fallacy": "Slippery Slope",
+    "prevalence": 0.27714932126696834,
+    "majority-class accuracy": 0.7228506787330317,
+    "SVM accuracy": 0.9377828054298643,
+    "balanced accuracy": 0.9305387882852671,
+    "F1": 0.8906560636182903,
+    "average precision": 0.9585260707446284
+   },
+   {
+    "fallacy": "Ad Hominem",
+    "prevalence": 0.07296380090497738,
+    "majority-class accuracy": 0.9270361990950227,
+    "SVM accuracy": 0.9643665158371041,
+    "balanced accuracy": 0.8807956259961879,
+    "F1": 0.7622641509433963,
+    "average precision": 0.8315849768093145
+   },
+   {
+    "fallacy": "False Dilemma",
+    "prevalence": 0.07861990950226244,
+    "majority-class accuracy": 0.9213800904977376,
+    "SVM accuracy": 0.9688914027149321,
+    "balanced accuracy": 0.8745423550662232,
+    "F1": 0.7940074906367042,
+    "average precision": 0.8571676173599934
+   }
+  ]
+ },
+ "split_prevalence": [
+  {
+   "label": "Slippery Slope",
+   "train": 0.2736908165399902,
+   "val": 0.27714932126696834,
+   "test": 0.27603870233352307,
+   "all": 0.2742639650733236,
+   "max |gap|": 0.002885356193644717
+  },
+  {
+   "label": "Appeal to Authority",
+   "train": 0.17167561536852383,
+   "val": 0.1578054298642534,
+   "test": 0.1798520204894707,
+   "all": 0.1711071308630919,
+   "max |gap|": 0.013301700998838512
+  },
+  {
+   "label": "Bandwagon / Popularity",
+   "train": 0.15814796736629244,
+   "val": 0.14819004524886878,
+   "test": 0.15993170176437108,
+   "all": 0.15733796037165565,
+   "max |gap|": 0.00914791512278687
+  },
+  {
+   "label": "Hasty Generalization",
+   "train": 0.14001812983752876,
+   "val": 0.12047511312217195,
+   "test": 0.11781445645987479,
+   "all": 0.13590059330572035,
+   "max |gap|": 0.018086136845845563
+  },
+  {
+   "label": "False Cause / Causality",
+   "train": 0.11679799177184297,
+   "val": 0.11934389140271494,
+   "test": 0.12236767216846899,
+   "all": 0.11759767155490876,
+   "max |gap|": 0.004770000613560227
+  },
+  {
+   "label": "Appeal to Emotion",
+   "train": 0.11024335820375149,
+   "val": 0.1170814479638009,
+   "test": 0.11838360842344905,
+   "all": 0.11172058658905183,
+   "max |gap|": 0.006663021834397223
+  },
+  {
+   "label": "Composition",
+   "train": 0.07795830137368384,
+   "val": 0.08540723981900453,
+   "test": 0.07455890722822994,
+   "all": 0.07836113287809246,
+   "max |gap|": 0.007046106940912067
+  },
+  {
+   "label": "False Dilemma",
+   "train": 0.07530855588871069,
+   "val": 0.07861990950226244,
+   "test": 0.08309618668184406,
+   "all": 0.07640210455614016,
+   "max |gap|": 0.006694082125703896
+  },
+  {
+   "label": "Ad Hominem",
+   "train": 0.06673174813471863,
+   "val": 0.07296380090497738,
+   "test": 0.06772908366533864,
+   "all": 0.06744654651292958,
+   "max |gap|": 0.005517254392047796
+  },
+  {
+   "label": "Equivocation",
+   "train": 0.05111219580224531,
+   "val": 0.04581447963800905,
+   "test": 0.048947068867387596,
+   "all": 0.05037501399305944,
+   "max |gap|": 0.004560534355050397
+  },
+  {
+   "label": "Circular Reasoning",
+   "train": 0.03897915068684192,
+   "val": 0.041289592760180995,
+   "test": 0.0421172453044963,
+   "all": 0.03951639986566663,
+   "max |gap|": 0.0026008454388296715
+  },
+  {
+   "label": "Straw Man",
+   "train": 0.026776375427097134,
+   "val": 0.022058823529411766,
+   "test": 0.0199203187250996,
+   "all": 0.02563528489869025,
+   "max |gap|": 0.005714966173590647
+  },
+  {
+   "label": "Red Herring",
+   "train": 0.007182204867164075,
+   "val": 0.010746606334841629,
+   "test": 0.00398406374501992,
+   "all": 0.00722041867233852,
+   "max |gap|": 0.003526187662503109
+  },
+  {
+   "label": "Appeal to Ignorance",
+   "train": 0.005927062269018897,
+   "val": 0.005656108597285068,
+   "test": 0.00398406374501992,
+   "all": 0.005709168252546737,
+   "max |gap|": 0.0017251045075268165
+  },
+  {
+   "label": "Affirming the Consequent",
+   "train": 0.004881110103897915,
+   "val": 0.006787330316742082,
+   "test": 0.008537279453614115,
+   "all": 0.005429307063696406,
+   "max |gap|": 0.003107972389917709
+  },
+  {
+   "label": "Denying the Antecedent",
+   "train": 0.0030681263510215465,
+   "val": 0.002828054298642534,
+   "test": 0.004553215708594195,
+   "all": 0.0031904175528937647,
+   "max |gap|": 0.0013627981557004301
+  }
+ ],
+ "data": {
+  "n": 17866,
+  "splits": {
+   "train": 14341,
+   "val": 1768,
+   "test": 1757
+  },
+  "label_counts": {
+   "Slippery Slope": 4900,
+   "Appeal to Authority": 3057,
+   "Bandwagon / Popularity": 2811,
+   "Hasty Generalization": 2428,
+   "False Cause / Causality": 2101,
+   "Appeal to Emotion": 1996,
+   "Composition": 1400,
+   "False Dilemma": 1365,
+   "Ad Hominem": 1205,
+   "Equivocation": 900,
+   "Circular Reasoning": 706,
+   "Straw Man": 458,
+   "Red Herring": 129,
+   "Appeal to Ignorance": 102,
+   "Affirming the Consequent": 97,
+   "Denying the Antecedent": 57
+  },
+  "labels_per_arg": {
+   "1": 12278,
+   "2": 5337,
+   "3": 245,
+   "4": 5,
+   "5": 1
+  },
+  "word_count": {
+   "count": 17866.0,
+   "mean": 27.3,
+   "std": 9.2,
+   "min": 4.0,
+   "25%": 20.0,
+   "50%": 26.0,
+   "75%": 33.0,
+   "max": 94.0
+  }
+ }
+}
