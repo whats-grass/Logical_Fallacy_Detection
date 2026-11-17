@@ -1,0 +1,295 @@
+{
+  "val_overlap": [
+    {
+      "model": "LinearSVM",
+      "bucket": "template-seen",
+      "n": 266,
+      "micro_f1": 0.9520295202952029,
+      "micro_f1_95ci": "[0.931, 0.970]",
+      "macro_f1": 0.8707113658557287
+    },
+    {
+      "model": "LinearSVM",
+      "bucket": "intermediate",
+      "n": 443,
+      "micro_f1": 0.9212121212121213,
+      "micro_f1_95ci": "[0.900, 0.941]",
+      "macro_f1": 0.8614686337042773
+    },
+    {
+      "model": "LinearSVM",
+      "bucket": "novel",
+      "n": 1059,
+      "micro_f1": 0.7851662404092071,
+      "micro_f1_95ci": "[0.769, 0.801]",
+      "macro_f1": 0.6656133896449414
+    },
+    {
+      "model": "LR-L1",
+      "bucket": "template-seen",
+      "n": 266,
+      "micro_f1": 0.9534450651769087,
+      "micro_f1_95ci": "[0.930, 0.972]",
+      "macro_f1": 0.8704979612969732
+    },
+    {
+      "model": "LR-L1",
+      "bucket": "intermediate",
+      "n": 443,
+      "micro_f1": 0.9117043121149897,
+      "micro_f1_95ci": "[0.890, 0.931]",
+      "macro_f1": 0.8432223343440478
+    },
+    {
+      "model": "LR-L1",
+      "bucket": "novel",
+      "n": 1059,
+      "micro_f1": 0.7573385518590998,
+      "micro_f1_95ci": "[0.741, 0.774]",
+      "macro_f1": 0.6639909854390215
+    },
+    {
+      "model": "LR-L2",
+      "bucket": "template-seen",
+      "n": 266,
+      "micro_f1": 0.9459962756052142,
+      "micro_f1_95ci": "[0.925, 0.965]",
+      "macro_f1": 0.858841250247223
+    },
+    {
+      "model": "LR-L2",
+      "bucket": "intermediate",
+      "n": 443,
+      "micro_f1": 0.9161554192229039,
+      "micro_f1_95ci": "[0.894, 0.936]",
+      "macro_f1": 0.8614371419045979
+    },
+    {
+      "model": "LR-L2",
+      "bucket": "novel",
+      "n": 1059,
+      "micro_f1": 0.7756452680344142,
+      "micro_f1_95ci": "[0.758, 0.791]",
+      "macro_f1": 0.6399474009176939
+    }
+  ],
+  "val_masking": [
+    {
+      "input": "full text",
+      "model": "LinearSVM",
+      "micro_f1": 0.8334763948497854,
+      "macro_f1": 0.8228550924020248
+    },
+    {
+      "input": "full text",
+      "model": "LR-L1",
+      "micro_f1": 0.8131964168669434,
+      "macro_f1": 0.8155356267687837
+    },
+    {
+      "input": "full text",
+      "model": "LR-L2",
+      "micro_f1": 0.8260965395635883,
+      "macro_f1": 0.8107884067165241
+    },
+    {
+      "input": "no topic words (cue + function only)",
+      "model": "LinearSVM",
+      "micro_f1": 0.7298438159560996,
+      "macro_f1": 0.6517107993665189
+    },
+    {
+      "input": "no topic words (cue + function only)",
+      "model": "LR-L1",
+      "micro_f1": 0.7192982456140351,
+      "macro_f1": 0.6230480866928335
+    },
+    {
+      "input": "no topic words (cue + function only)",
+      "model": "LR-L2",
+      "micro_f1": 0.7250844594594594,
+      "macro_f1": 0.6368303854040791
+    },
+    {
+      "input": "no cue words",
+      "model": "LinearSVM",
+      "micro_f1": 0.7445220322658319,
+      "macro_f1": 0.7351817889152139
+    },
+    {
+      "input": "no cue words",
+      "model": "LR-L1",
+      "micro_f1": 0.680019305019305,
+      "macro_f1": 0.6862845726644708
+    },
+    {
+      "input": "no cue words",
+      "model": "LR-L2",
+      "micro_f1": 0.7266009852216748,
+      "macro_f1": 0.7229595266414759
+    },
+    {
+      "input": "no function words",
+      "model": "LinearSVM",
+      "micro_f1": 0.768796992481203,
+      "macro_f1": 0.680685035673188
+    },
+    {
+      "input": "no function words",
+      "model": "LR-L1",
+      "micro_f1": 0.7263850562513267,
+      "macro_f1": 0.6316600403488759
+    },
+    {
+      "input": "no function words",
+      "model": "LR-L2",
+      "micro_f1": 0.7537349397590362,
+      "macro_f1": 0.6790334568891204
+    },
+    {
+      "input": "topic words only",
+      "model": "LinearSVM",
+      "micro_f1": 0.5293093441671504,
+      "macro_f1": 0.5019531577567121
+    },
+    {
+      "input": "topic words only",
+      "model": "LR-L1",
+      "micro_f1": 0.5601295097132285,
+      "macro_f1": 0.49259160392745804
+    },
+    {
+      "input": "topic words only",
+      "model": "LR-L2",
+      "micro_f1": 0.5657142857142857,
+      "macro_f1": 0.5334283837049176
+    }
+  ],
+  "val_restricted": [
+    {
+      "trained & evaluated on": "full text",
+      "vocab": 38246,
+      "micro_f1": 0.8334763948497854,
+      "macro_f1": 0.8228550924020248
+    },
+    {
+      "trained & evaluated on": "no topic words (cue + function only)",
+      "vocab": 8931,
+      "micro_f1": 0.7711143390744968,
+      "macro_f1": 0.7472800420655548
+    },
+    {
+      "trained & evaluated on": "no cue words",
+      "vocab": 35608,
+      "micro_f1": 0.8076923076923077,
+      "macro_f1": 0.7920760236359625
+    },
+    {
+      "trained & evaluated on": "no function words",
+      "vocab": 30304,
+      "micro_f1": 0.8190230256079191,
+      "macro_f1": 0.7899037698498454
+    },
+    {
+      "trained & evaluated on": "topic words only",
+      "vocab": 25129,
+      "micro_f1": 0.770696591149693,
+      "macro_f1": 0.7436512337205994
+    }
+  ],
+  "val_stress": [
+    {
+      "model": "LinearSVM",
+      "test": "topic swap (top-weighted)",
+      "true positives": 1942,
+      "edited": 1940,
+      "flip rate (edited)": 0.23144329896907218
+    },
+    {
+      "model": "LinearSVM",
+      "test": "topic swap (random control)",
+      "true positives": 1942,
+      "edited": 1941,
+      "flip rate (edited)": 0.06027820710973725
+    },
+    {
+      "model": "LinearSVM",
+      "test": "cue synonym swap",
+      "true positives": 1942,
+      "edited": 1458,
+      "flip rate (edited)": 0.09327846364883402
+    },
+    {
+      "model": "LR-L1",
+      "test": "topic swap (top-weighted)",
+      "true positives": 1861,
+      "edited": 1793,
+      "flip rate (edited)": 0.2426101505856107
+    },
+    {
+      "model": "LR-L1",
+      "test": "topic swap (random control)",
+      "true positives": 1861,
+      "edited": 1861,
+      "flip rate (edited)": 0.0800644814615798
+    },
+    {
+      "model": "LR-L1",
+      "test": "cue synonym swap",
+      "true positives": 1861,
+      "edited": 1386,
+      "flip rate (edited)": 0.12698412698412698
+    }
+  ],
+  "proper_noun_ablation": [
+    {
+      "proper nouns masked": false,
+      "model": "LinearSVM",
+      "micro_f1": 0.8334763948497854,
+      "macro_f1": 0.8228550924020248
+    },
+    {
+      "proper nouns masked": false,
+      "model": "LR-L1",
+      "micro_f1": 0.8131964168669434,
+      "macro_f1": 0.8155356267687837
+    },
+    {
+      "proper nouns masked": true,
+      "model": "LinearSVM",
+      "micro_f1": 0.8326161790017211,
+      "macro_f1": 0.823510892569467
+    },
+    {
+      "proper nouns masked": true,
+      "model": "LR-L1",
+      "micro_f1": 0.8114360541248363,
+      "macro_f1": 0.8147441916049912
+    }
+  ],
+  "coef_mass_mean": [
+    {
+      "model": "LinearSVM",
+      "topic": 0.8264283103244411,
+      "cue": 0.08108008719591095,
+      "function": 0.09249160247964802
+    },
+    {
+      "model": "LR-L1",
+      "topic": 0.7950010187563603,
+      "cue": 0.10429951521148002,
+      "function": 0.10069946603215964
+    },
+    {
+      "model": "LR-L2",
+      "topic": 0.8199928874834568,
+      "cue": 0.08181296754164075,
+      "function": 0.09819414497490242
+    }
+  ],
+  "vocab_group_share": {
+    "topic": 0.8923809025780474,
+    "cue": 0.05626732207289651,
+    "function": 0.05135177534905611
+  }
+}

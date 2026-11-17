@@ -1,0 +1,252 @@
+{
+  "prevalence_max_gap": 0.018086136845845563,
+  "kappa_X": 3.273613511127761e+17,
+  "kappa_gram": 1.071654542023823e+35,
+  "corr_pairs_095": 81,
+  "top_corr_pairs": [
+    [
+      "unable",
+      "unable to",
+      1.0
+    ],
+    [
+      "due to",
+      "due",
+      1.0
+    ],
+    [
+      "incapable of",
+      "incapable",
+      1.0
+    ],
+    [
+      "fossil fuels",
+      "fuels",
+      1.0
+    ],
+    [
+      "tend",
+      "tend to",
+      1.0
+    ]
+  ],
+  "cv_best": [
+    {
+      "family": "LinearSVM",
+      "C": 1.0,
+      "class_weight": "balanced",
+      "cv_macro_f1": 0.8076455831245865,
+      "cv_sd": 0.008446099568835323
+    },
+    {
+      "family": "LR-L2",
+      "C": 1000.0,
+      "class_weight": "balanced",
+      "cv_macro_f1": 0.8073225224927139,
+      "cv_sd": 0.007412368991622341
+    },
+    {
+      "family": "LR-L1",
+      "C": 1000.0,
+      "class_weight": "balanced",
+      "cv_macro_f1": 0.7886999604460192,
+      "cv_sd": 0.006396229331726329
+    }
+  ],
+  "cv_changed": [],
+  "structural_cv": [
+    {
+      "weight": 0.1,
+      "cv_macro_f1": 0.8076301594229509,
+      "cv_sd": 0.0055608663538005716
+    },
+    {
+      "weight": 0.3,
+      "cv_macro_f1": 0.8078771570111071,
+      "cv_sd": 0.004271257353285999
+    },
+    {
+      "weight": 1.0,
+      "cv_macro_f1": 0.8099995178271188,
+      "cv_sd": 0.006254623942065216
+    },
+    {
+      "weight": 3.0,
+      "cv_macro_f1": 0.8100312742629139,
+      "cv_sd": 0.006264025520506276
+    }
+  ],
+  "structural_val": [
+    {
+      "features": "structural only (13 features)",
+      "macro_f1": 0.3508060617803243,
+      "micro_f1": 0.4076105204252938
+    },
+    {
+      "features": "TF-IDF only",
+      "macro_f1": 0.8228550924020248,
+      "micro_f1": 0.8334763948497854
+    },
+    {
+      "features": "TF-IDF + structural (w=1)",
+      "macro_f1": 0.8272305788205012,
+      "micro_f1": 0.8352027610008628
+    }
+  ],
+  "boundary_summary": [
+    {
+      "fallacy": "Slippery Slope",
+      "train positives": 3925,
+      "support vectors": 5565,
+      "SV share of train": 0.38804825325988423,
+      "positives that are SVs": 0.39031847133757963
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "train positives": 957,
+      "support vectors": 4829,
+      "SV share of train": 0.33672686702461474,
+      "positives that are SVs": 0.7826541274817137
+    },
+    {
+      "fallacy": "False Dilemma",
+      "train positives": 1080,
+      "support vectors": 4975,
+      "SV share of train": 0.34690746809845896,
+      "positives that are SVs": 0.55
+    }
+  ],
+  "boundary_cases": [
+    {
+      "fallacy": "Slippery Slope",
+      "margin f(x)": -0.0,
+      "truly this fallacy": true,
+      "all true labels": "Slippery Slope",
+      "argument": "Dr. Smith, a renowned nutritionist, says that eating one apple a day keeps the doctor away. Therefore, if you eat an apple daily, you will never get sick and can avoid all medical expenses forever."
+    },
+    {
+      "fallacy": "Slippery Slope",
+      "margin f(x)": -0.005,
+      "truly this fallacy": false,
+      "all true labels": "Bandwagon / Popularity; Ad Hominem",
+      "argument": "Since polls show most people believe in climate change and scientists say it's urgent, we must immediately ban all fossil fuels even if it causes economic collapse\u2014after all, anyone who disagrees is probably funded by oil companies and doesn't care about future generations"
+    },
+    {
+      "fallacy": "Slippery Slope",
+      "margin f(x)": 0.006,
+      "truly this fallacy": true,
+      "all true labels": "Slippery Slope; Hasty Generalization",
+      "argument": "Since my friend started jogging daily and lost weight, everyone must jog to lose weight, and if you don't jog, you'll never be healthy."
+    },
+    {
+      "fallacy": "Slippery Slope",
+      "margin f(x)": 0.007,
+      "truly this fallacy": false,
+      "all true labels": "Appeal to Authority; Bandwagon / Popularity",
+      "argument": "Dr. Smith, a famous psychologist, claims that 95% of people who meditate daily become happier. Therefore, if you start meditating, you will definitely become happier because everyone is doing it and experts say it works."
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "margin f(x)": 0.007,
+      "truly this fallacy": false,
+      "all true labels": "Slippery Slope; Equivocation",
+      "argument": "My friend who studies philosophy says that since 'free will' could mean different things in different contexts, and since neuroscience shows our decisions are preceded by brain activity, we therefore cannot trust any of our choices at all and are just biological machines with no real autonomy."
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "margin f(x)": 0.01,
+      "truly this fallacy": false,
+      "all true labels": "Hasty Generalization",
+      "argument": "My friend John failed the exam, proving he's incompetent at everything. After all, everyone knows he always struggles with math, so why trust him on anything?"
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "margin f(x)": 0.01,
+      "truly this fallacy": false,
+      "all true labels": "Bandwagon / Popularity; False Dilemma",
+      "argument": "You should join this fitness program - everyone in our office is doing it and those who don't participate are clearly not serious about their health, so you must sign up now to avoid being ostracized."
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "margin f(x)": 0.011,
+      "truly this fallacy": false,
+      "all true labels": "Slippery Slope; Appeal to Emotion; False Dilemma",
+      "argument": "My psychic advisor, who predicted the 2020 stock crash, says that if you don't buy his 'lucky crystals' today, you will face financial ruin just like all those stubborn skeptics who ignored his warnings. It's common knowledge among his followers."
+    },
+    {
+      "fallacy": "False Dilemma",
+      "margin f(x)": -0.01,
+      "truly this fallacy": false,
+      "all true labels": "Appeal to Emotion",
+      "argument": "If you truly care about your children's education, you'll vote for this school funding proposal. How could you look them in the eye if you don't support better schools?"
+    },
+    {
+      "fallacy": "False Dilemma",
+      "margin f(x)": -0.01,
+      "truly this fallacy": false,
+      "all true labels": "Appeal to Authority",
+      "argument": "My professor said that regular exercise is beneficial, so you must join our expensive gym membership because it's the only way to get healthy."
+    },
+    {
+      "fallacy": "False Dilemma",
+      "margin f(x)": -0.025,
+      "truly this fallacy": false,
+      "all true labels": "Appeal to Authority; Straw Man",
+      "argument": "The government scientist says this chemical is completely safe, so if you oppose its use, you must want to harm our economy and put hardworking people out of jobs."
+    },
+    {
+      "fallacy": "False Dilemma",
+      "margin f(x)": -0.025,
+      "truly this fallacy": false,
+      "all true labels": "Appeal to Authority",
+      "argument": "Dr. Evans, the Nobel laureate in physics, has voiced skepticism about artificial sweeteners causing health issues. Since he is a celebrated expert in quantum mechanics, we must conclude that artificial sweeteners are unequivocally safe for human consumption"
+    }
+  ],
+  "nnp_ablation": [
+    {
+      "preprocessing": "no masking",
+      "macro_f1": 0.8228550924020248,
+      "micro_f1": 0.8334763948497854
+    },
+    {
+      "preprocessing": "capitalisation heuristic (nb06)",
+      "macro_f1": 0.823510892569467,
+      "micro_f1": 0.8326161790017211
+    },
+    {
+      "preprocessing": "NLTK NNP/NNPS",
+      "macro_f1": 0.8096476763717928,
+      "micro_f1": 0.8286510829937809
+    }
+  ],
+  "nnp_share": 0.28896171815075655,
+  "focus_binary_val": [
+    {
+      "fallacy": "Slippery Slope",
+      "prevalence": 0.27714932126696834,
+      "majority-class accuracy": 0.7228506787330317,
+      "SVM accuracy": 0.9377828054298643,
+      "balanced accuracy": 0.9305387882852671,
+      "F1": 0.8906560636182903,
+      "average precision": 0.9585260707446284
+    },
+    {
+      "fallacy": "Ad Hominem",
+      "prevalence": 0.07296380090497738,
+      "majority-class accuracy": 0.9270361990950227,
+      "SVM accuracy": 0.9643665158371041,
+      "balanced accuracy": 0.8807956259961879,
+      "F1": 0.7622641509433963,
+      "average precision": 0.8315849768093145
+    },
+    {
+      "fallacy": "False Dilemma",
+      "prevalence": 0.07861990950226244,
+      "majority-class accuracy": 0.9213800904977376,
+      "SVM accuracy": 0.9688914027149321,
+      "balanced accuracy": 0.8745423550662232,
+      "F1": 0.7940074906367042,
+      "average precision": 0.8571676173599934
+    }
+  ]
+}
