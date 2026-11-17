@@ -20,6 +20,8 @@
   <a href="#shortcuts">7 · Shortcut audit</a>
   <a href="#inspector" class="int">Perturbation inspector</a>
   <a href="#thresholds" class="int">Cost-threshold tool</a>
+  <a href="#external">External data</a>
+  <a href="#combined">Trained on all data</a>
   <a href="#errors">8 · Errors</a>
   <a href="#limitations">9 · Limitations</a>
   <a href="#conclusion">10 · Conclusion</a>
@@ -46,7 +48,7 @@
   <dt>When a prediction is made</dt><dd>At the moment a piece of text is available, e.g. a comment is posted. Only the text is used: no author, context, thread or metadata.</dd>
   <dt>What is not claimed</dt><dd>That the model can tell whether a text is fallacious <i>at all</i>: every training row contains a fallacy, so the model is only asked <i>which</i> fallacies are present. Nor do we claim the model “understands” reasoning; we measure what its predictions depend on.</dd>
 </dl>
-<div class="callout warn"><b>One proposal item could not be done as written.</b> The proposal planned to detect Ad Hominem, False Dilemma and Slippery Slope “alongside valid arguments”. The dataset contains <b>no valid (fallacy-free) arguments</b>, so fallacy-vs-valid detection cannot be evaluated. The closest honest version is in §6: a dedicated binary detector for each of the three focus fallacies (present vs. a different fallacy), reported with accuracy against the majority-class baseline as the proposal asked. Every other proposal item is implemented (notebook 09).</div>
+<div class="callout warn"><b>The main model cannot tell valid from fallacious arguments.</b> The proposal planned to detect Ad Hominem, False Dilemma and Slippery Slope “alongside valid arguments”, but the main dataset contains <b>no valid (fallacy-free) arguments</b>. The main analysis therefore only asks <i>which</i> fallacies an argument contains, with one binary detector per focus fallacy (present vs. a different fallacy, §6). Fallacy-vs-valid detection was evaluated separately, with a different model trained on external data that contains both classes; see <a href="#external">External data</a>. Every other proposal item is implemented (notebook 09).</div>
 </section>
 
 <!-- ===================================================== 2 -->
@@ -56,6 +58,7 @@
   <dt>Source</dt><dd><code>logical_fallacy_dataset.xlsx</code>, built from <code>logical_fallacy_model_candidates.jsonl</code> (19,246 raw multiple-choice, true/false and free-form fallacy items), cleaned and de-duplicated by the dataset builder. <i>[Team: add the original URL, licence and citation here.]</i></dd>
   <dt>Size after cleaning</dt><dd>17,866 arguments; 468 more were set aside for conflicting or rare labels.</dd>
   <dt>Labels</dt><dd><b>Silver labels</b>: produced from an LLM-written explanation of each answer, then normalised to 16 names. Not manually verified.</dd>
+  <dt>External data</dt><dd>Four further datasets in <code>data/raw/external/</code> (LOGIC educational examples, CoCoLoFa and Touché comments, contrastive pairs), used only for the tests in <a href="#external">External data</a>.</dd>
   <dt>Access</dt><dd>The spreadsheet is in the repository (<code>data/raw/</code>); it contains no personal data. The website ships only derived numbers and ~150 short test arguments.</dd>
 </dl>
 <h3>Class imbalance</h3>
@@ -245,6 +248,49 @@
 <div class="callout" id="threshold-text"></div>
 </section>
 
+<!-- ===================================================== external -->
+<section id="external">
+<h2>External data: generalisation and fallacy vs. valid</h2>
+<p>Four more datasets were added after the main evaluation (<code>data/raw/external/</code>; sources and licences in <code>data/README.md</code>). They serve two purposes without touching the main dataset or its test split: an <b>out-of-distribution test</b> of the frozen models (notebook 11), and the proposal's <b>fallacy-vs-valid</b> task (notebook 12).</p>
+<div class="tablewrap"><table>
+<thead><tr><th>source</th><th>what it is</th><th>used for</th></tr></thead>
+<tbody>
+<tr><td>edu</td><td>2,428 short educational examples from the LOGIC benchmark (Jin et al., 2022), with labels mapped onto ours by the provider; 2,094 carry at least one of our 16 labels</td><td>out-of-distribution test</td></tr>
+<tr><td>comments</td><td>1,175 labelled online comments: 237 news comments written by crowd workers (CoCoLoFa, Yeh et al., 2024) and 938 Reddit comments (Touché 2026, built on Sahai et al., 2021; 233 unlabelled rows dropped). 570 are “No Fallacy” and 605 fallacious, over 8 fallacy types, 5 of which are ours</td><td>both</td></tr>
+<tr><td>contrastive</td><td>703 LLM-generated pairs (Singh, 2026): a valid argument and a fallacious twin on the same topic with most of the same words</td><td>fallacy vs. valid</td></tr>
+</tbody></table></div>
+
+<h3>A. The frozen models on text written by other people</h3>
+<p class="small">Macro-F1 over the labels each source annotates (edu: 14, comments: 5), compared with the main test split scored on the same labels. Nothing was trained or tuned on these sources.</p>
+<div id="table-ood"></div>
+<figure class="figure"><img src="figures/ood_macro_f1.png" alt="Macro-F1 of the frozen models on the main test split and on the edu and comment data" loading="lazy"></figure>
+<p id="ood-text"></p>
+<details><summary class="small">Per-label F1 of the linear SVM</summary><div id="table-ood-perlabel"></div></details>
+
+<h3>B. Fallacy vs. valid argument</h3>
+<p>Only sources that contain both classes are used (contrastive pairs and online comments), so a source's writing style cannot predict the label. The split is a deterministic 70/15/15 hash of the contrastive pair or the near-duplicate cluster of a comment, so both twins of a pair always land in the same split. Settings were chosen on validation, and the test split (370 arguments) was scored once.</p>
+<p class="small"><b>Zero-shot.</b> The main-dataset linear SVM, unchanged, applied to every argument; “fallacy” means it predicts at least one of the 16 labels.</p>
+<div id="table-zeroshot"></div>
+<p class="small"><b>Trained detectors, held-out test.</b></p>
+<div id="table-binary"></div>
+<figure class="figure"><img src="figures/binary_test_accuracy.png" alt="Test accuracy with 95% intervals for the fallacy-vs-valid detectors" loading="lazy" style="max-width:620px"></figure>
+<p id="binary-text"></p>
+<p class="small"><b>Cross-source check</b> (validation macro-F1): trained on one source, scored on the other.</p>
+<div id="table-cross"></div>
+<p id="weights-text"></p>
+</section>
+
+<!-- ===================================================== combined -->
+<section id="combined">
+<h2>One model trained on all datasets</h2>
+<p>Finally, a single 16-label linear SVM was trained on the main dataset <b>and</b> the external data together (notebook 13), and compared with the main-data model on the same held-out arguments. Training uses the main train split, the edu train split, and the comment train split, where valid (“No Fallacy”) comments become arguments with <b>no label</b>, so this model can answer “no fallacy”. The contrastive pairs are used for testing only: their file gives no fallacy type, so a fallacious twin has no 16-label target. The configuration was chosen on pooled validation data, and each test split was scored once.</p>
+<div id="table-combined"></div>
+<figure class="figure"><img src="figures/combined_vs_main.png" alt="Test macro-F1 of the main-data model and the model trained on all datasets, on the main, edu and comment test splits" loading="lazy" style="max-width:640px"></figure>
+<p class="small"><b>Fallacy vs. valid</b> (“fallacy” = at least one label predicted):</p>
+<div id="table-combined-binary"></div>
+<p id="combined-text"></p>
+</section>
+
 <!-- ===================================================== 8 -->
 <section id="errors">
 <h2>8 · Errors</h2>
@@ -265,8 +311,8 @@
 <h2>9 · Limitations</h2>
 <ul>
   <li><b>Silver labels.</b> Labels come from LLM explanations, not annotators. Scores measure agreement with those labels, and some errors are label noise.</li>
-  <li><b>No “no fallacy” class.</b> A deployed model would flag fallacies in every sentence. The proposal's fallacy-vs-valid detection could not be evaluated; the focus-fallacy detectors in §6 only separate one fallacy from the others.</li>
-  <li><b>Synthetic, templated text.</b> Even our “novel” bucket shares the dataset's style; performance on real social-media arguments is unknown and likely lower.</li>
+  <li><b>Few valid arguments.</b> The main dataset has no fallacy-free arguments, so the main model would flag a fallacy in almost any text. Fallacy-vs-valid detection rests on the external contrastive pairs and online comments (370 test arguments), whose labels come from other annotators and other label schemes.</li>
+  <li><b>Synthetic, templated text.</b> Even our “novel” bucket shares the dataset's style. On fallacy text written by other people (External data A) the best model falls to about 0.33 macro-F1, so the main-dataset scores do not describe performance on real online arguments.</li>
   <li><b>The lexicon is coarse.</b> The topic/cue/function split is a ≈150-word hand-made list; “topic” includes missed rhetorical words, so topic-reliance numbers are upper bounds.</li>
   <li><b>Rare labels.</b> 5–15 test examples for four labels; their F1 values and tuned thresholds are very noisy.</li>
   <li><b>Compute compromises.</b> The RBF SVM ran on a 300-d SVD projection; the largest C values sat at the edge of the grid (C = 1000) for Lasso and ridge, where the curve had flattened (gain &lt; 0.005).</li>
@@ -291,11 +337,12 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng'); nltk.download('punkt_tab')"
 # notebooks 01-03 (audit, EDA, baselines): open in VS Code and Run All, in order
-python -m src.run_all                     # notebooks 04-10 + website data (about 45-60 min)
+python -m src.run_all                     # notebooks 04-13 + website data (about 50-65 min)
 python -m http.server -d website          # open http://localhost:8000</pre>
 <ul>
   <li>Data: <code>data/raw/logical_fallacy_dataset.xlsx</code>, sheet <code>Dataset</code>; split column <code>split</code> (train / val / test).</li>
-  <li>Notebooks 04–09 use train and validation only; notebook 10 is the held-out test evaluation and runs last.</li>
+  <li>Notebooks 04–09 use train and validation only; notebook 10 is the held-out test evaluation of the main task.</li>
+  <li>Notebooks 11–13 use the external data in <code>data/raw/external/</code>: 11 applies the frozen models; 12 has its own grouped train/val/test split; 13 trains one model on all datasets with the same splits (<code>src/external.py</code>). <code>python -m src.run_all --from 11</code> re-runs only these (about 6 min).</li>
   <li>Selected hyperparameters: <code>results/selection.json</code>. Validation and CV grids: <code>results/val_*.csv</code>, <code>results/cv_grid_train.csv</code>. Test results: <code>results/test_results.csv</code>. Near-duplicate clusters: <code>data/processed/near_dup_groups_trainval.csv</code>.</li>
   <li>The full pipeline was run on Python 3.12.3 (as in the team setup guide) and on 3.13. Notebook 03 reproduces its published validation numbers exactly, and every reported metric agrees across the two versions (largest difference 7×10⁻⁸, in Platt-calibrated probabilities).</li>
   <li>Random seed 42 everywhere; scikit-learn 1.9.1. The website is static HTML/CSS/JS in <code>website/</code>, deployed by <code>.github/workflows/pages.yml</code>; its Lasso model is re-implemented in JavaScript and checked against Python on load (see the self-check line under the inspector).</li>
@@ -312,6 +359,8 @@ python -m http.server -d website          # open http://localhost:8000</pre>
 </ul>
 <p><b>AI assistance.</b> Claude and ChatGPT was used to help in drafting the experiment code in <code>src/</code> and notebooks, draft website text, and build the interactive tools. All reported numbers come from executing the notebooks. We re-ran and checked them, and are responsible for every result.</p>
 <p><b>Test-set use.</b> The final test notebook was executed and evaluated the models of exisiting notebooks. New notebooks were added according to the requirements, ran again with two additional models chosen without looking at test (TF-IDF + structural SVM, focus-fallacy detectors). Cross-validation left every earlier choice unchanged, so the rows shared by both runs are identical.</p>
+<p><b>External data.</b> Notebooks 11 and 12 were added after the main evaluation. Notebook 11 only applies frozen models. In notebook 12 the detector was chosen on validation before the test cells ran. Both were re-executed to fix a crash in a save cell, to correct explanatory text, and to correct a source name (the CoCoLoFa news comments had first been labelled as Reddit). The results are deterministic and were identical in every run, and no choice changed after the test results were seen.</p>
+<p><b>Training on all datasets (notebook 13).</b> This uses the main test split once more, after notebook 10; the model was chosen on validation data only. Its first execution showed, in the leakage check before any model was fitted, one LOGIC argument in two splits (two copies differing only in an apostrophe). The grouping was fixed and the notebook run again; the results of the first run are not reported, and the selection rule was not changed.</p>
 </section>
 <p class="small" style="margin-top:24px">Built with plain HTML, CSS and JavaScript; no tracking, no external requests.</p>
 </main>
@@ -405,13 +454,18 @@ function renderResults(R) {
       <li>scores fall from ≈0.94 to ≈0.80 micro-F1 when a test argument is not a paraphrase of a training template;</li>
       <li>topic words alone predict the fallacy about as well as cue and function words alone (≈0.74 vs ≈0.75 macro-F1);</li>
       <li>swapping the top topic words flips ≈22% of correct detections (random swaps: ≈6%), and synonym swaps of cue words flip 9–11%;</li>
-      <li>when near-duplicate clusters cannot span training and evaluation folds, CV macro-F1 falls from ${fmt(R.q6[0]["macro_f1 mean"])} to ${fmt(R.q6[R.q6.length - 1]["macro_f1 mean"])}, and the rare, templated fallacies lose most (§7D).</li>
+      <li>when near-duplicate clusters cannot span training and evaluation folds, CV macro-F1 falls from ${fmt(R.q6[0]["macro_f1 mean"])} to ${fmt(R.q6[R.q6.length - 1]["macro_f1 mean"])}, and the rare, templated fallacies lose most (§7D);</li>
+      ${R.ood ? `<li>on external text written by other people, the frozen SVM falls to ${fmt(R.ood.results.find(r => r.set === "edu" && r.model === "TF-IDF Linear SVM").macro_f1)} (edu) and ${fmt(R.ood.results.find(r => r.set === "comments" && r.model === "TF-IDF Linear SVM").macro_f1)} (online comments) macro-F1 (External data A);</li>` : ""}
+      ${R.combined ? `<li>training one model on all five datasets leaves the main test score unchanged (${fmt(R.combined.multi.find(r => r["test set"] === "main test" && r.model === "all datasets").macro_f1)}), helps only on the source it added (LOGIC: ${fmt(R.combined.multi.find(r => r["test set"] === "edu test" && r.model === "main data only").macro_f1)} → ${fmt(R.combined.multi.find(r => r["test set"] === "edu test" && r.model === "all datasets").macro_f1)}), and still cannot tell valid from fallacious comments (Trained on all data).</li>` : ""}
     </ul>
     <p><b>Structure is learnable but adds nothing that generalises.</b> Thirteen hand-written structural features carry the expected signal on their own (either–or → False Dilemma, chain → Slippery Slope), yet add nothing measurable on top of n-grams (test macro-F1 ${stc ? fmt(stc.macro_f1) : "–"} vs ${fmt(svm.macro_f1)}).</p>
     <p><b>Neither Lasso sparsity nor SVM margins removed the shortcut.</b> Lasso found a compact model (≈4% of 38k features) but kept mostly topic n-grams. The SVM was the most accurate and slightly less brittle to synonym swaps, yet just as dependent on topic words. Dense PCA projections and RBF kernels did not help.</p>
+    ${R.binary ? `<p><b>Fallacy vs. valid.</b> A model trained only on fallacies flags ${pct(R.binary.zero_shot.find(r => r.source === "all")["valid flagged as fallacy (FPR)"], 0)} of valid arguments. A dedicated detector reaches ${fmt(R.binary.test.find(r => r.model.startsWith("Selected")).accuracy)} test accuracy (majority baseline ${fmt(R.binary.test.find(r => /Majority/.test(r.model)).accuracy)}), but mostly on the LLM-generated contrastive pairs; on the online comments it barely beats the baseline, and nothing transfers between sources.</p>` : ""}
     <p><b>What would change the conclusion:</b> evaluation on human-labelled, non-templated arguments that include valid (non-fallacious) text. The group-based CV of §7D suggests that grouped splitting should be the default protocol for this dataset.</p>`;
 
   renderExtra(R);
+  if (R.ood && R.binary) renderExternal(R);
+  if (R.combined) renderCombined(R);
   // representative error cards from inspector examples
   fetch("data/examples.json").then(r => r.json()).then(ex => {
     const pick = ex.filter(e => e.status !== "correct").slice(0, 6);
@@ -467,6 +521,68 @@ function renderExtra(R) {
   document.getElementById("sv-text").innerHTML = bs.map(r => `${r.fallacy}: ${r["support vectors"].toLocaleString()} support vectors (${pct(r["SV share of train"], 0)} of training arguments, ${pct(r["positives that are SVs"], 0)} of its positives)`).join("; ") + ". The classes are far from separable with a wide margin, so each boundary rests on thousands of arguments, not a few prototypes.";
   table(document.getElementById("table-boundary"), [{ h: "boundary of", k: "fallacy" }, { h: "f(x)", num: 1, f: r => fmt(r["margin f(x)"]) },
     { h: "true labels", k: "all true labels" }, { h: "argument", f: r => r.argument }], P.boundary_cases.filter((_, i) => i % 4 < 2));
+}
+function renderExternal(R) {
+  const O = R.ood, B = R.binary, SVM = "TF-IDF Linear SVM";
+  const SRC = { contrastive: "contrastive pairs", cocolofa: "CoCoLoFa (news comments)", touche: "Touché (Reddit)", comments: "online comments", all: "all" };
+  const g = (set, model) => O.results.find(r => r.set === set && r.model === model) || {};
+  const sets = ["main test (all 16 labels)", "edu", "main test (comments' 5 labels)", "comments"];
+  const models = [...new Set(O.results.map(r => r.model))];
+  table(document.getElementById("table-ood"), [{ h: "model", k: "model" },
+    ...sets.map(s => ({ h: s, num: 1, f: r => fmt(g(s, r.model).macro_f1) }))],
+    models.map(m => ({ model: m, _class: m === SVM ? "hl" : "" })));
+  const e = g("edu", SVM), rd = g("comments", SVM), mt = g("main test (all 16 labels)", SVM), m5 = g("main test (comments' 5 labels)", SVM);
+  const d = Object.fromEntries(O.distance.map(x => [x.set, x]));
+  document.getElementById("ood-text").innerHTML =
+    `<b>The shortcut finding holds on independent data.</b> The linear SVM drops from ${fmt(mt.macro_f1)} macro-F1 on the main test split to <b>${fmt(e.macro_f1)}</b> ${e.macro_f1_95ci} on edu, and from ${fmt(m5.macro_f1)} to <b>${fmt(rd.macro_f1)}</b> ${rd.macro_f1_95ci} on the online comments scored on the same five labels. Every model drops by about the same amount, so none of them learned something more transferable. ` +
+    `For ${pct(e["no label predicted"], 0)} of edu and ${pct(rd["no label predicted"], 0)} of comment arguments, all of which contain a fallacy, the SVM predicts no fallacy at all. None of these texts resembles the training data: ${fmt(d.edu["% novel"], 0)}% of edu and ${fmt(d.comments["% novel"], 0)}% of comment arguments fall in the “novel” bucket, against ${fmt(d["main test"]["% novel"], 0)}% of the main test split. ` +
+    `Part of the edu drop is a label-schema mismatch rather than model error: edu has no Slippery Slope label, and ${O.edu_pred_ss_chain} of its arguments with chain-of-consequence wording are predicted as Slippery Slope while labelled otherwise. That is too few to explain the drop.`;
+  table(document.getElementById("table-ood-perlabel"), [{ h: "label", k: "label" },
+    { h: "main test F1", num: 1, f: r => fmt(r["main test F1"]) },
+    { h: "edu F1", num: 1, f: r => r["edu F1"] == null ? "–" : fmt(r["edu F1"]) }, { h: "edu n", num: 1, k: "edu n" },
+    { h: "comments F1", num: 1, f: r => r["comments F1"] == null ? "–" : fmt(r["comments F1"]) }, { h: "comments n", num: 1, k: "comments n" }],
+    O.per_label.filter(r => r["edu n"] > 0 || r["comments n"] > 0));
+
+  table(document.getElementById("table-zeroshot"), [{ h: "source", f: r => SRC[r.source] || r.source }, { h: "arguments", num: 1, f: r => Math.round(r.n) },
+    { h: "valid flagged as fallacy", num: 1, f: r => pct(r["valid flagged as fallacy (FPR)"]) },
+    { h: "fallacies flagged", num: 1, f: r => pct(r["fallacies flagged (recall)"]) },
+    { h: "accuracy", num: 1, f: r => fmt(r.accuracy) }, { h: "AUC", num: 1, f: r => fmt(r["AUC of max probability"]) }], B.zero_shot);
+  table(document.getElementById("table-binary"), [{ h: "model", k: "model" }, { h: "accuracy", num: 1, f: r => fmt(r.accuracy) },
+    { h: "95% CI", f: r => r.accuracy_95ci }, { h: "balanced acc.", num: 1, f: r => fmt(r.balanced_accuracy) },
+    { h: "macro-F1", num: 1, f: r => fmt(r.macro_f1) }, { h: "fallacy precision", num: 1, f: r => fmt(r.fallacy_precision) },
+    { h: "fallacy recall", num: 1, f: r => fmt(r.fallacy_recall) }],
+    B.test.map(r => ({ ...r, _class: r.model.startsWith("Selected") ? "hl" : /Majority/.test(r.model) ? "base" : "" })));
+  const zs = B.zero_shot.find(r => r.source === "all"), sel = B.test.find(r => r.model.startsWith("Selected")),
+        maj = B.test.find(r => /Majority/.test(r.model)), bow = B.test.find(r => /BoW/.test(r.model));
+  const ps = Object.fromEntries(B.test_per_source.map(r => [r.source, r]));
+  document.getElementById("binary-text").innerHTML =
+    `<b>Reading the results.</b> A model trained only on fallacies cannot tell valid from fallacious reasoning: it flags ${pct(zs["valid flagged as fallacy (FPR)"], 0)} of valid arguments, reaches ${fmt(zs.accuracy)} accuracy (a coin flip scores 0.5), and ranks the fallacious twin of a contrastive pair higher in only ${pct(B.zero_shot_pair_rank, 0)} of pairs. ` +
+    `A dedicated detector, trained on this task, reaches <b>${fmt(sel.accuracy)}</b> test accuracy against ${fmt(maj.accuracy)} for the majority baseline. That is no better than the unigram BoW baseline (${fmt(bow.accuracy)}). ` +
+    `On the contrastive pairs it scores ${fmt(ps.contrastive.accuracy)} and ranks the fallacious twin higher in ${pct(B.test_pair_rank, 0)} of ${B.n_test_pairs} test pairs. On the online comments it is near the majority baseline (${fmt(ps.touche.accuracy)} on the Touché Reddit comments, ${fmt(ps.cocolofa.accuracy)} on CoCoLoFa).`;
+  table(document.getElementById("table-cross"), [{ h: "trained on", f: r => SRC[r["trained on"]] || r["trained on"] }, { h: "evaluated on", f: r => SRC[r["evaluated on"]] || r["evaluated on"] },
+    { h: "val macro-F1", num: 1, f: r => fmt(r.val_macro_f1) }], B.cross_source_val);
+  document.getElementById("weights-text").innerHTML =
+    `What is learned does not transfer between sources (the off-diagonal rows sit near 0.5). The detector's strongest weights show why. Some are genuine reasoning cues (“so”, “therefore the”, “we either” → fallacy; “has never”, “lacks”, “data” → valid). Others are traces of how the contrastive pairs were written: their authority pairs swap an expert for a celebrity, so “famous”, “celebrity”, “chef” point to fallacy and “engineer”, “scientist” to valid. Removing topic words as a shortcut only exposed the next one.`;
+}
+function renderCombined(R) {
+  const C = R.combined, M = C.multi, B = C.binary, mo = "main data only", al = "all datasets";
+  const g = (set, m) => M.find(r => r["test set"] === set && r.model === m) || {};
+  const sets = [...new Set(M.map(r => r["test set"]))];
+  table(document.getElementById("table-combined"), [{ h: "test set", k: "set" }, { h: "labels", num: 1, f: r => g(r.set, al)["labels scored"] }, { h: "n", num: 1, f: r => g(r.set, al).n },
+    { h: "main data only", num: 1, f: r => fmt(g(r.set, mo).macro_f1) }, { h: "all datasets", num: 1, f: r => fmt(g(r.set, al).macro_f1) },
+    { h: "95% CI (all datasets)", f: r => g(r.set, al).macro_f1_95ci }, { h: "paired Δ, 95% CI", f: r => g(r.set, al).delta_vs_main_only_95ci }],
+    sets.map(s => ({ set: s })));
+  const b = (set, m) => B.find(r => r["test set"] === set && r.model === m) || {};
+  const bsets = [...new Set(B.map(r => r["test set"]))];
+  table(document.getElementById("table-combined-binary"), [{ h: "test set", k: "set" }, { h: "model", k: "m" }, { h: "accuracy", num: 1, f: r => fmt(b(r.set, r.m).accuracy) },
+    { h: "95% CI", f: r => b(r.set, r.m).accuracy_95ci }, { h: "majority class", num: 1, f: r => fmt(b(r.set, r.m)["majority accuracy"]) },
+    { h: "valid flagged", num: 1, f: r => pct(b(r.set, r.m)["valid flagged as fallacy (FPR)"], 0) }, { h: "fallacies flagged", num: 1, f: r => pct(b(r.set, r.m)["fallacies flagged (recall)"], 0) }],
+    bsets.flatMap(s => [mo, al].map(m => ({ set: s, m, _class: m === al ? "hl" : "" }))));
+  const mt = g("main test", al), mt0 = g("main test", mo), ed = g("edu test", al), ed0 = g("edu test", mo), cm = g("comments test (fallacious)", al), cm0 = g("comments test (fallacious)", mo);
+  const cb = b("comments test", al), cb0 = b("comments test", mo);
+  document.getElementById("combined-text").innerHTML =
+    `<b>Reading the results.</b> On the main test split nothing changes: ${fmt(mt.macro_f1)} against ${fmt(mt0.macro_f1)}, with a paired interval ${mt.delta_vs_main_only_95ci} that contains zero. On LOGIC (edu) the extra data helps clearly: ${fmt(ed.macro_f1)} against ${fmt(ed0.macro_f1)}, interval ${ed.delta_vs_main_only_95ci}. On the online comments there is no measurable gain in naming the fallacy (${fmt(cm.macro_f1)} vs ${fmt(cm0.macro_f1)}, interval ${cm.delta_vs_main_only_95ci}), and the model is still not a fallacy-vs-valid detector: ${fmt(cb.accuracy)} accuracy against ${fmt(cb["majority accuracy"])} for always answering the majority class. It flags fewer valid comments (${pct(cb["valid flagged as fallacy (FPR)"], 0)} instead of ${pct(cb0["valid flagged as fallacy (FPR)"], 0)}) but also misses more fallacies (recall ${pct(cb["fallacies flagged (recall)"], 0)} instead of ${pct(cb0["fallacies flagged (recall)"], 0)}): it learned to say “no fallacy” more often, not to tell the two apart. ` +
+    `On contrastive pairs, which it never trained on, the fallacious twin gets the higher score in ${pct(C.pair_rank[al], 0)} of ${C.n_test_pairs} pairs (${pct(C.pair_rank[mo], 0)} for the main-data model). <b>More data helps a bag-of-words model only on text that resembles that data; it does not make it reason about argument structure.</b> The other sections, the inspector and the threshold tool keep using the main-data models.`;
 }
 // highlight current section in nav
 const links = [...document.querySelectorAll("nav a")];

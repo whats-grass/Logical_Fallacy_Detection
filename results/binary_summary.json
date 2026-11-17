@@ -1,0 +1,277 @@
+{
+  "counts": [
+    {
+      "source": "cocolofa",
+      "split": "test",
+      "n": 36,
+      "fallacies": 19
+    },
+    {
+      "source": "cocolofa",
+      "split": "train",
+      "n": 161,
+      "fallacies": 94
+    },
+    {
+      "source": "cocolofa",
+      "split": "val",
+      "n": 40,
+      "fallacies": 27
+    },
+    {
+      "source": "contrastive",
+      "split": "test",
+      "n": 186,
+      "fallacies": 93
+    },
+    {
+      "source": "contrastive",
+      "split": "train",
+      "n": 974,
+      "fallacies": 487
+    },
+    {
+      "source": "contrastive",
+      "split": "val",
+      "n": 246,
+      "fallacies": 123
+    },
+    {
+      "source": "touche",
+      "split": "test",
+      "n": 148,
+      "fallacies": 77
+    },
+    {
+      "source": "touche",
+      "split": "train",
+      "n": 658,
+      "fallacies": 321
+    },
+    {
+      "source": "touche",
+      "split": "val",
+      "n": 132,
+      "fallacies": 67
+    }
+  ],
+  "zero_shot": [
+    {
+      "source": "cocolofa",
+      "n": 237.0,
+      "valid flagged as fallacy (FPR)": 0.4742268041237113,
+      "fallacies flagged (recall)": 0.5714285714285714,
+      "accuracy": 0.5527426160337553,
+      "AUC of max probability": 0.5288659793814432
+    },
+    {
+      "source": "contrastive",
+      "n": 1406.0,
+      "valid flagged as fallacy (FPR)": 0.37980085348506404,
+      "fallacies flagged (recall)": 0.6344238975817923,
+      "accuracy": 0.6273115220483642,
+      "AUC of max probability": 0.6637374066437478
+    },
+    {
+      "source": "touche",
+      "n": 938.0,
+      "valid flagged as fallacy (FPR)": 0.5264270613107822,
+      "fallacies flagged (recall)": 0.49032258064516127,
+      "accuracy": 0.48187633262260127,
+      "AUC of max probability": 0.47995635272454484
+    },
+    {
+      "source": "all",
+      "n": 2581.0,
+      "valid flagged as fallacy (FPR)": 0.44147682639434405,
+      "fallacies flagged (recall)": 0.5764525993883792,
+      "accuracy": 0.5676094537001163,
+      "AUC of max probability": 0.5991655676230148
+    }
+  ],
+  "zero_shot_pair_rank": 0.6799431009957326,
+  "val_grid": [
+    {
+      "model": "Majority class",
+      "C": null,
+      "val_macro_f1": 0.3417322834645669,
+      "val_accuracy": 0.5191387559808612
+    },
+    {
+      "model": "BoW + LR",
+      "C": 1.0,
+      "val_macro_f1": 0.7243107769423558,
+      "val_accuracy": 0.7248803827751196
+    },
+    {
+      "model": "TF-IDF + LR",
+      "C": 0.1,
+      "val_macro_f1": 0.725,
+      "val_accuracy": 0.7272727272727273
+    },
+    {
+      "model": "TF-IDF + LR",
+      "C": 1.0,
+      "val_macro_f1": 0.7505050505050506,
+      "val_accuracy": 0.7511961722488039
+    },
+    {
+      "model": "TF-IDF + LR",
+      "C": 10.0,
+      "val_macro_f1": 0.7601010101010102,
+      "val_accuracy": 0.7607655502392344
+    },
+    {
+      "model": "TF-IDF + LR",
+      "C": 100.0,
+      "val_macro_f1": 0.7481682091770282,
+      "val_accuracy": 0.7488038277511961
+    },
+    {
+      "model": "TF-IDF + linear SVM",
+      "C": 0.01,
+      "val_macro_f1": 0.7173766058147397,
+      "val_accuracy": 0.7200956937799043
+    },
+    {
+      "model": "TF-IDF + linear SVM",
+      "C": 0.1,
+      "val_macro_f1": 0.7455727312400946,
+      "val_accuracy": 0.7464114832535885
+    },
+    {
+      "model": "TF-IDF + linear SVM",
+      "C": 1.0,
+      "val_macro_f1": 0.7650122759918313,
+      "val_accuracy": 0.7655502392344498
+    },
+    {
+      "model": "TF-IDF + linear SVM",
+      "C": 10.0,
+      "val_macro_f1": 0.7289810251143256,
+      "val_accuracy": 0.7296650717703349
+    }
+  ],
+  "selected": {
+    "model": "TF-IDF + linear SVM",
+    "C": 1.0,
+    "val_macro_f1": 0.7650122759918313,
+    "selected_by": "validation macro-F1 (notebook 12), before the test split was scored"
+  },
+  "cross_source_val": [
+    {
+      "trained on": "contrastive",
+      "evaluated on": "contrastive",
+      "val_macro_f1": 0.8942809917355372,
+      "val_accuracy": 0.8943089430894309
+    },
+    {
+      "trained on": "contrastive",
+      "evaluated on": "comments",
+      "val_macro_f1": 0.46952957251610383,
+      "val_accuracy": 0.5406976744186046
+    },
+    {
+      "trained on": "comments",
+      "evaluated on": "contrastive",
+      "val_macro_f1": 0.497967651076892,
+      "val_accuracy": 0.508130081300813
+    },
+    {
+      "trained on": "comments",
+      "evaluated on": "comments",
+      "val_macro_f1": 0.5650034176349965,
+      "val_accuracy": 0.5697674418604651
+    }
+  ],
+  "test": [
+    {
+      "model": "Majority class",
+      "accuracy": 0.5108108108108108,
+      "accuracy_95ci": "[0.462, 0.565]",
+      "balanced_accuracy": 0.5,
+      "macro_f1": 0.33810375670840787,
+      "fallacy_precision": 0.5108108108108108,
+      "fallacy_recall": 1.0
+    },
+    {
+      "model": "Zero-shot main-dataset SVM",
+      "accuracy": 0.5594594594594594,
+      "accuracy_95ci": "[0.511, 0.608]",
+      "balanced_accuracy": 0.558376450641644,
+      "macro_f1": 0.5577505481370673,
+      "fallacy_precision": 0.5637254901960784,
+      "fallacy_recall": 0.6084656084656085
+    },
+    {
+      "model": "BoW + LR (baseline)",
+      "accuracy": 0.6945945945945946,
+      "accuracy_95ci": "[0.649, 0.738]",
+      "balanced_accuracy": 0.6942763600222164,
+      "macro_f1": 0.694324421146521,
+      "fallacy_precision": 0.6979166666666666,
+      "fallacy_recall": 0.708994708994709
+    },
+    {
+      "model": "Selected: TF-IDF + linear SVM (C=1)",
+      "accuracy": 0.6945945945945946,
+      "accuracy_95ci": "[0.649, 0.743]",
+      "balanced_accuracy": 0.6945102166096642,
+      "macro_f1": 0.6944852430745847,
+      "fallacy_precision": 0.7021276595744681,
+      "fallacy_recall": 0.6984126984126984
+    }
+  ],
+  "test_per_source": [
+    {
+      "source": "cocolofa",
+      "n": 36.0,
+      "accuracy": 0.5833333333333334,
+      "majority accuracy": 0.5277777777777778
+    },
+    {
+      "source": "contrastive",
+      "n": 186.0,
+      "accuracy": 0.8010752688172043,
+      "majority accuracy": 0.5
+    },
+    {
+      "source": "touche",
+      "n": 148.0,
+      "accuracy": 0.5878378378378378,
+      "majority accuracy": 0.5202702702702703
+    }
+  ],
+  "test_pair_rank": 0.9139784946236559,
+  "test_pair_both": 0.6129032258064516,
+  "n_test_pairs": 93,
+  "majority_label": 1,
+  "top_fallacy": [
+    "so (c)",
+    "so the (c)",
+    "famous (c)",
+    "the famous (c)",
+    "she is (f)",
+    "because it's (t)",
+    "will (f)",
+    "you (f)",
+    "my (f)",
+    "would (f)",
+    "therefore the (c)",
+    "chef (t)"
+  ],
+  "top_valid": [
+    "so we (c)",
+    "cannot (f)",
+    "has never (c)",
+    "data (t)",
+    "lacks (t)",
+    "using (t)",
+    "we must (c)",
+    "argument (t)",
+    "is either (c)",
+    "engineer (t)",
+    "she has (f)",
+    "just because (t)"
+  ]
+}

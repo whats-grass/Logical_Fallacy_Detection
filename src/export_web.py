@@ -1,4 +1,4 @@
-"""Export the small JSON files the static website needs (run after notebook 08).
+"""Export the small JSON files the static website needs (run after notebooks 10-13; src.run_all does this).
 
     python -m src.export_web
 
@@ -47,22 +47,43 @@ def main():
     vocab = vec.get_feature_names_out().tolist()
 
     # ---- 1. Lasso model for the perturbation inspector --------------------------------
-    s1 = sel["LR-L1"]
-    l1 = logreg("l1", s1["C"], cw(s1["class_weight"])).fit(A, Y_tr)
+    # After notebook 13 the inspector uses the Lasso trained on all datasets (main + LOGIC +
+    # comments, valid comments as rows with no label), so it can also answer "no fallacy".
+    # Without notebook 13 it falls back to the main-data Lasso of notebooks 04-09.
+    combined = "combined_lasso" in sel
+    if combined:
+        from .external import combined_dataset
+        D = combined_dataset(LABELS)
+        TR = D[D.trainable & (D.split == "train")]
+        ivec = word_tfidf(ngram_range=(1, 2)); A_i = ivec.fit_transform(TR.argument)
+        s1 = sel["combined_lasso"]
+        l1 = logreg("l1", s1["C"], cw(s1["class_weight"])).fit(A_i, TR[LABELS].values)
+    else:
+        ivec, s1 = vec, sel["LR-L1"]
+        l1 = logreg("l1", s1["C"], cw(s1["class_weight"])).fit(A, Y_tr)
     W, b = linear_coefs(l1)
     coefs = {}
     for k, lab in enumerate(LABELS):
         nz = np.nonzero(W[k])[0]
         coefs[lab] = {"idx": nz.tolist(), "w": np.round(W[k, nz], 5).tolist()}
-    model = {"labels": LABELS, "vocab": vocab, "idf": np.round(vec.idf_, 6).tolist(),
-             "intercept": np.round(b, 6).tolist(), "coef": coefs, "config": s1,
+    model = {"labels": LABELS, "vocab": ivec.get_feature_names_out().tolist(), "idf": np.round(ivec.idf_, 6).tolist(),
+             "intercept": np.round(b, 6).tolist(), "coef": coefs, "config": s1, "trained_on": "all datasets" if combined else "main data",
              "cues": sorted(RHETORICAL_CUES), "function_words": sorted(FUNCTION_WORDS)}
     (WEB_DATA / "lasso_model.json").write_text(json.dumps(model, separators=(",", ":")))
 
-    # reference probabilities so the JS implementation can be checked against Python
-    P_l1 = l1.predict_proba(T)
+    def status(truth, pred):
+        t, p = set(truth), set(pred)
+        if not t: return "valid: no fallacy found" if not p else "valid: fallacy flagged"
+        if not p: return "no fallacy found"
+        if p == t: return "correct"
+        if p < t: return "missed label(s)"
+        if p > t: return "extra label(s)"
+        return "swapped"
 
     # ---- 2. Example arguments for the inspector ----------------------------------------
+    # `status`/`pred` describe the final main-data SVM (used by the error cards in section 8);
+    # `ins_status`/`ins_pred` describe the inspector's own model (used to group the picker);
+    # `py_prob` are the inspector model's Python probabilities, for the in-browser self-check.
     preds = pd.read_csv(RESULTS / "test_predictions.csv")
     rng = np.random.default_rng(SEED)
     picks = set()
@@ -71,11 +92,30 @@ def main():
         picks.update(rng.choice(idx, size=min(8, len(idx)), replace=False).tolist())
     wrong = np.where(preds.status.values != "correct")[0]
     picks.update(rng.choice(wrong, size=min(30, len(wrong)), replace=False).tolist())
+    picks = sorted(picks)
+    P_main = l1.predict_proba(ivec.transform(X_te.iloc[picks]))
     ex = []
-    for i in sorted(picks):
-        ex.append({"i": int(i), "text": X_te.iloc[i], "labels": te_df.fallacies.iloc[i].split("; "),
+    for q, i in enumerate(picks):
+        truth = te_df.fallacies.iloc[i].split("; "); pp = [LABELS[j] for j in np.where(P_main[q] >= 0.5)[0]]
+        ex.append({"i": int(i), "text": X_te.iloc[i], "labels": truth, "source": "main",
                    "bucket": preds.bucket.iloc[i], "max_sim": round(float(preds.max_sim.iloc[i]), 3),
-                   "status": preds.status.iloc[i], "pred": preds.predicted.iloc[i], "py_prob": np.round(P_l1[i], 4).tolist()})
+                   "status": preds.status.iloc[i], "pred": preds.predicted.iloc[i],
+                   "ins_status": status(truth, pp), "ins_pred": "; ".join(pp) or "(none)",
+                   "py_prob": np.round(P_main[q], 4).tolist()})
+    if combined:                                         # held-out online comments, valid and fallacious
+        from .neardup import max_sim_to_train, bucket
+        from .config import NEAR_DUP_LOW, NEAR_DUP_HIGH
+        C = D[D.source.isin(["cocolofa", "touche"]) & (D.split == "test")].reset_index(drop=True)
+        take = sorted(rng.choice(np.where(C.is_fallacy == 0)[0], 12, replace=False).tolist()
+                      + rng.choice(np.where(C.is_fallacy == 1)[0], 8, replace=False).tolist())
+        C = C.iloc[take].reset_index(drop=True)
+        P_c = l1.predict_proba(ivec.transform(C.argument)); sim, _ = max_sim_to_train(X_tr, list(C.argument))
+        for q in range(len(C)):
+            truth = [l for l in LABELS if C[l].iloc[q] == 1]; pp = [LABELS[j] for j in np.where(P_c[q] >= 0.5)[0]]
+            ex.append({"i": 100000 + q, "text": C.argument.iloc[q], "labels": truth, "source": C.source.iloc[q],
+                       "bucket": str(bucket(np.array([sim[q]]), NEAR_DUP_LOW, NEAR_DUP_HIGH)[0]), "max_sim": round(float(sim[q]), 3),
+                       "status": "external", "pred": "", "ins_status": status(truth, pp), "ins_pred": "; ".join(pp) or "(none)",
+                       "py_prob": np.round(P_c[q], 4).tolist()})
     (WEB_DATA / "examples.json").write_text(json.dumps(ex))
 
     # ---- 3. Calibrated SVM test probabilities for the threshold tool ------------------
@@ -104,6 +144,10 @@ def main():
     summary["q6_per_label"] = pd.read_csv(RESULTS / "val_q6_per_label.csv", index_col=0).reset_index(names="label").to_dict("records")
     summary["proposal"] = json.loads((RESULTS / "proposal_items_val.json").read_text())
     summary["split_prevalence"] = pd.read_csv(RESULTS / "split_prevalence.csv", index_col=0).reset_index(names="label").to_dict("records")
+    # notebooks 11-13: external data (written only if those notebooks have been run)
+    for key, fname in [("ood", "ood_summary.json"), ("binary", "binary_summary.json"), ("combined", "combined_summary.json")]:
+        if (RESULTS / fname).exists():
+            summary[key] = json.loads((RESULTS / fname).read_text())
     split_counts = df.split.value_counts().to_dict()
     summary["data"] = {"n": int(len(df)), "splits": split_counts,
                        "label_counts": df[LABELS].sum().astype(int).to_dict(),

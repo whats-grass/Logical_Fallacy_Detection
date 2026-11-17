@@ -77,7 +77,7 @@ website/                                static GitHub Pages site (HTML/CSS/JS + 
 
 ## Reproduce
 
-Follows the team setup guide (Python 3.11 or 3.12, virtual environment, VS Code + Jupyter).
+Follows the team setup guide (Python 3.11, 3.12 or 3.13, virtual environment, VS Code + Jupyter).
 
 ```bash
 python -m venv venv
@@ -90,7 +90,7 @@ python -c "import nltk; nltk.download('averaged_perceptron_tagger_eng'); nltk.do
 Then run notebooks 01 → 02 → 03 in VS Code (venv kernel), and the rest with:
 
 ```bash
-python -m src.run_all               # notebooks 04-10 + website data (about 45-60 min; nb09 is ~30)
+python -m src.run_all               # notebooks 04-13 + website data (about 50-65 min; nb09 is ~30)
 python -m http.server -d website    # view the site at http://localhost:8000
 ```
 
@@ -105,4 +105,63 @@ Limitations section.
 
 ## AI use
 
-Claude and ChatGPT assisted with code for notebooks and with drafting text. We re-ran every notebook, checked the outputs and are responsible for all results.
+Claude and ChatGPT assisted with code for notebooks and with drafting codes. We re-ran every notebook, checked the outputs and are responsible for all results.
+
+## External data (notebooks 11-12)
+
+Four further datasets in `data/raw/external/` (sources and licences in `data/README.md`) are used
+without touching the main dataset or its test split:
+
+* **Out-of-distribution test (notebook 11).** The frozen models of `results/selection.json` are
+  applied to 2,094 short educational examples from LOGIC (edu) and 363 fallacious online comments
+  (CoCoLoFa news comments and Touché 2026 Reddit comments). The linear SVM falls from 0.805
+  macro-F1 on the main test split to 0.327 on edu and 0.326 on the comments (scored on the labels
+  each source annotates), and finds no fallacy at all in 38-49% of these arguments.
+* **Fallacy vs valid (notebook 12).** On LLM-generated contrastive pairs and the online comments
+  (both classes present; grouped 70/15/15 split so the twins of a pair never cross splits), the
+  main-dataset model flags 44% of valid arguments. A dedicated TF-IDF linear SVM reaches 0.695
+  test accuracy against 0.511 for the majority baseline (BoW baseline: 0.695), 0.80 on the pairs
+  but only about 0.59 on the comments, and nothing transfers between the two sources.
+
+* **One model trained on all datasets (notebook 13).** Main + LOGIC + comments (valid comments
+  as rows with no label), contrastive pairs for testing only. Main test macro-F1 is unchanged
+  (0.803 vs 0.805, paired 95% interval [-0.007, +0.005]); LOGIC test improves from 0.323 to 0.445;
+  the comments show no measurable gain, and fallacy-vs-valid accuracy on them (0.538) stays below
+  the majority baseline (0.564).
+
+Re-run only these with `python -m src.run_all --from 11` (about 6 minutes).
+
+## Data access
+
+* **Main dataset:** `data/raw/logical_fallacy_dataset.xlsx` is in the repository (no download
+  needed). Sheet `Dataset` holds one argument per row: `argument` (the text, the only model input),
+  16 binary label columns, `fallacies` (the same labels as a string), `num_fallacies`, `split`
+  (the fixed train / val / test assignment) and `id`. Sheets `README`, `Label Guide` and
+  `Excluded - Review` (468 set-aside rows) document how it was built. See `data/README.md`.
+* **External data:** four files in `data/raw/external/`, used only by notebooks 11-13.
+* **Derived data:** `data/processed/near_dup_groups_trainval.csv` (near-duplicate clusters for
+  group-based CV); every result table is in `results/`, figures in `results/figures/`.
+
+
+## Data sources and citations
+
+1. Bin Liu (2026). *A Logical Fallacy Dataset from 2015 to 2025* (V2). Science Data Bank.
+   https://doi.org/10.57760/sciencedb.30044 (main dataset, as identified by the team)
+2. Z. Jin, A. Lalwani, T. Vaidhya, X. Shen, Y. Ding, Z. Lyu, M. Sachan, R. Mihalcea,
+   B. Schölkopf (2022). Logical Fallacy Detection. *Findings of EMNLP 2022*.
+   https://doi.org/10.18653/v1/2022.findings-emnlp.532 (LOGIC, `edu_fallacies.xlsx`)
+3. M.-H. Yeh, R. Wan, T.-H. K. Huang (2024). CoCoLoFa: A Dataset of News Comments with Common
+   Logical Fallacies Written by LLM-Assisted Crowds. *EMNLP 2024*.
+   https://doi.org/10.18653/v1/2024.emnlp-main.39 (`sample_fallacies.xlsx`)
+4. M. Heinrich, C. Mathews, B. Stein (2026). *Touché26-Fallacy-Detection*. Zenodo, CC BY 4.0.
+   https://doi.org/10.5281/zenodo.19925569 (`touche_fallacies.xlsx`), built on
+   S. Sahai, O. Balalau, R. Horincar (2021). Breaking Down the Invisible Wall of Informal
+   Fallacies in Online Discussions. *ACL-IJCNLP 2021*. https://doi.org/10.18653/v1/2021.acl-long.53
+5. N. Singh (2026). Debiasing Logical Fallacy Detection for Real-World Robustness via
+   Counterfactually Augmented Data. *ACL 2026 Student Research Workshop*.
+   https://aclanthology.org/2026.acl-srw.30/ ; data: Logical Fallacy Counterfactual Dataset,
+   Kaggle (navy007) (`contrastive_dataset.csv`)
+
+Software: scikit-learn, NumPy, pandas, SciPy, NLTK, Hugging Face `tokenizers`,
+`iterative-stratification`, matplotlib (versions in `requirements.txt`).
+file: `data/README.md`.

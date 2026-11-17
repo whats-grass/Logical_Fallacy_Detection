@@ -91,5 +91,25 @@
     "model": "LinearSVC per fallacy",
     "C": 1.0,
     "class_weight": "balanced"
+  },
+  "binary": {
+    "model": "TF-IDF + linear SVM",
+    "C": 1.0,
+    "val_macro_f1": 0.7650122759918313,
+    "selected_by": "validation macro-F1 (notebook 12), before the test split was scored"
+  },
+  "combined": {
+    "model": "TF-IDF uni+bi LinearSVM on main + edu + comments",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "val_macro_f1": 0.772022251143982,
+    "selected_by": "pooled validation macro-F1 (notebook 13), before any test split was scored"
+  },
+  "combined_lasso": {
+    "model": "TF-IDF uni+bi LR-L1 on main + edu + comments (website inspector)",
+    "C": 1000.0,
+    "class_weight": "balanced",
+    "val_macro_f1": 0.74320538207347,
+    "selected_by": "pooled validation macro-F1 (notebook 13), before any test split was scored"
   }
 }

@@ -1,0 +1,423 @@
+{
+  "distance": [
+    {
+      "set": "main test",
+      "n": 1757,
+      "median max-cosine": 0.4233588052612571,
+      "% template-seen": 14.285714285714285,
+      "% intermediate": 25.668753557199775,
+      "% novel": 60.045532157085944
+    },
+    {
+      "set": "edu",
+      "n": 2094,
+      "median max-cosine": 0.2109656050878591,
+      "% template-seen": 0.2387774594078319,
+      "% intermediate": 1.8624641833810889,
+      "% novel": 97.89875835721108
+    },
+    {
+      "set": "comments",
+      "n": 363,
+      "median max-cosine": 0.16985783823503486,
+      "% template-seen": 0.0,
+      "% intermediate": 0.0,
+      "% novel": 100.0
+    }
+  ],
+  "results": [
+    {
+      "set": "main test (all 16 labels)",
+      "model": "Unigram BoW + LR (baseline)",
+      "labels scored": 16,
+      "macro_f1": 0.7511386275143801,
+      "macro_f1_95ci": "[0.699, 0.786]",
+      "micro_f1": 0.7940639269406393,
+      "micro_precision": 0.8524509803921568,
+      "micro_recall": 0.7431623931623932,
+      "no label predicted": 0.09675583380762663
+    },
+    {
+      "set": "main test (all 16 labels)",
+      "model": "TF-IDF LR-L1 (Lasso)",
+      "labels scored": 16,
+      "macro_f1": 0.7728641105380656,
+      "macro_f1_95ci": "[0.729, 0.805]",
+      "micro_f1": 0.7983377077865267,
+      "micro_precision": 0.817652329749104,
+      "micro_recall": 0.7799145299145299,
+      "no label predicted": 0.053500284575981785
+    },
+    {
+      "set": "main test (all 16 labels)",
+      "model": "TF-IDF LR-L2 (ridge)",
+      "labels scored": 16,
+      "macro_f1": 0.7894807165684523,
+      "macro_f1_95ci": "[0.746, 0.820]",
+      "micro_f1": 0.8238623993032876,
+      "micro_precision": 0.8397691966267199,
+      "micro_recall": 0.8085470085470086,
+      "no label predicted": 0.043824701195219126
+    },
+    {
+      "set": "main test (all 16 labels)",
+      "model": "TF-IDF Linear SVM",
+      "labels scored": 16,
+      "macro_f1": 0.8045460250513587,
+      "macro_f1_95ci": "[0.764, 0.834]",
+      "micro_f1": 0.8320545609548167,
+      "micro_precision": 0.8299319727891157,
+      "micro_recall": 0.8341880341880342,
+      "no label predicted": 0.035287421741605006
+    },
+    {
+      "set": "main test (all 16 labels)",
+      "model": "TF-IDF + structural Linear SVM",
+      "labels scored": 16,
+      "macro_f1": 0.804075724333789,
+      "macro_f1_95ci": "[0.761, 0.834]",
+      "micro_f1": 0.8284554582354198,
+      "micro_precision": 0.8282785134557882,
+      "micro_recall": 0.8286324786324787,
+      "no label predicted": 0.03927148548662493
+    },
+    {
+      "set": "edu",
+      "model": "Unigram BoW + LR (baseline)",
+      "labels scored": 14,
+      "macro_f1": 0.31797241892961686,
+      "macro_f1_95ci": "[0.269, 0.357]",
+      "micro_f1": 0.32979749276759884,
+      "micro_precision": 0.5079207920792079,
+      "micro_recall": 0.2441694431223227,
+      "no label predicted": 0.5563514804202483
+    },
+    {
+      "set": "edu",
+      "model": "TF-IDF LR-L1 (Lasso)",
+      "labels scored": 14,
+      "macro_f1": 0.31408777525903714,
+      "macro_f1_95ci": "[0.290, 0.335]",
+      "micro_f1": 0.3830005120327701,
+      "micro_precision": 0.41440443213296396,
+      "micro_recall": 0.35602094240837695,
+      "no label predicted": 0.3003820439350525
+    },
+    {
+      "set": "edu",
+      "model": "TF-IDF LR-L2 (ridge)",
+      "labels scored": 14,
+      "macro_f1": 0.3343716198639705,
+      "macro_f1_95ci": "[0.313, 0.353]",
+      "micro_f1": 0.41375358166189113,
+      "micro_precision": 0.5197984161267099,
+      "micro_recall": 0.3436458829128986,
+      "no label predicted": 0.39159503342884433
+    },
+    {
+      "set": "edu",
+      "model": "TF-IDF Linear SVM",
+      "labels scored": 14,
+      "macro_f1": 0.32704216512979095,
+      "macro_f1_95ci": "[0.306, 0.344]",
+      "micro_f1": 0.4134587966923296,
+      "micro_precision": 0.515647226173542,
+      "micro_recall": 0.3450737743931461,
+      "no label predicted": 0.3825214899713467
+    },
+    {
+      "set": "edu",
+      "model": "TF-IDF + structural Linear SVM",
+      "labels scored": 14,
+      "macro_f1": 0.3311700352871263,
+      "macro_f1_95ci": "[0.309, 0.349]",
+      "micro_f1": 0.40144564915207115,
+      "micro_precision": 0.48262032085561496,
+      "micro_recall": 0.3436458829128986,
+      "no label predicted": 0.3748806112702961
+    },
+    {
+      "set": "comments",
+      "model": "Unigram BoW + LR (baseline)",
+      "labels scored": 5,
+      "macro_f1": 0.33889618208568684,
+      "macro_f1_95ci": "[0.288, 0.390]",
+      "micro_f1": 0.36397748592870544,
+      "micro_precision": 0.5705882352941176,
+      "micro_recall": 0.26721763085399447,
+      "no label predicted": 0.45179063360881544
+    },
+    {
+      "set": "comments",
+      "model": "TF-IDF LR-L1 (Lasso)",
+      "labels scored": 5,
+      "macro_f1": 0.31198818376475346,
+      "macro_f1_95ci": "[0.258, 0.362]",
+      "micro_f1": 0.3172690763052209,
+      "micro_precision": 0.5851851851851851,
+      "micro_recall": 0.21763085399449036,
+      "no label predicted": 0.46831955922865015
+    },
+    {
+      "set": "comments",
+      "model": "TF-IDF LR-L2 (ridge)",
+      "labels scored": 5,
+      "macro_f1": 0.3413302679747158,
+      "macro_f1_95ci": "[0.288, 0.393]",
+      "micro_f1": 0.358974358974359,
+      "micro_precision": 0.6319444444444444,
+      "micro_recall": 0.25068870523415976,
+      "no label predicted": 0.46831955922865015
+    },
+    {
+      "set": "comments",
+      "model": "TF-IDF Linear SVM",
+      "labels scored": 5,
+      "macro_f1": 0.32593648274798065,
+      "macro_f1_95ci": "[0.271, 0.377]",
+      "micro_f1": 0.3441295546558704,
+      "micro_precision": 0.648854961832061,
+      "micro_recall": 0.23415977961432508,
+      "no label predicted": 0.4931129476584022
+    },
+    {
+      "set": "comments",
+      "model": "TF-IDF + structural Linear SVM",
+      "labels scored": 5,
+      "macro_f1": 0.32829060021299744,
+      "macro_f1_95ci": "[0.277, 0.379]",
+      "micro_f1": 0.35984848484848486,
+      "micro_precision": 0.5757575757575758,
+      "micro_recall": 0.26170798898071623,
+      "no label predicted": 0.34710743801652894
+    },
+    {
+      "set": "main test (comments' 5 labels)",
+      "model": "Unigram BoW + LR (baseline)",
+      "labels scored": 5,
+      "macro_f1": 0.7865814122938847,
+      "macro_f1_95ci": "[0.767, 0.806]",
+      "micro_f1": 0.8070937386898299,
+      "micro_precision": 0.8396084337349398,
+      "micro_recall": 0.7770034843205574,
+      "no label predicted": NaN
+    },
+    {
+      "set": "main test (comments' 5 labels)",
+      "model": "TF-IDF LR-L1 (Lasso)",
+      "labels scored": 5,
+      "macro_f1": 0.7871484806698428,
+      "macro_f1_95ci": "[0.769, 0.804]",
+      "micro_f1": 0.8056140350877193,
+      "micro_precision": 0.8113074204946996,
+      "micro_recall": 0.8,
+      "no label predicted": NaN
+    },
+    {
+      "set": "main test (comments' 5 labels)",
+      "model": "TF-IDF LR-L2 (ridge)",
+      "labels scored": 5,
+      "macro_f1": 0.8189161529341694,
+      "macro_f1_95ci": "[0.803, 0.835]",
+      "micro_f1": 0.8339714584058475,
+      "micro_precision": 0.8331015299026425,
+      "micro_recall": 0.8348432055749129,
+      "no label predicted": NaN
+    },
+    {
+      "set": "main test (comments' 5 labels)",
+      "model": "TF-IDF Linear SVM",
+      "labels scored": 5,
+      "macro_f1": 0.8243984990323453,
+      "macro_f1_95ci": "[0.808, 0.841]",
+      "micro_f1": 0.840080971659919,
+      "micro_precision": 0.8142576847612819,
+      "micro_recall": 0.867595818815331,
+      "no label predicted": NaN
+    },
+    {
+      "set": "main test (comments' 5 labels)",
+      "model": "TF-IDF + structural Linear SVM",
+      "labels scored": 5,
+      "macro_f1": 0.8200163441486961,
+      "macro_f1_95ci": "[0.804, 0.837]",
+      "micro_f1": 0.8372881355932204,
+      "micro_precision": 0.8151815181518152,
+      "micro_recall": 0.8606271777003485,
+      "no label predicted": NaN
+    }
+  ],
+  "per_label": [
+    {
+      "label": "Slippery Slope",
+      "main test F1": 0.9056224899598394,
+      "main n": 485,
+      "edu F1": null,
+      "edu n": 0,
+      "comments F1": 0.5039370078740157,
+      "comments n": 88
+    },
+    {
+      "label": "Appeal to Authority",
+      "main test F1": 0.8598425196850393,
+      "main n": 316,
+      "edu F1": 0.430939226519337,
+      "edu n": 95,
+      "comments F1": 0.29545454545454547,
+      "comments n": 72
+    },
+    {
+      "label": "Bandwagon / Popularity",
+      "main test F1": 0.8019639934533551,
+      "main n": 281,
+      "edu F1": 0.5831202046035806,
+      "edu n": 231,
+      "comments F1": 0.3888888888888889,
+      "comments n": 68
+    },
+    {
+      "label": "Hasty Generalization",
+      "main test F1": 0.7142857142857143,
+      "main n": 207,
+      "edu F1": 0.3264,
+      "edu n": 439,
+      "comments F1": 0.1686746987951807,
+      "comments n": 73
+    },
+    {
+      "label": "False Cause / Causality",
+      "main test F1": 0.8190954773869347,
+      "main n": 215,
+      "edu F1": 0.5546666666666666,
+      "edu n": 215,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Appeal to Emotion",
+      "main test F1": 0.8444444444444444,
+      "main n": 208,
+      "edu F1": 0.2955032119914347,
+      "edu n": 165,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Composition",
+      "main test F1": 0.7967479674796748,
+      "main n": 131,
+      "edu F1": null,
+      "edu n": 0,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "False Dilemma",
+      "main test F1": 0.8402777777777778,
+      "main n": 146,
+      "edu F1": 0.647887323943662,
+      "edu n": 140,
+      "comments F1": 0.2727272727272727,
+      "comments n": 62
+    },
+    {
+      "label": "Ad Hominem",
+      "main test F1": 0.782608695652174,
+      "main n": 119,
+      "edu F1": 0.45493562231759654,
+      "edu n": 300,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Equivocation",
+      "main test F1": 0.8734177215189873,
+      "main n": 86,
+      "edu F1": 0.041666666666666664,
+      "edu n": 46,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Circular Reasoning",
+      "main test F1": 0.8201438848920863,
+      "main n": 74,
+      "edu F1": 0.416,
+      "edu n": 169,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Straw Man",
+      "main test F1": 0.8,
+      "main n": 35,
+      "edu F1": 0.287292817679558,
+      "edu n": 138,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Red Herring",
+      "main test F1": 0.5,
+      "main n": 7,
+      "edu F1": 0.07142857142857142,
+      "edu n": 106,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Appeal to Ignorance",
+      "main test F1": 0.8571428571428571,
+      "main n": 7,
+      "edu F1": 0.46875,
+      "edu n": 44,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Affirming the Consequent",
+      "main test F1": 0.8,
+      "main n": 15,
+      "edu F1": 0.0,
+      "edu n": 10,
+      "comments F1": null,
+      "comments n": 0
+    },
+    {
+      "label": "Denying the Antecedent",
+      "main test F1": 0.8571428571428571,
+      "main n": 8,
+      "edu F1": 0.0,
+      "edu n": 3,
+      "comments F1": null,
+      "comments n": 0
+    }
+  ],
+  "n_edu": 2094,
+  "n_comments": 363,
+  "edu_labels_scored": [
+    "Appeal to Authority",
+    "Bandwagon / Popularity",
+    "Hasty Generalization",
+    "False Cause / Causality",
+    "Appeal to Emotion",
+    "False Dilemma",
+    "Ad Hominem",
+    "Equivocation",
+    "Circular Reasoning",
+    "Straw Man",
+    "Red Herring",
+    "Appeal to Ignorance",
+    "Affirming the Consequent",
+    "Denying the Antecedent"
+  ],
+  "comments_labels_scored": [
+    "Slippery Slope",
+    "Appeal to Authority",
+    "Bandwagon / Popularity",
+    "Hasty Generalization",
+    "False Dilemma"
+  ],
+  "edu_pred_ss": 109,
+  "edu_pred_ss_chain": 78
+}
