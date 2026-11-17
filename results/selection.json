@@ -1,0 +1,95 @@
+{
+  "LinearSVM": {
+    "model": "TF-IDF uni+bi LinearSVM C=1 cw=balanced",
+    "ngram": "uni+bi",
+    "penalty": "l2-hinge",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "macro_f1": 0.8228550924020248,
+    "cv_macro_f1": 0.8076455831245865,
+    "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "LR-L1": {
+    "model": "TF-IDF uni+bi LR-L1 C=1000 cw=balanced",
+    "ngram": "uni+bi",
+    "penalty": "l1",
+    "C": 1000.0,
+    "class_weight": "balanced",
+    "macro_f1": 0.8155356267687837,
+    "cv_macro_f1": 0.7886999604460192,
+    "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "LR-L2": {
+    "model": "TF-IDF uni+bi LR-L2 C=1000 cw=balanced",
+    "ngram": "uni+bi",
+    "penalty": "l2",
+    "C": 1000.0,
+    "class_weight": "balanced",
+    "macro_f1": 0.8107884067165241,
+    "cv_macro_f1": 0.8073225224927139,
+    "selected_by": "5-fold multilabel-stratified CV on train"
+  },
+  "PCA-LR": {
+    "model": "SVD-1000 + LR cw=None",
+    "k": 1000,
+    "C": 1.0,
+    "class_weight": "None",
+    "macro_f1": 0.7686393230640249
+  },
+  "RBF-SVM": {
+    "model": "SVD-300 + RBF-SVM C=10 cw=balanced",
+    "k": 300,
+    "C": 10.0,
+    "class_weight": "balanced",
+    "macro_f1": 0.7894359130522337
+  },
+  "thresholds": {
+    "model": "Calibrated LinearSVM",
+    "f1_tuned_on_val": {
+      "Slippery Slope": 0.56,
+      "Appeal to Authority": 0.51,
+      "Bandwagon / Popularity": 0.46,
+      "Hasty Generalization": 0.4,
+      "False Cause / Causality": 0.36,
+      "Appeal to Emotion": 0.28,
+      "Composition": 0.39,
+      "False Dilemma": 0.25,
+      "Ad Hominem": 0.46,
+      "Equivocation": 0.28,
+      "Circular Reasoning": 0.45,
+      "Straw Man": 0.56,
+      "Red Herring": 0.5,
+      "Appeal to Ignorance": 0.07,
+      "Affirming the Consequent": 0.7,
+      "Denying the Antecedent": 0.06
+    }
+  },
+  "calibration_val": [
+    {
+      "model": "Calibrated LinearSVM",
+      "brier": 0.020744740392789507
+    },
+    {
+      "model": "LR-L1 (raw probabilities)",
+      "brier": 0.02723425996845089
+    }
+  ],
+  "TFIDF+Structural-SVM": {
+    "model": "TF-IDF + structural (w=1) Linear SVM",
+    "weight": 1.0,
+    "C": 1.0,
+    "class_weight": "balanced",
+    "cv_macro_f1": 0.8100312742629139,
+    "beats_tfidf_only_in_cv": true
+  },
+  "focus_binary": {
+    "fallacies": [
+      "Slippery Slope",
+      "Ad Hominem",
+      "False Dilemma"
+    ],
+    "model": "LinearSVC per fallacy",
+    "C": 1.0,
+    "class_weight": "balanced"
+  }
+}
