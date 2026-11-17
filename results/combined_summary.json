@@ -1,0 +1,466 @@
+{
+  "counts": [
+    {
+      "source": "cocolofa",
+      "split": "test",
+      "n": 31
+    },
+    {
+      "source": "cocolofa",
+      "split": "train",
+      "n": 124
+    },
+    {
+      "source": "cocolofa",
+      "split": "val",
+      "n": 27
+    },
+    {
+      "source": "contrastive",
+      "split": "test",
+      "n": 186
+    },
+    {
+      "source": "contrastive",
+      "split": "train",
+      "n": 974
+    },
+    {
+      "source": "contrastive",
+      "split": "val",
+      "n": 246
+    },
+    {
+      "source": "edu",
+      "split": "test",
+      "n": 314
+    },
+    {
+      "source": "edu",
+      "split": "train",
+      "n": 1482
+    },
+    {
+      "source": "edu",
+      "split": "val",
+      "n": 298
+    },
+    {
+      "source": "main",
+      "split": "test",
+      "n": 1757
+    },
+    {
+      "source": "main",
+      "split": "train",
+      "n": 14341
+    },
+    {
+      "source": "main",
+      "split": "val",
+      "n": 1768
+    },
+    {
+      "source": "touche",
+      "split": "test",
+      "n": 125
+    },
+    {
+      "source": "touche",
+      "split": "train",
+      "n": 522
+    },
+    {
+      "source": "touche",
+      "split": "val",
+      "n": 104
+    }
+  ],
+  "val_grid": [
+    {
+      "C": 0.1,
+      "class_weight": "None",
+      "val_macro_f1": 0.4946008399411266,
+      "val_macro_f1 main": 0.5361333588289539,
+      "val_macro_f1 edu": 0.17175824982070687,
+      "val_macro_f1 cocolofa": 0.0,
+      "val_macro_f1 touche": 0.03636363636363636,
+      "val valid kept clean": 0.9871794871794872
+    },
+    {
+      "C": 0.1,
+      "class_weight": "balanced",
+      "val_macro_f1": 0.7427605873289005,
+      "val_macro_f1 main": 0.7932055976523433,
+      "val_macro_f1 edu": 0.43993195501816196,
+      "val_macro_f1 cocolofa": 0.225,
+      "val_macro_f1 touche": 0.2612454212454212,
+      "val valid kept clean": 0.5897435897435898
+    },
+    {
+      "C": 0.3,
+      "class_weight": "None",
+      "val_macro_f1": 0.61775409253808,
+      "val_macro_f1 main": 0.6592873426061827,
+      "val_macro_f1 edu": 0.31337616018067144,
+      "val_macro_f1 cocolofa": 0.0,
+      "val_macro_f1 touche": 0.09350649350649351,
+      "val valid kept clean": 0.9230769230769231
+    },
+    {
+      "C": 0.3,
+      "class_weight": "balanced",
+      "val_macro_f1": 0.7631419876851206,
+      "val_macro_f1 main": 0.8158065555660488,
+      "val_macro_f1 edu": 0.4526693268298557,
+      "val_macro_f1 cocolofa": 0.29642857142857143,
+      "val_macro_f1 touche": 0.38337662337662337,
+      "val valid kept clean": 0.6794871794871795
+    },
+    {
+      "C": 1.0,
+      "class_weight": "None",
+      "val_macro_f1": 0.7269579619643319,
+      "val_macro_f1 main": 0.7850984364041205,
+      "val_macro_f1 edu": 0.39128063348156567,
+      "val_macro_f1 cocolofa": 0.125,
+      "val_macro_f1 touche": 0.26623376623376627,
+      "val valid kept clean": 0.8333333333333334
+    },
+    {
+      "C": 1.0,
+      "class_weight": "balanced",
+      "val_macro_f1": 0.772022251143982,
+      "val_macro_f1 main": 0.8225697391959208,
+      "val_macro_f1 edu": 0.4706905843624707,
+      "val_macro_f1 cocolofa": 0.27142857142857146,
+      "val_macro_f1 touche": 0.30063936063936064,
+      "val valid kept clean": 0.7435897435897436
+    },
+    {
+      "C": 3.0,
+      "class_weight": "None",
+      "val_macro_f1": 0.7637221527405818,
+      "val_macro_f1 main": 0.8168085922111086,
+      "val_macro_f1 edu": 0.4298817144976796,
+      "val_macro_f1 cocolofa": 0.27142857142857146,
+      "val_macro_f1 touche": 0.30623376623376625,
+      "val valid kept clean": 0.8205128205128205
+    },
+    {
+      "C": 3.0,
+      "class_weight": "balanced",
+      "val_macro_f1": 0.7655210106819357,
+      "val_macro_f1 main": 0.8143146382979607,
+      "val_macro_f1 edu": 0.46382310882310884,
+      "val_macro_f1 cocolofa": 0.27142857142857146,
+      "val_macro_f1 touche": 0.30063936063936064,
+      "val valid kept clean": 0.7692307692307693
+    }
+  ],
+  "selected": {
+    "model": "TF-IDF uni+bi LinearSVM on main + edu + comments",
+    "C": 1.0,
+    "class_weight": "balanced",
+    "val_macro_f1": 0.772022251143982,
+    "selected_by": "pooled validation macro-F1 (notebook 13), before any test split was scored"
+  },
+  "multi": [
+    {
+      "test set": "main test",
+      "model": "main data only",
+      "n": 1757,
+      "labels scored": 16,
+      "macro_f1": 0.8045460250513587,
+      "macro_f1_95ci": "[0.760, 0.831]",
+      "micro_f1": 0.8320545609548167,
+      "delta_vs_main_only_95ci": null
+    },
+    {
+      "test set": "main test",
+      "model": "all datasets",
+      "n": 1757,
+      "labels scored": 16,
+      "macro_f1": 0.8026390155208198,
+      "macro_f1_95ci": "[0.758, 0.830]",
+      "micro_f1": 0.8290066509332761,
+      "delta_vs_main_only_95ci": "[-0.007, +0.005]"
+    },
+    {
+      "test set": "edu test",
+      "model": "main data only",
+      "n": 314,
+      "labels scored": 13,
+      "macro_f1": 0.3229220456404611,
+      "macro_f1_95ci": "[0.250, 0.377]",
+      "micro_f1": 0.37453183520599254,
+      "delta_vs_main_only_95ci": null
+    },
+    {
+      "test set": "edu test",
+      "model": "all datasets",
+      "n": 314,
+      "labels scored": 13,
+      "macro_f1": 0.44522544358088123,
+      "macro_f1_95ci": "[0.355, 0.503]",
+      "micro_f1": 0.5078740157480315,
+      "delta_vs_main_only_95ci": "[+0.074, +0.165]"
+    },
+    {
+      "test set": "comments test (fallacious)",
+      "model": "main data only",
+      "n": 68,
+      "labels scored": 5,
+      "macro_f1": 0.31876750700280115,
+      "macro_f1_95ci": "[0.195, 0.433]",
+      "micro_f1": 0.3404255319148936,
+      "delta_vs_main_only_95ci": null
+    },
+    {
+      "test set": "comments test (fallacious)",
+      "model": "all datasets",
+      "n": 68,
+      "labels scored": 5,
+      "macro_f1": 0.2969089390142021,
+      "macro_f1_95ci": "[0.154, 0.407]",
+      "micro_f1": 0.2988505747126437,
+      "delta_vs_main_only_95ci": "[-0.133, +0.078]"
+    }
+  ],
+  "binary": [
+    {
+      "test set": "comments test",
+      "model": "main data only",
+      "n": 156,
+      "accuracy": 0.5128205128205128,
+      "accuracy_95ci": "[0.436, 0.590]",
+      "majority accuracy": 0.5641025641025641,
+      "valid flagged as fallacy (FPR)": 0.5227272727272727,
+      "fallacies flagged (recall)": 0.5588235294117647
+    },
+    {
+      "test set": "comments test",
+      "model": "all datasets",
+      "n": 156,
+      "accuracy": 0.5384615384615384,
+      "accuracy_95ci": "[0.455, 0.622]",
+      "majority accuracy": 0.5641025641025641,
+      "valid flagged as fallacy (FPR)": 0.3068181818181818,
+      "fallacies flagged (recall)": 0.3382352941176471
+    },
+    {
+      "test set": "contrastive test",
+      "model": "main data only",
+      "n": 186,
+      "accuracy": 0.6021505376344086,
+      "accuracy_95ci": "[0.532, 0.672]",
+      "majority accuracy": 0.5,
+      "valid flagged as fallacy (FPR)": 0.46236559139784944,
+      "fallacies flagged (recall)": 0.6666666666666666
+    },
+    {
+      "test set": "contrastive test",
+      "model": "all datasets",
+      "n": 186,
+      "accuracy": 0.6129032258064516,
+      "accuracy_95ci": "[0.538, 0.688]",
+      "majority accuracy": 0.5,
+      "valid flagged as fallacy (FPR)": 0.45161290322580644,
+      "fallacies flagged (recall)": 0.6774193548387096
+    }
+  ],
+  "pair_rank": {
+    "main data only": 0.6344086021505376,
+    "all datasets": 0.6774193548387096
+  },
+  "n_test_pairs": 93,
+  "per_label_main": [
+    {
+      "label": "Slippery Slope",
+      "main test n": 485,
+      "F1 main data only": 0.9056224899598394,
+      "F1 all datasets": 0.9087261785356068,
+      "change": 0.0031036885757673716
+    },
+    {
+      "label": "Appeal to Authority",
+      "main test n": 316,
+      "F1 main data only": 0.8598425196850393,
+      "F1 all datasets": 0.8540031397174255,
+      "change": -0.005839379967613856
+    },
+    {
+      "label": "Bandwagon / Popularity",
+      "main test n": 281,
+      "F1 main data only": 0.8019639934533551,
+      "F1 all datasets": 0.7986798679867987,
+      "change": -0.0032841254665564312
+    },
+    {
+      "label": "Hasty Generalization",
+      "main test n": 207,
+      "F1 main data only": 0.7142857142857143,
+      "F1 all datasets": 0.7102803738317757,
+      "change": -0.004005340453938633
+    },
+    {
+      "label": "False Cause / Causality",
+      "main test n": 215,
+      "F1 main data only": 0.8190954773869347,
+      "F1 all datasets": 0.810126582278481,
+      "change": -0.008968895108453667
+    },
+    {
+      "label": "Appeal to Emotion",
+      "main test n": 208,
+      "F1 main data only": 0.8444444444444444,
+      "F1 all datasets": 0.8324873096446701,
+      "change": -0.011957134799774338
+    },
+    {
+      "label": "Composition",
+      "main test n": 131,
+      "F1 main data only": 0.7967479674796748,
+      "F1 all datasets": 0.8032786885245902,
+      "change": 0.006530721044915366
+    },
+    {
+      "label": "False Dilemma",
+      "main test n": 146,
+      "F1 main data only": 0.8402777777777778,
+      "F1 all datasets": 0.8268551236749117,
+      "change": -0.013422654102866138
+    },
+    {
+      "label": "Ad Hominem",
+      "main test n": 119,
+      "F1 main data only": 0.782608695652174,
+      "F1 all datasets": 0.7967479674796748,
+      "change": 0.014139271827500854
+    },
+    {
+      "label": "Equivocation",
+      "main test n": 86,
+      "F1 main data only": 0.8734177215189873,
+      "F1 all datasets": 0.8553459119496856,
+      "change": -0.018071809569301767
+    },
+    {
+      "label": "Circular Reasoning",
+      "main test n": 74,
+      "F1 main data only": 0.8201438848920863,
+      "F1 all datasets": 0.8111888111888111,
+      "change": -0.008955073703275196
+    },
+    {
+      "label": "Straw Man",
+      "main test n": 35,
+      "F1 main data only": 0.8,
+      "F1 all datasets": 0.7868852459016393,
+      "change": -0.013114754098360715
+    },
+    {
+      "label": "Red Herring",
+      "main test n": 7,
+      "F1 main data only": 0.5,
+      "F1 all datasets": 0.5333333333333333,
+      "change": 0.033333333333333326
+    },
+    {
+      "label": "Appeal to Ignorance",
+      "main test n": 7,
+      "F1 main data only": 0.8571428571428571,
+      "F1 all datasets": 0.8571428571428571,
+      "change": 0.0
+    },
+    {
+      "label": "Affirming the Consequent",
+      "main test n": 15,
+      "F1 main data only": 0.8,
+      "F1 all datasets": 0.8,
+      "change": 0.0
+    },
+    {
+      "label": "Denying the Antecedent",
+      "main test n": 8,
+      "F1 main data only": 0.8571428571428571,
+      "F1 all datasets": 0.8571428571428571,
+      "change": 0.0
+    }
+  ],
+  "n_train": 16469,
+  "n_train_by_source": {
+    "main": 14341,
+    "edu": 1482,
+    "touche": 522,
+    "cocolofa": 124
+  },
+  "lasso": {
+    "val_grid": [
+      {
+        "C": 10.0,
+        "val_macro_f1": 0.7372047987879559,
+        "val valid kept clean": 0.5
+      },
+      {
+        "C": 100.0,
+        "val_macro_f1": 0.7418067717168001,
+        "val valid kept clean": 0.6025641025641025
+      },
+      {
+        "C": 1000.0,
+        "val_macro_f1": 0.74320538207347,
+        "val valid kept clean": 0.717948717948718
+      }
+    ],
+    "selected": {
+      "model": "TF-IDF uni+bi LR-L1 on main + edu + comments (website inspector)",
+      "C": 1000.0,
+      "class_weight": "balanced",
+      "val_macro_f1": 0.74320538207347,
+      "selected_by": "pooled validation macro-F1 (notebook 13), before any test split was scored"
+    },
+    "test": [
+      {
+        "test set": "main test",
+        "macro_f1": 0.776238086047274,
+        "macro_f1_95ci": "[0.728, 0.805]",
+        "accuracy": null,
+        "valid flagged as fallacy (FPR)": null,
+        "fallacies flagged (recall)": null
+      },
+      {
+        "test set": "edu test",
+        "macro_f1": 0.4242454741240166,
+        "macro_f1_95ci": "[0.349, 0.482]",
+        "accuracy": null,
+        "valid flagged as fallacy (FPR)": null,
+        "fallacies flagged (recall)": null
+      },
+      {
+        "test set": "comments test (fallacious)",
+        "macro_f1": 0.2931890331890332,
+        "macro_f1_95ci": "[0.155, 0.405]",
+        "accuracy": null,
+        "valid flagged as fallacy (FPR)": null,
+        "fallacies flagged (recall)": null
+      },
+      {
+        "test set": "comments test (fallacy vs valid)",
+        "macro_f1": null,
+        "macro_f1_95ci": null,
+        "accuracy": 0.5705128205128205,
+        "valid flagged as fallacy (FPR)": 0.3068181818181818,
+        "fallacies flagged (recall)": 0.4117647058823529
+      },
+      {
+        "test set": "contrastive test (fallacy vs valid)",
+        "macro_f1": null,
+        "macro_f1_95ci": null,
+        "accuracy": 0.5698924731182796,
+        "valid flagged as fallacy (FPR)": 0.5591397849462365,
+        "fallacies flagged (recall)": 0.6989247311827957
+      }
+    ]
+  }
+}
