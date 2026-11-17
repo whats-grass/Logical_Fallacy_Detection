@@ -1,0 +1,572 @@
+{
+ "label_guide": [
+  {
+   "label": "Slippery Slope",
+   "description": "A small first step is claimed to inevitably lead to an extreme chain of consequences, without evidence.",
+   "count": 4900,
+   "share": 0.2743
+  },
+  {
+   "label": "Appeal to Authority",
+   "description": "A claim is accepted because an authority, expert or celebrity said so, instead of on evidence.",
+   "count": 3057,
+   "share": 0.1711
+  },
+  {
+   "label": "Bandwagon / Popularity",
+   "description": "Something is claimed true or good because many people believe or do it.",
+   "count": 2811,
+   "share": 0.1573
+  },
+  {
+   "label": "Hasty Generalization",
+   "description": "A broad conclusion is drawn from a small or unrepresentative sample.",
+   "count": 2428,
+   "share": 0.1359
+  },
+  {
+   "label": "False Cause / Causality",
+   "description": "Assuming one event caused another just because they are correlated or one followed the other.",
+   "count": 2101,
+   "share": 0.1176
+  },
+  {
+   "label": "Appeal to Emotion",
+   "description": "Using fear, pity, guilt, anger etc. in place of valid reasons to persuade.",
+   "count": 1996,
+   "share": 0.1117
+  },
+  {
+   "label": "Composition",
+   "description": "Assuming what is true of the parts must be true of the whole (or of the group).",
+   "count": 1400,
+   "share": 0.0784
+  },
+  {
+   "label": "False Dilemma",
+   "description": "Presenting only two options when more exist.",
+   "count": 1365,
+   "share": 0.0764
+  },
+  {
+   "label": "Ad Hominem",
+   "description": "Attacking the person making the argument rather than the argument itself.",
+   "count": 1205,
+   "share": 0.0674
+  },
+  {
+   "label": "Equivocation",
+   "description": "Using a key term with two different meanings in the same argument.",
+   "count": 900,
+   "share": 0.0504
+  },
+  {
+   "label": "Circular Reasoning",
+   "description": "The conclusion is assumed in the premises (includes begging the question).",
+   "count": 706,
+   "share": 0.0395
+  },
+  {
+   "label": "Straw Man",
+   "description": "Distorting or exaggerating an opponent's position, then attacking that version.",
+   "count": 458,
+   "share": 0.0256
+  },
+  {
+   "label": "Red Herring",
+   "description": "Diverting attention to an irrelevant point instead of addressing the issue.",
+   "count": 129,
+   "share": 0.0072
+  },
+  {
+   "label": "Appeal to Ignorance",
+   "description": "Claiming something is true because it has not been proven false (or vice versa).",
+   "count": 102,
+   "share": 0.0057
+  },
+  {
+   "label": "Affirming the Consequent",
+   "description": "Formal fallacy: If P then Q; Q; therefore P.",
+   "count": 97,
+   "share": 0.0054
+  },
+  {
+   "label": "Denying the Antecedent",
+   "description": "Formal fallacy: If P then Q; not P; therefore not Q.",
+   "count": 57,
+   "share": 0.0032
+  }
+ ],
+ "quiz": [
+  {
+   "text": "Since everyone in my class failed the test, clearly the teacher is incompetent and designed it unfairly, so my poor grade is completely unjustified.",
+   "label": "Ad Hominem",
+   "options": [
+    "Appeal to Authority",
+    "False Dilemma",
+    "Hasty Generalization",
+    "Ad Hominem"
+   ]
+  },
+  {
+   "text": "Dr. Smith, a renowned physicist, claims that ghosts exist. Therefore, we must accept that ghosts are real because such an authority would not be wrong.",
+   "label": "Appeal to Authority",
+   "options": [
+    "Bandwagon / Popularity",
+    "Slippery Slope",
+    "Appeal to Authority",
+    "Ad Hominem"
+   ]
+  },
+  {
+   "text": "The local bakery sells delicious croissants, so all bakeries in this country must have excellent pastries.",
+   "label": "Hasty Generalization",
+   "options": [
+    "Bandwagon / Popularity",
+    "False Dilemma",
+    "Appeal to Authority",
+    "Hasty Generalization"
+   ]
+  },
+  {
+   "text": "Most teenagers prefer streaming music services over traditional radio, so streaming must be the superior audio format.",
+   "label": "Bandwagon / Popularity",
+   "options": [
+    "Appeal to Authority",
+    "Hasty Generalization",
+    "Ad Hominem",
+    "Bandwagon / Popularity"
+   ]
+  },
+  {
+   "text": "When choosing a pet, you must decide between getting a dog that requires daily walks or a cat that needs litter box cleaning—there are no other practical options for busy people.",
+   "label": "False Dilemma",
+   "options": [
+    "Ad Hominem",
+    "False Dilemma",
+    "Slippery Slope",
+    "Appeal to Authority"
+   ]
+  },
+  {
+   "text": "If we ban smoking in parks, next they'll ban eating in public, then ban talking outdoors, and eventually we'll lose all our freedoms. Therefore, we must oppose any smoking restrictions.",
+   "label": "Slippery Slope",
+   "options": [
+    "Bandwagon / Popularity",
+    "Slippery Slope",
+    "Appeal to Authority",
+    "Hasty Generalization"
+   ]
+  }
+ ],
+ "pairs": [
+  {
+   "valid": "Most climate scientists conclude that reducing methane emissions lowers near-term warming based on multi-decade atmospheric data.",
+   "fallacy": "Most people think reducing methane emissions lowers near-term warming, so it must be true."
+  },
+  {
+   "valid": "Our survey indicates 60% support the policy, 30% oppose, and 10% are undecided.",
+   "fallacy": "Everyone knows this policy is incredibly unpopular with normal people."
+  },
+  {
+   "valid": "The investment is risky, with volatility 40% above the market average.",
+   "fallacy": "You shouldn't invest because it's too risky."
+  },
+  {
+   "valid": "The encryption is secure because it uses 256-bit AES, which remains unbroken by current computing power.",
+   "fallacy": "This encryption method is safe because it provides security."
+  },
+  {
+   "valid": "The pedagogical method is effective, with students in the program outperforming controls on standardized assessments.",
+   "fallacy": "This teaching style works because it helps students learn."
+  },
+  {
+   "valid": "This proposition is necessary because its negation leads to a logical contradiction.",
+   "fallacy": "This must be true because it's necessarily the case."
+  },
+  {
+   "valid": "Data from 1,000 schools shows that free breakfast programs improve attendance by an average of 15%.",
+   "fallacy": "The kids at my daughter's school still miss class, so free breakfast doesn't help."
+  },
+  {
+   "valid": "Extending the deadline for this project by one week accounts for the unexpected supply chain delay.",
+   "fallacy": "If we extend this deadline once, soon every project will be delayed, deadlines will become meaningless, and our company will fail."
+  }
+ ],
+ "bpe": [
+  {
+   "text": "Since everyone in my class failed the test, clearly the teacher is incompetent and designed it unfairly, so my poor grade is completely unjustified.",
+   "tokens": [
+    "since",
+    "everyone",
+    "in",
+    "my",
+    "class",
+    "failed",
+    "the",
+    "test",
+    ",",
+    "clearly",
+    "the",
+    "teacher",
+    "is",
+    "incompetent",
+    "and",
+    "designed",
+    "it",
+    "unfair",
+    "ly",
+    ",",
+    "so",
+    "my",
+    "poor",
+    "grade",
+    "is",
+    "completely",
+    "un",
+    "just",
+    "ified",
+    "."
+   ]
+  },
+  {
+   "text": "Dr. Smith, a renowned physicist, claims that ghosts exist. Therefore, we must accept that ghosts are real because such an authority would not be wrong.",
+   "tokens": [
+    "dr",
+    ".",
+    "smith",
+    ",",
+    "a",
+    "renowned",
+    "physicist",
+    ",",
+    "claims",
+    "that",
+    "gho",
+    "sts",
+    "exist",
+    ".",
+    "therefore",
+    ",",
+    "we",
+    "must",
+    "accept",
+    "that",
+    "gho",
+    "sts",
+    "are",
+    "real",
+    "because",
+    "such",
+    "an",
+    "authority",
+    "would",
+    "not",
+    "be",
+    "wrong",
+    "."
+   ]
+  },
+  {
+   "text": "The local bakery sells delicious croissants, so all bakeries in this country must have excellent pastries.",
+   "tokens": [
+    "the",
+    "local",
+    "bak",
+    "ery",
+    "sell",
+    "s",
+    "delicious",
+    "cro",
+    "is",
+    "s",
+    "ants",
+    ",",
+    "so",
+    "all",
+    "baker",
+    "ies",
+    "in",
+    "this",
+    "country",
+    "must",
+    "have",
+    "excellent",
+    "past",
+    "ries",
+    "."
+   ]
+  },
+  {
+   "text": "Most teenagers prefer streaming music services over traditional radio, so streaming must be the superior audio format.",
+   "tokens": [
+    "most",
+    "teenagers",
+    "prefer",
+    "streaming",
+    "music",
+    "services",
+    "over",
+    "traditional",
+    "radio",
+    ",",
+    "so",
+    "streaming",
+    "must",
+    "be",
+    "the",
+    "superior",
+    "audio",
+    "form",
+    "at",
+    "."
+   ]
+  },
+  {
+   "text": "When choosing a pet, you must decide between getting a dog that requires daily walks or a cat that needs litter box cleaning—there are no other practical options for busy people.",
+   "tokens": [
+    "when",
+    "choosing",
+    "a",
+    "pet",
+    ",",
+    "you",
+    "must",
+    "deci",
+    "de",
+    "between",
+    "getting",
+    "a",
+    "dog",
+    "that",
+    "requires",
+    "daily",
+    "walks",
+    "or",
+    "a",
+    "cat",
+    "that",
+    "needs",
+    "litter",
+    "box",
+    "clean",
+    "ing",
+    "—",
+    "there",
+    "are",
+    "no",
+    "other",
+    "practical",
+    "options",
+    "for",
+    "bu",
+    "sy",
+    "people",
+    "."
+   ]
+  },
+  {
+   "text": "If we ban smoking in parks, next they'll ban eating in public, then ban talking outdoors, and eventually we'll lose all our freedoms. Therefore, we must oppose any smoking restrictions.",
+   "tokens": [
+    "if",
+    "we",
+    "ban",
+    "smoking",
+    "in",
+    "parks",
+    ",",
+    "next",
+    "they",
+    "'",
+    "ll",
+    "ban",
+    "eating",
+    "in",
+    "public",
+    ",",
+    "then",
+    "ban",
+    "talking",
+    "out",
+    "doors",
+    ",",
+    "and",
+    "eventually",
+    "we",
+    "'",
+    "ll",
+    "lose",
+    "all",
+    "our",
+    "freedoms",
+    ".",
+    "therefore",
+    ",",
+    "we",
+    "must",
+    "oppose",
+    "any",
+    "smoking",
+    "restrictions",
+    "."
+   ]
+  },
+  {
+   "text": "John claims that all people should obey the rules of the road. But John has received several speeding tickets in the past. It's not necessary to obey the rules of the road.",
+   "tokens": [
+    "john",
+    "claims",
+    "that",
+    "all",
+    "people",
+    "should",
+    "obey",
+    "the",
+    "rules",
+    "of",
+    "the",
+    "road",
+    ".",
+    "but",
+    "john",
+    "has",
+    "rece",
+    "i",
+    "ved",
+    "several",
+    "speeding",
+    "tickets",
+    "in",
+    "the",
+    "past",
+    ".",
+    "it",
+    "'",
+    "s",
+    "not",
+    "necessary",
+    "to",
+    "obey",
+    "the",
+    "rules",
+    "of",
+    "the",
+    "road",
+    "."
+   ]
+  }
+ ],
+ "models": [
+  {
+   "text": "This new policy will definitely fail just like everything else the government has ever done. It’s a slippery slope that will lead to economic collapse and chaos for our families, so we must oppose it emotionally",
+   "label": [
+    "Slippery Slope",
+    "Composition"
+   ],
+   "pred": {
+    "BoW baseline": [
+     "Slippery Slope",
+     "Appeal to Authority",
+     "Appeal to Emotion"
+    ],
+    "Lasso": [
+     "Slippery Slope",
+     "Appeal to Emotion"
+    ],
+    "Ridge": [
+     "Slippery Slope",
+     "Appeal to Emotion"
+    ],
+    "Linear SVM": [
+     "Slippery Slope",
+     "Appeal to Emotion"
+    ]
+   }
+  },
+  {
+   "text": "This new smartphone app is incredibly popular. It's been downloaded millions of times and all the reviews are positive. Everyone is using it, so it must be completely bug-free and perfectly secure for all your banking transactions.",
+   "label": [
+    "Bandwagon / Popularity"
+   ],
+   "pred": {
+    "BoW baseline": [
+     "Bandwagon / Popularity",
+     "Composition"
+    ],
+    "Lasso": [
+     "Bandwagon / Popularity"
+    ],
+    "Ridge": [
+     "Bandwagon / Popularity"
+    ],
+    "Linear SVM": [
+     "Bandwagon / Popularity"
+    ]
+   }
+  },
+  {
+   "text": "My phone battery died right after I watched a scary movie. Therefore, horror films drain electronic devices of power and should be banned to save energy.",
+   "label": [
+    "False Cause / Causality"
+   ],
+   "pred": {
+    "BoW baseline": [
+     "Appeal to Emotion"
+    ],
+    "Lasso": [
+     "False Cause / Causality",
+     "Appeal to Emotion"
+    ],
+    "Ridge": [
+     "False Cause / Causality",
+     "Appeal to Emotion"
+    ],
+    "Linear SVM": [
+     "False Cause / Causality"
+    ]
+   }
+  },
+  {
+   "text": "The soccer match concluded with a draw.",
+   "label": [
+    "False Dilemma"
+   ],
+   "pred": {
+    "BoW baseline": [],
+    "Lasso": [
+     "Hasty Generalization"
+    ],
+    "Ridge": [],
+    "Linear SVM": []
+   }
+  },
+  {
+   "text": "If we allow students to use calculators in math class, they might start relying on them for simple arithmetic, then forget basic math skills entirely, leading to a generation unable to balance a checkbook. Think of the financial ruin these poor children will face!",
+   "label": [
+    "Slippery Slope",
+    "Appeal to Emotion"
+   ],
+   "pred": {
+    "BoW baseline": [
+     "Slippery Slope"
+    ],
+    "Lasso": [
+     "Slippery Slope",
+     "Appeal to Emotion"
+    ],
+    "Ridge": [
+     "Slippery Slope"
+    ],
+    "Linear SVM": [
+     "Slippery Slope"
+    ]
+   }
+  }
+ ],
+ "n_disagree": 583,
+ "n_test": 1757,
+ "nonzero_share": {
+  "Lasso": 0.03969205930031899,
+  "Ridge": 1.0
+ }
+}

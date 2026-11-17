@@ -1,5 +1,5 @@
 /* Logical Fallacy Detection - client-side logic. No build step, no server.
-   Data files are produced by `python -m src.export_web` into docs/data/. */
+   Data files are produced by `python -m src.export_web` into website/data/. */
 "use strict";
 const $ = (s, r = document) => r.querySelector(s);
 const el = (tag, attrs = {}, ...kids) => {
@@ -23,7 +23,12 @@ document.body.append(tip);
 function showTip(e, html) { tip.innerHTML = html; tip.style.opacity = 1; moveTip(e); }
 function moveTip(e) { tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + "px"; tip.style.top = (e.clientY + 14) + "px"; }
 function hideTip() { tip.style.opacity = 0; }
-function hover(node, html) { node.addEventListener("mousemove", e => showTip(e, typeof html === "function" ? html() : html)); node.addEventListener("mouseleave", hideTip); }
+function hover(node, html) {
+  node.addEventListener("mousemove", e => showTip(e, typeof html === "function" ? html() : html));
+  node.addEventListener("mouseleave", hideTip);
+  node.addEventListener("blur", hideTip);
+  node.addEventListener("focus", () => { const b = node.getBoundingClientRect(); showTip({ clientX: b.left, clientY: b.bottom }, typeof html === "function" ? html() : html); });
+}
 
 /* ---------- generic horizontal bar chart (one series, optional CI) ---------- */
 function hbar(container, rows, { max = 1, valueLabel = "macro-F1", color = "var(--c-1)", highlight = () => false, width = 640 } = {}) {
@@ -76,6 +81,35 @@ function groupedBars(container, groups, series, get, { max = 1, yLabel = "", wid
   container.replaceChildren(lg, svg);
 }
 
+/* ---------- two-point comparison ("dumbbell") for the shortcut summary ---------- */
+function dumbbell(p) {
+  // two labelled rows on a shared axis
+  const max = p.max || 1, w = 360, h = 104, l = 8, r = 14, X = v => l + (w - l - r) * Math.min(Math.max(v, 0), max) / max;
+  const f = v => (p.percent ? pct(v, 0) : fmt(v, 3));
+  const svg = sv("svg", { viewBox: `0 0 ${w} ${h}`, class: "chart db", role: "img",
+    "aria-label": `${p.title}: ${p.a.l} ${f(p.a.v)}, ${p.b.l} ${f(p.b.v)} (${p.unit})` });
+  for (let i = 0; i <= 4; i++) {
+    const v = max * i / 4; svg.append(sv("line", { x1: X(v), x2: X(v), y1: 21, y2: 61, class: "grid" }));
+    const t = sv("text", { x: X(v), y: h - 4, class: "tick", "text-anchor": i === 0 ? "start" : i === 4 ? "end" : "middle" });
+    t.textContent = p.percent ? Math.round(100 * v) + "%" : v.toFixed(2); svg.append(t);
+  }
+  // label A above its row, label B below its row, so the connecting line never crosses text
+  const rows = [[p.a, 13, 29, "db-a"], [p.b, 76, 53, "db-b"]];
+  svg.append(sv("line", { x1: X(p.a.v), x2: X(p.b.v), y1: 29, y2: 53, class: "db-link" }));
+  rows.forEach(([d, ty, y, cls]) => {
+    const t = sv("text", { x: l, y: ty, class: "val" }); t.textContent = `${d.l}: ${f(d.v)}`; svg.append(t);
+    const lo = d.lo ?? (d.sd != null ? d.v - d.sd : null), hi = d.hi ?? (d.sd != null ? d.v + d.sd : null);
+    if (lo != null) {
+      svg.append(sv("line", { x1: X(lo), x2: X(hi), y1: y, y2: y, class: "ci" }));
+      for (const v of [lo, hi]) svg.append(sv("line", { x1: X(v), x2: X(v), y1: y - 5, y2: y + 5, class: "ci" }));
+    }
+    svg.append(sv("circle", { cx: X(d.v), cy: y, r: 5.5, class: cls }));
+  });
+  return el("figure", { class: "db-card" },
+    el("div", { class: "db-head" }, el("span", { class: "tag tag-" + p.tag.toLowerCase().split(/[ -]/)[0] }, p.tag), el("a", { href: p.href }, p.title)),
+    svg, el("figcaption", {}, el("span", { class: "unit" }, p.unit + ". "), p.note));
+}
+
 /* ---------- simple table ---------- */
 function table(container, cols, rows) {
   const t = el("table", {}, el("thead", {}, el("tr", {}, cols.map(c => el("th", { class: c.num ? "num" : "" }, c.h)))),
@@ -123,10 +157,14 @@ function contributions(x, k) {
 const INS = { ex: null, tokens: [], off: new Set(), base: null, label: 0, custom: false };
 function initInspector(examples) {
   const sel = $("#ins-example");
-  const byStatus = { correct: "Correct", "missed label(s)": "Missed a label", "extra label(s)": "Extra label", swapped: "Swapped label" };
+  // grouped by what the inspector's own model predicts (ins_status); older data files only have status
+  const byStatus = { correct: "Fallacy: correct", "missed label(s)": "Fallacy: missed a label", "extra label(s)": "Fallacy: extra label",
+    swapped: "Fallacy: swapped label", "no fallacy found": "Fallacy: none found (missed)",
+    "valid: no fallacy found": "Valid comment: no fallacy found", "valid: fallacy flagged": "Valid comment: fallacy flagged (false alarm)" };
+  const stOf = e => e.ins_status || e.status;
   for (const [st, name] of Object.entries(byStatus)) {
     const og = el("optgroup", { label: name });
-    examples.filter(e => e.status === st).forEach(e => og.append(el("option", { value: e.i }, `[${e.labels.join(" + ")}] ${e.text.slice(0, 70)}…`)));
+    examples.filter(e => stOf(e) === st).forEach(e => og.append(el("option", { value: e.i }, `[${e.labels.join(" + ") || "valid"}] ${e.text.slice(0, 70)}…`)));
     if (og.children.length) sel.append(og);
   }
   sel.addEventListener("change", () => loadExample(examples.find(e => e.i == sel.value)));
@@ -135,7 +173,8 @@ function initInspector(examples) {
   $("#ins-reset").addEventListener("click", () => { INS.off.clear(); renderInspector(); });
   for (const g of ["topic", "cue", "function"]) $(`#ins-drop-${g}`).addEventListener("click", () => { INS.tokens.forEach((t, i) => { if (groupOf(t) === g) INS.off.add(i); }); renderInspector(); });
   $("#ins-own").addEventListener("click", () => {
-    const txt = $("#ins-text").value.trim(); if (!txt) return;
+    const txt = $("#ins-text").value.trim();
+    if (!txt) { $("#ins-summary").textContent = "Type an argument first."; return; }
     INS.ex = { text: txt, labels: [], bucket: "your text", status: "custom" }; INS.tokens = tokenize(txt); INS.off.clear();
     INS.base = predict(INS.tokens).probs; INS.custom = true; renderInspector();
   });
@@ -165,8 +204,9 @@ function renderInspector() {
   });
   $("#ins-chips").replaceChildren(...chips);
   const ex = INS.ex;
+  const SRCN = { main: "main test split", cocolofa: "CoCoLoFa comment (test split)", touche: "Touché Reddit comment (test split)" };
   $("#ins-meta").innerHTML = INS.custom ? "Your own text (no ground truth)." :
-    `True label(s): <b>${ex.labels.join(", ")}</b> · overlap with training data: <b>${ex.bucket}</b> (max cosine ${fmt(ex.max_sim, 2)}) · ${INS.off.size} token(s) removed`;
+    `True label(s): <b>${ex.labels.join(", ") || "none (valid argument)"}</b> · ${SRCN[ex.source || "main"] || ex.source} · overlap with the main training data: <b>${ex.bucket}</b> (max cosine ${fmt(ex.max_sim, 2)}) · ${INS.off.size} token(s) removed`;
   // probability bars
   const rows = M.labels.map((l, j) => ({ l, p: probs[j], b: INS.base[j], truth: !INS.custom && ex.labels.includes(l) })).sort((a, b) => b.b - a.b);
   const list = rows.map(r => {
@@ -179,6 +219,19 @@ function renderInspector() {
     return row;
   });
   $("#ins-probs").replaceChildren(...list);
+  // verdict: the labels the model predicts now (threshold 0.5), or no fallacy at all
+  const predNow = M.labels.filter((_, j) => probs[j] >= 0.5);
+  $("#ins-verdict").innerHTML = predNow.length ? `Model prediction: <b>${predNow.join(", ")}</b>`
+    : `Model prediction: <b>no fallacy</b> (all ${M.labels.length} labels below 0.5)`;
+  // one-line summary of the effect of the edits on the selected label
+  const nOff = INS.off.size, lab = M.labels[k], before = INS.base[k], after = probs[k];
+  if (!nOff) $("#ins-summary").textContent = `No words removed. P(${lab}) = ${pct(before, 0)}.`;
+  else {
+    const byG = { topic: 0, cue: 0, function: 0 }; INS.off.forEach(i => byG[groupOf(INS.tokens[i])]++);
+    const parts = Object.entries(byG).filter(([, v]) => v).map(([g, v]) => `${v} ${g}`).join(", ");
+    const cross = before >= 0.5 && after < 0.5 ? " The model no longer predicts it." : before < 0.5 && after >= 0.5 ? " The model now predicts it." : "";
+    $("#ins-summary").textContent = `Removed ${nOff} word${nOff > 1 ? "s" : ""} (${parts}): P(${lab}) ${pct(before, 0)} → ${pct(after, 0)}.${cross}`;
+  }
   // active coefficients
   const top = contrib.slice(0, 14);
   $("#ins-coefs").replaceChildren(
@@ -237,18 +290,97 @@ function drawXY(container, series, point, xl, yl, xr, yr) {
   container.replaceChildren(svg);
 }
 
+/* ---------- "§7D"-style references -> the heading's name, as a link ---------- */
+function linkSectionRefs() {
+  const secs = {};
+  document.querySelectorAll("main section[id]").forEach(sec => {
+    const h = sec.querySelector("h2"); const m = h && h.textContent.match(/^(\d+)\s*·\s*(.+)$/);
+    if (m) secs[m[1]] = { id: sec.id, name: m[2].replace(/:.*$/, "").trim(), sec };
+  });
+  const label = (n, L) => {
+    const s = secs[n]; if (!s) return null;
+    if (!L) return { href: "#" + s.id, text: s.name };
+    const h3 = [...s.sec.querySelectorAll("h3")].find(h => h.textContent.trim().startsWith(L + "."));
+    if (!h3) return { href: "#" + s.id, text: s.name };
+    const sub = h3.textContent.trim().slice(2).replace(/[:(].*$/, "").trim();
+    return { href: "#" + (h3.id || s.id), text: `${s.name} › ${sub}` };
+  };
+  const walker = document.createTreeWalker($("main"), NodeFilter.SHOW_TEXT, { acceptNode: n => /§\d/.test(n.nodeValue) && !n.parentElement.closest("pre, code, script") ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) {
+    const inLink = !!node.parentElement.closest("a"), frag = document.createDocumentFragment(); let last = 0;
+    node.nodeValue.replace(/§(\d+)([A-F])?/g, (m, n, L, i) => {
+      const t = label(n, L); frag.append(node.nodeValue.slice(last, i)); last = i + m.length;
+      if (!t) frag.append(m); else if (inLink) frag.append(t.text); else frag.append(el("a", { href: t.href }, t.text));
+    });
+    frag.append(node.nodeValue.slice(last)); node.replaceWith(frag);
+  }
+}
+
+/* ---------- research.html: Interactive | Research panes, chosen by the top bar ---------- */
+function initTabs() {
+  const panes = [...document.querySelectorAll(".pane")]; if (!panes.length) return;
+  const tops = [...document.querySelectorAll(".toplinks a[data-pane]")], blocks = [...document.querySelectorAll(".navblock")];
+  const show = pane => {
+    panes.forEach(p => { p.hidden = p !== pane; });
+    tops.forEach(a => { if (a.dataset.pane === pane.id) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    blocks.forEach(b => { b.hidden = b.dataset.pane !== pane.id; });   // the sidebar lists only the open pane's headings
+  };
+  const paneOf = node => node && node.closest(".pane");
+  // images in a newly shown pane load late and push content down, so scroll again once they have
+  // (stops as soon as the reader scrolls, taps or presses a key, so it never fights them)
+  const settle = t => {
+    t.scrollIntoView(); let live = true;
+    const stop = () => { live = false; ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev => removeEventListener(ev, stop)); };
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev => addEventListener(ev, stop, { passive: true }));
+    [150, 500, 1200].forEach(ms => setTimeout(() => { if (live) t.scrollIntoView(); }, ms));
+    setTimeout(stop, 1300);
+  };
+  // an in-page link into the other pane switches pane first, then scrolls
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const target = document.getElementById(a.getAttribute("href").slice(1)), pane = paneOf(target);
+    if (pane && pane.hidden) { e.preventDefault(); show(pane); settle(target); history.pushState(null, "", a.getAttribute("href")); }
+  });
+  const go = () => {
+    const id = location.hash.slice(1), named = id && document.getElementById("pane-" + id), target = id && document.getElementById(id);
+    if (named) { show(named); window.scrollTo(0, 0); }
+    else if (paneOf(target)) { show(paneOf(target)); settle(target); }
+    else show(document.getElementById("pane-research") || panes[0]);
+  };
+  window.addEventListener("hashchange", go); go();
+}
+document.addEventListener("DOMContentLoaded", initTabs);
+
+/* ---------- mobile "Contents" menu ---------- */
+function initNav() {
+  const nav = $("nav"), btn = $(".navtoggle"); if (!btn) return;
+  const set = open => { nav.classList.toggle("open", open); btn.setAttribute("aria-expanded", open ? "true" : "false"); };
+  btn.addEventListener("click", () => set(!nav.classList.contains("open")));
+  nav.querySelectorAll(".navlinks a").forEach(a => a.addEventListener("click", () => set(false)));
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && nav.classList.contains("open")) { set(false); btn.focus(); } });
+  document.addEventListener("click", e => { if (nav.classList.contains("open") && !nav.contains(e.target)) set(false); });
+}
+document.addEventListener("DOMContentLoaded", initNav);
+
 /* ---------- boot ---------- */
 async function boot() {
+  if (document.body.dataset.page === "lab") return;   // lab.html has its own boot (lab.js)
   const get = f => fetch("data/" + f).then(r => { if (!r.ok) throw new Error(f); return r.json(); });
   try {
     const [res, model, ex, td] = await Promise.all([get("results.json"), get("lasso_model.json"), get("examples.json"), get("threshold_data.json")]);
     M = prepModel(model);
     window.RESULTS = res;
     if (typeof renderResults === "function") renderResults(res);
+    linkSectionRefs();
     initInspector(ex); initThreshold(td);
     // self-check: JS reimplementation vs Python probabilities
-    let maxd = 0; for (const e of ex) { const p = predict(tokenize(e.text)).probs; p.forEach((v, j) => { maxd = Math.max(maxd, Math.abs(v - e.py_prob[j])); }); }
-    $("#selfcheck").textContent = `Self-check: the in-browser model reproduces the Python probabilities for all ${ex.length} example arguments to within ${maxd.toExponential(1)}.`;
+    // Python probabilities are stored to 4 decimals (rounding error <= 5e-5), hence the tolerance 1e-4.
+    const TOL = 1e-4; let maxd = 0;
+    for (const e of ex) { const p = predict(tokenize(e.text)).probs; p.forEach((v, j) => { maxd = Math.max(maxd, Math.abs(v - e.py_prob[j])); }); }
+    const ok = maxd <= TOL;
+    console.info(`Self-check ${ok ? "PASS" : "FAIL"}: in-browser model vs Python on ${ex.length} example arguments x ${M.labels.length} labels; largest difference ${maxd.toExponential(1)}, tolerance ${TOL.toExponential(0)}.`);
+    if (!ok) document.body.prepend(el("div", { class: "loaderr" }, "Self-check failed: the in-browser model does not match the Python model. See the browser console."));
   } catch (err) {
     document.body.prepend(el("div", { class: "loaderr" }, "Could not load data files (" + err.message + "). If you opened index.html from disk, serve the folder instead: python -m http.server -d website (from the repo root), then open http://localhost:8000"));
   }
